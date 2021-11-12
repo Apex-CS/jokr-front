@@ -3,9 +3,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p ${PORT:=3000}"
+    "start": "next start -p ${PORT:=3000}",
+    "serve": "json-server --watch mockdb.json --port 3004"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "next": "latest",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
@@ -18,6 +20,7 @@
     "eslint-config-next": "^12.0.3",
     "eslint-plugin-react": "^7.27.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "json-server": "^0.17.0",
     "next-sitemap": "^1.6.203",
     "prettier": "^2.4.1",
     "typescript": "^4.4.4"
