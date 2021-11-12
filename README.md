@@ -1,4 +1,15 @@
 # Usage
+## For Development
+```
+# Install dependencies
+npm install
+
+# If using a mockup endpoint. run the following command in a different terminal
+npm run serve
+
+# Run the development server
+npm run dev
+```
 
 ## With the Dockerfile
 
