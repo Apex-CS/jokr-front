@@ -1,16 +1,20 @@
 {
+  "name": "client",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start -p ${PORT:=3000}",
+    "dev": "NODE_ENV='development' node server.js",
+    "build": "next build && next export",
+    "start": "next start",
+    "lint": "next lint",
     "serve": "json-server --watch mockdb.json --port 3004"
   },
   "dependencies": {
     "axios": "^0.24.0",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^2.0.1",
     "next": "latest",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "devDependencies": {
     "@types/react": "^17.0.34",
