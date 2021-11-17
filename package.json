@@ -2,19 +2,20 @@
   "name": "client",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV='development' node server.js",
-    "build": "next build && next export",
-    "start": "next start",
-    "lint": "next lint",
-    "serve": "json-server --watch mockdb.json --port 3004"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p ${PORT:=3000}",
+    "serve": "json-server --watch mockdb.json --port 8080"
   },
   "dependencies": {
+    "@emotion/react": "^11.6.0",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.1.1",
     "axios": "^0.24.0",
-    "express": "^4.17.1",
-    "http-proxy-middleware": "^2.0.1",
     "next": "latest",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "swr": "^1.0.1"
   },
   "devDependencies": {
     "@types/react": "^17.0.34",
