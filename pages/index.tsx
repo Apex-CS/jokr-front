@@ -2,8 +2,10 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import useSWR from 'swr';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 type User = {
+  id: number
   name: string;
   email: string;
 };
@@ -11,8 +13,15 @@ type User = {
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 function Home() {
-  const { data, error } = useSWR('http://localhost:8080/demo/all', fetcher);
+  const router = useRouter()
+  
 
+
+  const handleClick = () => {
+    router.push('/post')
+  
+  }
+  const { data, error } = useSWR('http://localhost:8080/demo/all', fetcher);
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (
@@ -25,11 +34,15 @@ function Home() {
       <main className={styles.main}>
         <ul>
           {data?.map((usr: User) => (
-            <li key={usr.name}>{usr.name}</li>
+            <li key={usr.id}>{usr.name}-{usr.email}</li>
           ))}
         </ul>
         {/* <DetailTable products={products} /> */}
       </main>
+    
+      <label>Ingresar un nuevo usuario: </label>
+      <a href={'/post'} onClick={handleClick}>ver</a>
+
     </div>
   );
 }
