@@ -21,89 +21,15 @@ import Paper from '@mui/material/Paper';
 import ListProducts from '@/components/listProducts';
 import { TextField, Typography } from '@mui/material';
 
-
-
-const style = {
-  fontStyle: 'Arial',
-  backgroundImage: `url(${background1})`,
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-
-};
-
-
-
-
-type User = {
-  id: number
-  sku: string
-  name: string
-  description: string
-  price: number
-  is_active: number
-  created_at: string
-  updated_at: string
-  stock: number
-  photo_file_name: string
-};
-
-
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
-
-
-function Home() {
-  const [open, setOpen] = React.useState(false);
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  
-
-  
-  const router = useRouter()
-
-
-  
-
-
-  const handleClick = () => {
-    router.push('/post')
-  }
-  const { data, error } = useSWR('http://localhost:8080/products', fetcher);
-  if (error) return 'An error has occurred.' + error;
-  if (!data) return 'Loading...';
-
-  
-  return (
-    
-    
-    
-
-
-    <div className={styles.container}>
-
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-            
-      <main className={styles.main}>
-
+function addProduct() {
+    return (
         
-      
-        
-      
-      <Button color="success" onClick={handleOpen}>
-  Create
-</Button>
-      <Modal
+        <>
+         <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -121,7 +47,7 @@ function Home() {
         boxShadow: 24,
         p: 4,
       }}>
-          <div><h3>Create product</h3></div>
+          <div><h3>Edit Product</h3></div>
 
 
            <FormGroup>
@@ -196,55 +122,9 @@ function Home() {
            </Button>
         </Box>
         
-      </Modal>
-      <br/>
-      <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell align="right">Sku</TableCell>
-            <TableCell align="right">Name</TableCell>
-            <TableCell align="right">Description</TableCell>
-            <TableCell align="right">Price</TableCell>
-            <TableCell align="right">Is Active</TableCell>
-            <TableCell align="right">Created At</TableCell>
-            <TableCell align="right">Updated At</TableCell>
-            <TableCell align="right">Stock</TableCell>
-            <TableCell align="right">Photo File Name</TableCell>
-            <TableCell align="center">Button</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          
-            
-              
-            
-             {data?.map((usr: User) => {
-            // <li key={usr.id}>{usr.name}-{usr.email}</li>
-            return <ListProducts key={usr.id} user={usr}/>
-})}
-              
-            
-          
-           
-        </TableBody>
-      </Table>
-    </TableContainer>
-      
-      
-        
-        {/* <DetailTable products={products} /> */}
-      </main>
-    
-      <label>Ingresar un nuevo usuario: </label>
-      <a href={'/post'} onClick={handleClick}>ver</a>
-      
-
-    </div>
-  );
+      </Modal>   
+        </>
+    )
 }
 
-
-
-export default Home;
+export default addProduct
