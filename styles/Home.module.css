@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color:#44546A;
+  background-color:#f4f6f9;
 }
 
 .main {
@@ -114,6 +114,7 @@
 .logo {
   height: 1em;
 }
+@import url("product.css");
 
 @media (max-width: 600px) {
   .grid {
