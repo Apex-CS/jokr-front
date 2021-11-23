@@ -14,12 +14,8 @@ const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 function Home() {
   const router = useRouter()
-  
-
-
   const handleClick = () => {
     router.push('/post')
-  
   }
   const { data, error } = useSWR('http://localhost:8080/demo/all', fetcher);
   if (error) return 'An error has occurred.' + error;
