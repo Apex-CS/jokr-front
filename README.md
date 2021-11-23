@@ -9,6 +9,9 @@ npm run serve
 
 # Run the development server
 npm run dev
+
+# Run the tests
+npm run test
 ```
 
 ## With the Dockerfile
