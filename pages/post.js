@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import { useRouter } from 'next/router'
 
-function post() {
+function Post() {
     const initialState = {
         name:'',
         email:''
@@ -17,7 +17,7 @@ function post() {
       const SubmitExample = async(e) => {
         e.preventDefault()
         try{
-        await axios.post('http://localhost:8080/demo/add',{...formulario})
+        await axios.Post('http://localhost:8080/demo/add',{...formulario})
         setFormulario(initialState)
         alert("Usuario Agregado")
         router.push('/')
@@ -43,4 +43,4 @@ function post() {
     )
 }
 
-export default post
+export default Post
