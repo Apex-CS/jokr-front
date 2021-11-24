@@ -60,7 +60,7 @@ workflows:
   version: 2
   app-docker-push:
     jobs:
-      - build:
+      - build
       - docker-build:
           requires:
             - build
