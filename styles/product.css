@@ -3,3 +3,12 @@
     -moz-box-shadow: 0px 9px 29px 3px rgba(0,0,0,0.31);
     box-shadow: 0px 9px 29px 3px rgba(0,0,0,0.31);
 }
+.TableContainer {
+    table-layout:fixed!important;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:#f4f6f9; 
+   
+  }

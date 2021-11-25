@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Button, FormGroup, TextField } from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import database from '../mockdb.json';
@@ -18,7 +18,7 @@ const initProduct = {
 
 function addProduct() {
   /* Add new Product */
-  const [newProduct, setNewProduct] = React.useState(initProduct);
+  const [newProduct, setNewProduct] = useState(initProduct);
 
   const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

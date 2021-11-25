@@ -1,8 +1,6 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
-import * as React from 'react';
-import ListProducts from '@/components/listProducts';
-import { ToolsContext } from '@/components/ToolsContext';
+import React, { useState } from 'react';
+import ListProducts from '@/components/ListProducts';
 import { styled } from '@mui/material/styles';
 import {
   Modal,
@@ -18,11 +16,13 @@ import {
   tableCellClasses,
   Backdrop,
   Fade,
+  Grid,
 } from '@mui/material';
 import { Iproduct } from '@/components/interfaces/interfaceProduct';
 import axios from 'axios';
 import useSWR from 'swr';
 import AddProduct from '@/components/addProduct';
+
 interface IProps {
   onAddProduct: (product: Iproduct) => void;
   product: Array<Iproduct>;
@@ -63,53 +63,59 @@ const Home = () => {
   }));
   /* Check if state edit is enable */
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { data, error } = useSWR('http://localhost:8080/products', fetcher);
+  const { data, error } = useSWR('http://localhost:4040/products', fetcher);
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (
     <>
-      <div className={styles.container}>
-        <Head>
-          <title>ApexShop</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <main className={styles.main}>
-          <Button variant="contained" color="primary" onClick={handleOpen}>
-            {' '}
-            Create a new Product
-          </Button>
-          <br />
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>ID</StyledTableCell>
-                  <StyledTableCell align="right">Sku</StyledTableCell>
-                  <StyledTableCell align="right">Name</StyledTableCell>
-                  <StyledTableCell align="right">Description</StyledTableCell>
-                  <StyledTableCell align="right">Price</StyledTableCell>
-                  <StyledTableCell align="right">Is Active</StyledTableCell>
-                  <StyledTableCell align="right">Created At</StyledTableCell>
-                  <StyledTableCell align="right">Updated At</StyledTableCell>
-                  <StyledTableCell align="right">Stock</StyledTableCell>
-                  <StyledTableCell align="right">Photo File Name</StyledTableCell>
-                  <StyledTableCell align="center">Options</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data?.map((usr: Product) => {
-                  return <ListProducts key={usr.id} user={usr} />;
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </main>
-      </div>
-
+      <Head>
+        <title>ApexShop</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Button variant="contained" color="primary" onClick={handleOpen}>
+        Create a new Product
+      </Button>
+      <br />
+      <br />
+      <Box
+        display="flex"
+        marginLeft="5rem"
+        marginRight="auto"
+        justifyContent="right"
+        alignContent="center"
+        alignItems="center"
+        minHeight="30vh"
+      >
+        <TableContainer component={Paper}>
+          <Table /*  sx={{ minWidth: "100%", alignItems:"center"}} */ /* aria-label="simple table" */
+          >
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="center">ID</StyledTableCell>
+                <StyledTableCell align="center">Sku</StyledTableCell>
+                <StyledTableCell align="center">Name</StyledTableCell>
+                <StyledTableCell align="center">Description</StyledTableCell>
+                <StyledTableCell align="center">Price</StyledTableCell>
+                <StyledTableCell align="center">Is Active</StyledTableCell>
+                <StyledTableCell align="center">Created At</StyledTableCell>
+                <StyledTableCell align="center">Updated At</StyledTableCell>
+                <StyledTableCell align="center">Stock</StyledTableCell>
+                <StyledTableCell align="center">Photo File Name</StyledTableCell>
+                <StyledTableCell align="center">Options</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data?.map((usr: Product) => {
+                return <ListProducts key={usr.id} user={usr} />;
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
       <Modal
         open={open}
         onClose={handleClose}
@@ -138,6 +144,7 @@ const Home = () => {
               overflow: 'scroll',
               height: '100%',
               borderRadius: '2%',
+              minWidth: 650,
             }}
           >
             {/* AQUI LLAMO EL RESTO DEL MODAL el form para agregar Nuevo Productos */}
@@ -148,5 +155,4 @@ const Home = () => {
     </>
   );
 };
-
 export default Home;
