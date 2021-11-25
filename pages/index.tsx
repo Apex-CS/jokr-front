@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
-import ListProducts from '@/components/ListProducts';
+import ListProducts from '@/components/listProducts';
 import { styled } from '@mui/material/styles';
 import {
   Modal,
