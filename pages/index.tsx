@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
-import ListProducts from '@/components/ListProducts';
+import ListProducts from '@/components/listProducts';
 import { styled } from '@mui/material/styles';
 import {
   Modal,
@@ -68,6 +68,7 @@ const Home = () => {
   const handleClose = () => setOpen(false);
 
   const { data, error } = useSWR('http://localhost:4040/products', fetcher);
+
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (
@@ -155,4 +156,5 @@ const Home = () => {
     </>
   );
 };
+
 export default Home;

@@ -14,6 +14,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
+
 export default function MyApp({ Component, pageProps }) {
   return (
     <>
@@ -23,6 +24,7 @@ export default function MyApp({ Component, pageProps }) {
           <DrawerHeader />
           <Component {...pageProps} />
         </Box>
+
       </GlobalProvider>
     </>
   );

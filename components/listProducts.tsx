@@ -4,6 +4,7 @@ import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, Modal, Box, TableCell, TableRow, Backdrop, Fade } from '@mui/material';
 import EditProduct from '@/components/editProduct';
 
+
 type User = {
   id: number;
   sku: string;
@@ -17,7 +18,8 @@ type User = {
   photo_file_name: string;
 };
 
-function ListProducts(props: { user: User; key: number }) {
+
+function listProducts(props: { user: User; key: number }) {
   const { user } = props;
 
   const editData = {
@@ -34,6 +36,7 @@ function ListProducts(props: { user: User; key: number }) {
   };
 
   const [obj, setObjt] = useState({ editData });
+
 
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -110,4 +113,5 @@ function ListProducts(props: { user: User; key: number }) {
   );
 }
 
-export default ListProducts;
+
+export default listProducts;
