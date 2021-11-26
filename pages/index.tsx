@@ -17,6 +17,8 @@ import {
   Backdrop,
   Fade,
   Grid,
+  FormGroup,
+  Container,
 } from '@mui/material';
 import { Iproduct } from '@/components/interfaces/interfaceProduct';
 import axios from 'axios';
@@ -77,20 +79,18 @@ const Home = () => {
         <title>ApexShop</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Button variant="contained" color="primary" onClick={handleOpen}>
+      
+      <Container >
+        
+        <FormGroup >
+        <Button variant="contained" color="primary" onClick={handleOpen}>
         Create a new Product
       </Button>
+      
+      
       <br />
       <br />
-      <Box
-        display="flex"
-        marginLeft="5rem"
-        marginRight="auto"
-        justifyContent="right"
-        alignContent="center"
-        alignItems="center"
-        minHeight="30vh"
-      >
+      
         <TableContainer component={Paper}>
           <Table /*  sx={{ minWidth: "100%", alignItems:"center"}} */ /* aria-label="simple table" */
           >
@@ -116,7 +116,8 @@ const Home = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Box>
+      </FormGroup>
+      </Container>
       <Modal
         open={open}
         onClose={handleClose}
@@ -143,9 +144,7 @@ const Home = () => {
               maxHeight: '90%',
               marginTop: '-1rem',
               overflow: 'scroll',
-              height: '100%',
-              borderRadius: '2%',
-              minWidth: 650,
+              
             }}
           >
             {/* AQUI LLAMO EL RESTO DEL MODAL el form para agregar Nuevo Productos */}
