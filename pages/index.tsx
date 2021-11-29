@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 /* import { Iproduct } from '@/components/interfaces/InterfaceProduct'; */
 import axios from 'axios';
 import useSWR from 'swr';
-import AddProduct from '../components/AddProduct';
+import AddProduct from '@/components/AddProduct';
 import {
   Modal,
   Button,
