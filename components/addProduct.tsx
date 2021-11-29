@@ -1,7 +1,8 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Button, FormGroup, TextField } from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import database from '../mockdb.json';
+import axios from 'axios';
 
 const initProduct = {
   id: 3,
@@ -18,17 +19,21 @@ const initProduct = {
 
 function addProduct() {
   /* Add new Product */
-  const [newProduct, setNewProduct] = React.useState(initProduct);
+  const [newProduct, setNewProduct] = useState(initProduct);
 
   const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewProduct({ ...newProduct, [name]: value });
   };
-  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    database.products.push(newProduct);
+   /*  database.products.push(newProduct); */
+    await axios.post('http://localhost:8080/api/addProducts',{...newProduct})
     setNewProduct(initProduct);
-    console.log(database);
+
+/*     await axios.post('http://localhost:8080/demo/add', { ...formulario });
+    setNewProduct(initProduct);
+    console.log(database); */
   };
   /* Add new Product */
 
