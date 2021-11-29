@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Singin from '../public/signin-image.jpg';
-import { Box, Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, Container, FormGroup, Typography } from '@mui/material';
 function Login() {
   /* Card customization*/
   const bull = (
@@ -13,7 +13,8 @@ function Login() {
 
   return (
     <>
-      <Card sx={{ minWidth: 275 }}>
+    <Container>
+      <Card sx={{ minWidth: 275, textAlign: "center"}}>
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Word of the Day
@@ -30,9 +31,7 @@ function Login() {
             {'"a benevolent smile"'}
           </Typography>
         </CardContent>
-        <CardActions>
           <Button size="small">Learn More</Button>
-        </CardActions>
       </Card>
 
       {/*       <div className="signin-content">
@@ -102,6 +101,7 @@ function Login() {
           </div>
         </div>
       </div> */}
+      </Container>
     </>
   );
 }
