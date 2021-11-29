@@ -69,7 +69,7 @@ const Home = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { data, error } = useSWR('http://localhost:4040/products', fetcher);
+  const { data, error } = useSWR('http://localhost:8080/api/showProducts', fetcher);
 
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
