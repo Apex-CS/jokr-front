@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, FormGroup, TextField } from '@mui/material';
 import { DialogTitle } from '@mui/material';
 
@@ -14,16 +14,33 @@ type obj = {
   stock: number;
   photo_file_name: string;
 };
-function editProduct(props: { obj: obj }) {
+
+
+function EditProduct(props: { obj: obj }) {
   const { obj } = props;
-  console.log(obj);
+
+  const initProduct = {
+    id: obj.id,
+    sku: obj.sku,
+    name: obj.name,
+    description: obj.description,
+    price: obj.price,
+    is_active: obj.is_active,
+    created_at: obj.created_at,
+    updated_at: obj.updated_at,
+    stock: obj.stock,
+    photo_file_name: obj.photo_file_name,
+  };
+
+  const [EditProduct,setEditNewProduct] = useState(initProduct);
 
   const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    /* setNewProduct({...newProduct,[name]:value}); */
+     const { name, value } = e.target; 
+     setEditNewProduct({...EditProduct,[name]:value}); 
   };
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(EditProduct)
     /*   database.products.push(newProduct) 
         setNewProduct(initProduct);
         console.log(database)    */
@@ -31,7 +48,7 @@ function editProduct(props: { obj: obj }) {
 
   return (
     <>
-      <DialogTitle>Update product: </DialogTitle>
+      <DialogTitle>Update {obj.name} product: </DialogTitle>
       <form onSubmit={onFormSubmit}>
         <FormGroup>
           <TextField
@@ -41,7 +58,7 @@ function editProduct(props: { obj: obj }) {
             color="error"
             label="Sku"
             name="sku"
-            value={obj.sku}
+           value={EditProduct.sku}
             onChange={onInputChnage}
             id="outlined-basic"
           />
@@ -55,7 +72,7 @@ function editProduct(props: { obj: obj }) {
             color="error"
             label="Name"
             name="name"
-            value={obj.name}
+            value={EditProduct.name}
             onChange={onInputChnage}
             id="outlined-basic"
           />
@@ -69,7 +86,7 @@ function editProduct(props: { obj: obj }) {
             color="error"
             label="Description"
             name="description"
-            value={obj.description}
+            value={EditProduct.description}
             onChange={onInputChnage}
             id="outlined-basic"
           />
@@ -84,7 +101,7 @@ function editProduct(props: { obj: obj }) {
             color="error"
             label="Price"
             name="price"
-            value={obj.price}
+            value={EditProduct.price}
             onChange={onInputChnage}
             id="outlined-basic"
           />
@@ -99,7 +116,7 @@ function editProduct(props: { obj: obj }) {
             color="error"
             label="Active"
             name="is_active"
-            value={obj.is_active}
+            value={EditProduct.is_active}
             onChange={onInputChnage}
             id="outlined-basic"
           />
@@ -114,7 +131,7 @@ function editProduct(props: { obj: obj }) {
             color="error"
             label="Created at"
             name="created_at"
-            value={obj.created_at}
+            value={EditProduct.created_at}
             onChange={onInputChnage}
             id="outlined-basic"
           />
@@ -129,7 +146,7 @@ function editProduct(props: { obj: obj }) {
             color="error"
             label="Updated at"
             name="updated_at"
-            value={obj.updated_at}
+            value={EditProduct.updated_at}
             onChange={onInputChnage}
             id="outlined-basic"
           />
@@ -144,7 +161,7 @@ function editProduct(props: { obj: obj }) {
             color="error"
             label="Stock"
             name="stock"
-            value={obj.stock}
+            value={EditProduct.stock}
             onChange={onInputChnage}
             id="outlined-basic"
           />
@@ -159,7 +176,7 @@ function editProduct(props: { obj: obj }) {
             color="error"
             label="Image"
             name="photo_file_name"
-            value={obj.photo_file_name}
+            value={EditProduct.photo_file_name}
             onChange={onInputChnage}
             id="outlined-basic"
           />
@@ -174,4 +191,4 @@ function editProduct(props: { obj: obj }) {
   );
 }
 
-export default editProduct;
+export default EditProduct;

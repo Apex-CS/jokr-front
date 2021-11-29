@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, Modal, Box, TableCell, TableRow, Backdrop, Fade } from '@mui/material';
-import EditProduct from '@/components/editProduct';
-
+import EditProduct from '@/components/EditProduct';
 
 type User = {
   id: number;
@@ -18,8 +17,7 @@ type User = {
   photo_file_name: string;
 };
 
-
-function listProducts(props: { user: User; key: number }) {
+function ListProducts(props: { user: User; key: number }) {
   const { user } = props;
 
   const editData = {
@@ -35,8 +33,7 @@ function listProducts(props: { user: User; key: number }) {
     photo_file_name: user.photo_file_name,
   };
 
-  const [obj, setObjt] = useState({ editData });
-
+  const [obj] = useState({ editData });
 
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -113,5 +110,4 @@ function listProducts(props: { user: User; key: number }) {
   );
 }
 
-
-export default listProducts;
+export default ListProducts;

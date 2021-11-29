@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Button, FormGroup, TextField } from '@mui/material';
+import { Button, FormGroup, InputLabel, MenuItem, Select, TextField} from '@mui/material';
 import { DialogTitle } from '@mui/material';
-import database from '../mockdb.json';
 import axios from 'axios';
-
+/* import useSWR from 'swr'; */
 const initProduct = {
   id: 3,
   sku: '',
@@ -17,25 +16,24 @@ const initProduct = {
   photo_file_name: '',
 };
 
-function addProduct() {
-  /* Add new Product */
+function AddProduct() {
   const [newProduct, setNewProduct] = useState(initProduct);
 
-  const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /* Add new Product */
+  const onInputChnage = (e: { preventDefault: () => void; target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
     setNewProduct({ ...newProduct, [name]: value });
   };
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   /*  database.products.push(newProduct); */
-    await axios.post('http://localhost:8080/api/addProducts',{...newProduct})
-    setNewProduct(initProduct);
+/*     const fetcher = (url: string) => axios.post(url,newProduct);
+    const { data, error } = useSWR('/api/addProducts', fetcher);
+    if (error) return 'An error has occurred.' + error;
+    if (!data) return 'Loading...'; */
 
-/*     await axios.post('http://localhost:8080/demo/add', { ...formulario });
-    setNewProduct(initProduct);
-    console.log(database); */
+     await axios.post('/api/addProducts', { ...newProduct });
+    setNewProduct(initProduct); 
   };
-  /* Add new Product */
 
   return (
     <>
@@ -99,7 +97,7 @@ function addProduct() {
         </FormGroup>
 
         <FormGroup>
-          <label>Is Active:</label>
+          {/*           <label>Is Active:</label>
           <TextField
             size="small"
             margin="normal"
@@ -110,17 +108,30 @@ function addProduct() {
             value={newProduct.is_active}
             onChange={onInputChnage}
             id="outlined-basic"
-          />
+          /> */}
+
+          <InputLabel id="demo-simple-select-label">Is active</InputLabel>
+          <Select
+            name = "is_active"
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={newProduct.is_active}
+            label="Is Active"
+            onChange={onInputChnage}
+          >
+            <MenuItem value={1}>Yes</MenuItem>
+            <MenuItem value={0}>No</MenuItem>
+          </Select>
         </FormGroup>
 
         <FormGroup>
           <label>Created At:</label>
           <TextField
+            type="date"
             size="small"
             margin="normal"
             variant="outlined"
             color="error"
-            label="Created at"
             name="created_at"
             value={newProduct.created_at}
             onChange={onInputChnage}
@@ -135,7 +146,7 @@ function addProduct() {
             margin="normal"
             variant="outlined"
             color="error"
-            label="Updated at"
+            type="date"
             name="updated_at"
             value={newProduct.updated_at}
             onChange={onInputChnage}
@@ -182,4 +193,4 @@ function addProduct() {
   );
 }
 
-export default addProduct;
+export default AddProduct;
