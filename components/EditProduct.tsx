@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Button, FormGroup, TextField } from '@mui/material';
 import { DialogTitle } from '@mui/material';
+import { Modal, Box, Backdrop, Fade } from '@mui/material';
 
-type obj = {
+type Product = {
   id: number;
   sku: string;
   name: string;
@@ -15,10 +16,14 @@ type obj = {
   photo_file_name: string;
 };
 
+type FieldTypes = {
+  label: string;
+  name: string;
+  value: string | number;
+};
 
-function EditProduct(props: { obj: obj }) {
-  const { obj } = props;
-
+function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
+  const { obj, open, handleClose } = props;
   const initProduct = {
     id: obj.id,
     sku: obj.sku,
@@ -32,162 +37,94 @@ function EditProduct(props: { obj: obj }) {
     photo_file_name: obj.photo_file_name,
   };
 
-  const [EditProduct,setEditNewProduct] = useState(initProduct);
+  const [productData, setEditNewProduct] = useState(initProduct);
 
+  const editFormFieldsData: FieldTypes[] = [
+    { label: 'Sku', name: 'sku', value: productData.id },
+    { label: 'Name', name: 'name', value: productData.sku },
+    { label: 'Description', name: 'description', value: productData.description },
+    { label: 'Price', name: 'price', value: productData.price },
+    { label: 'is_active', name: 'Active', value: productData.is_active },
+    { label: 'Created At', name: 'created_at', value: productData.created_at },
+    { label: 'Updated At', name: 'updated_at', value: productData.updated_at },
+    { label: 'Stock', name: 'stock', value: productData.stock },
+    { label: 'Image', name: 'photo_file_name', value: productData.photo_file_name },
+  ];
   const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
-     const { name, value } = e.target; 
-     setEditNewProduct({...EditProduct,[name]:value}); 
+    const { name, value } = e.target;
+    setEditNewProduct({ ...productData, [name]: value });
   };
+
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    // Here will go the axios.post() to edit the selected product
     e.preventDefault();
-    console.log(EditProduct)
-    /*   database.products.push(newProduct) 
-        setNewProduct(initProduct);
-        console.log(database)    */
+    console.log(productData);
   };
 
   return (
-    <>
-      <DialogTitle>Update {obj.name} product: </DialogTitle>
-      <form onSubmit={onFormSubmit}>
-        <FormGroup>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Sku"
-            name="sku"
-           value={EditProduct.sku}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 1500,
+      }}
+      className="modalProduct"
+    >
+      <Fade in={open}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            maxHeight: '90%',
+            marginTop: '-1rem',
+            overflow: 'scroll',
+            height: '100%',
+            borderRadius: '2%',
+          }}
+        >
+          <DialogTitle>
+            Update {obj.name} product:
+            <form onSubmit={onFormSubmit}>
+              {editFormFieldsData?.map((field: FieldTypes) => {
+                return (
+                  <FormGroup key={field.label}>
+                    <TextField
+                      size="small"
+                      margin="normal"
+                      variant="outlined"
+                      label={field.label}
+                      name={field.name}
+                      value={field.value}
+                      onChange={onInputChnage}
+                      id="outlined-basic"
+                    />
+                  </FormGroup>
+                );
+              })}
 
-        <FormGroup>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Name"
-            name="name"
-            value={EditProduct.name}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Description"
-            name="description"
-            value={EditProduct.description}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <label>Price:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Price"
-            name="price"
-            value={EditProduct.price}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <label>Is Active:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Active"
-            name="is_active"
-            value={EditProduct.is_active}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <label>Created At:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Created at"
-            name="created_at"
-            value={EditProduct.created_at}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <label>Updated At:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Updated at"
-            name="updated_at"
-            value={EditProduct.updated_at}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <label>Stock:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Stock"
-            name="stock"
-            value={EditProduct.stock}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <label>Photo File Name:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Image"
-            name="photo_file_name"
-            value={EditProduct.photo_file_name}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-        <br />
-        <Button type="submit" color="primary" variant="contained">
-          {' '}
-          Edit Product
-        </Button>
-      </form>
-    </>
+              <Box>
+                <Button type="submit" color="secondary" variant="contained">
+                  Cancel
+                </Button>
+                <Button type="submit" color="primary" variant="contained">
+                  Save
+                </Button>
+              </Box>
+            </form>
+          </DialogTitle>
+        </Box>
+      </Fade>
+    </Modal>
   );
 }
 
