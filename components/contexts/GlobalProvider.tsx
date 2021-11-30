@@ -4,7 +4,7 @@ import React, { useState, createContext, useEffect } from 'react';
 export const ToolsContext = createContext({});
 export const GlobalProvider = ({ children }: any) => {
   const [UserLogeado, setLogeado] = useState<any>(false);
-  
+
   useEffect( () => {
     setLogeado(true);
   },[])
