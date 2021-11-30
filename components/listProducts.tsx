@@ -34,7 +34,7 @@ function ListProducts(props: { user: User; key: number }) {
   };
 
   const [obj] = useState({ editData });
-
+console.log(obj)
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   const [iduser, setIdUser] = useState<number>();
