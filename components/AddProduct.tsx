@@ -19,6 +19,8 @@ const initProduct = {
 function AddProduct() {
   const [newProduct, setNewProduct] = useState(initProduct);
 
+  
+
   /* Add new Product */
   const onInputChnage = (e: { preventDefault: () => void; target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
