@@ -1,14 +1,15 @@
-import React from 'react';
+import { useState } from 'react';
 interface EnableModal {
-  Logeado: Boolean;
+  /* Logeado: boolean; */
+  Logeado:boolean;
 }
 
 function ProductAdmin(props: { Logeado: EnableModal }) {
-  const [ModalEditActive, setModalEditActive] = React.useState<Boolean>(false);
-
+  const [ModalEditActive, setModalEditActive] = useState<boolean>(false);
+  const {Logeado} = props 
+  
   return {
-    isModalProducts: ModalEditActive,
-    setModalEditActive,
+    isModalProducts:[ModalEditActive,setModalEditActive],
   };
 }
 
