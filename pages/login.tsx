@@ -1,8 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import Singin from '../public/signin-image.jpg';
-import { Box, Button, Card, CardActions, CardContent, Container, FormGroup, Typography } from '@mui/material';
+
+import { Box, Button, Card, CardContent, Container, Typography } from '@mui/material';
 function Login() {
   /* Card customization*/
   const bull = (

@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import '../styles/Home.module.css';
-import { GlobalProvider } from '@/components/ToolsContext';
+import { GlobalProvider } from '@/components/contexts/GlobalProvider';
 import Header from '@/components/default/Header';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
