@@ -28,15 +28,6 @@ function AddProduct() {
   };
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-<<<<<<< HEAD:components/addProduct.tsx
-   /*  database.products.push(newProduct); */
-    await axios.post('http://localhost:8080/api/addProducts',{...newProduct})
-    setNewProduct(initProduct);
-
-/*     await axios.post('http://localhost:8080/demo/add', { ...formulario });
-    setNewProduct(initProduct);
-    console.log(database); */
-=======
 /*     const fetcher = (url: string) => axios.post(url,newProduct);
     const { data, error } = useSWR('/api/addProducts', fetcher);
     if (error) return 'An error has occurred.' + error;
@@ -44,7 +35,6 @@ function AddProduct() {
 
      await axios.post('/api/addProducts', { ...newProduct });
     setNewProduct(initProduct); 
->>>>>>> US-17-fix-warnings:components/AddProduct.tsx
   };
 
   return (
