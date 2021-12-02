@@ -17,6 +17,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import Shop from '@mui/icons-material/AddShoppingCart';
+
+import { Badge, MenuItem } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -54,6 +57,8 @@ interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
+
+
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
@@ -89,7 +94,27 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   })
 );
 
+// Types
+export type CartItemType = {
+  id: number;
+  category: string;
+  description: string;
+  image: string;
+  price: number;
+  title: string;
+  amount: number;
+};
+
+
 function MiniDrawer() {
+  /*  SHOPCart */
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([] as CartItemType[]);
+
+  const getTotalItems = (items: CartItemType[]) =>
+  items.reduce((ack: number, item) => ack + item.amount, 0);
+
+  /* Shop Cart */
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
@@ -123,6 +148,21 @@ function MiniDrawer() {
             <Typography variant="h6" noWrap component="div">
               Mini variant drawer
             </Typography>
+
+            <MenuItem onClick={() => setCartOpen(true)}>
+        <IconButton
+          size="large"
+          aria-label="show 17 new notifications"
+          color="inherit"
+        >
+          <Badge badgeContent={getTotalItems(cartItems)} color="error" >
+            <Shop />
+          </Badge>
+        </IconButton>
+        
+      </MenuItem>
+
+      
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
