@@ -16,7 +16,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 /* import { CartItemType } from '@/pages/index';   */
-import { Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 
  export type CartItemType = {
     id: number;
@@ -58,6 +58,7 @@ function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart
       
     return (
         <>
+        
          <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -132,6 +133,7 @@ function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart
         </CardContent>
         
       </Collapse>   
+      
         </>
     )
 }

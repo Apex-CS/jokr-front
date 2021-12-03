@@ -19,6 +19,9 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ItemProduct from '@/components/ItemProduct';
+import { NineK } from '@mui/icons-material';
+import { Paper } from '@material-ui/core';
+import Box from '@mui/material/Box';
 
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -49,6 +52,12 @@ export type CartItemType = {
   photo_file_name: string;
   amount: number;
 };
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -97,16 +106,38 @@ const handleRemoveFromCart = (id: number) => {
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (
+    
     <>
-    <Card sx={{ maxWidth: 345 }} >
-      {
-         data?.map((item: CartItemType)=> {
-            return (
-          <ItemProduct  key={item.id} product={item} handleAddToCart={handleAddToCart}  />
-            )}
-        )
-      }
-    </Card>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={2}>
+        
+          {
+        
+        data?.map((item: CartItemType)=> {
+          
+
+          
+           return (
+             
+         
+           
+          <>
+          <Grid item xs={4}>
+          <Item>
+         <ItemProduct key={item.id} product={item} handleAddToCart={handleAddToCart}  />
+         </Item>
+         </Grid>
+       </>
+         
+           )}
+       )
+     }
+       
+      </Grid>
+    </Box>
+    
+    
+    
     </>
     )
 }
