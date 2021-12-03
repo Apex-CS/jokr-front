@@ -4,7 +4,7 @@ import { useState } from 'react';
 import useSWR from 'swr';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
@@ -22,6 +22,7 @@ import ItemProduct from '@/components/ItemProduct';
 import { NineK } from '@mui/icons-material';
 import { Paper } from '@material-ui/core';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -54,7 +55,7 @@ export type CartItemType = {
 };
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
-  padding: theme.spacing(1),
+  padding: theme.spacing(2),
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
@@ -108,8 +109,9 @@ const handleRemoveFromCart = (id: number) => {
   return (
     
     <>
+    <Container>
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2}>
+      <Grid container /* spacing={1} */spacing={{ xs: 2, md: 3 }}   columns={{ xs: 4, sm: 8, md: 12 }} >
         
           {
         
@@ -122,7 +124,7 @@ const handleRemoveFromCart = (id: number) => {
          
            
           <>
-          <Grid item xs={4}>
+          <Grid item  xs={3} sm={4} md={4}>
           <Item>
          <ItemProduct key={item.id} product={item} handleAddToCart={handleAddToCart}  />
          </Item>
@@ -137,7 +139,7 @@ const handleRemoveFromCart = (id: number) => {
     </Box>
     
     
-    
+    </Container>
     </>
     )
 }
