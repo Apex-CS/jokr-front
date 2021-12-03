@@ -4,10 +4,10 @@ module.exports = {
     return [
       {
         source: '/api/addProducts',
-        destination: 'http://localhost:8080/api/addProducts'
+        destination: 'http://localhost:8080/products'
       },{
         source: '/api/showProducts',
-        destination: 'http://localhost:8080/api/showProducts'
+        destination: 'http://localhost:8080/products'
       }
     ]
   }
