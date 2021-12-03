@@ -10,5 +10,12 @@ module.exports = {
         destination: 'http://localhost:8080/products'
       }
     ]
-  }
+  },
+  webpackDevMiddleware: config => {
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300,
+    }
+    return config
+  },
 }
