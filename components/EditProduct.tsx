@@ -4,6 +4,8 @@ import { DialogTitle } from '@mui/material';
 import { Modal, Box, Backdrop, Fade } from '@mui/material';
 import axios from 'axios';
 
+
+
 type Product = {
   id: number;
   sku: string;
@@ -22,6 +24,10 @@ type FieldTypes = {
   name: string;
   value: string | number;
 };
+
+function refreshPage() {
+  window.location.reload();
+}
 
 function EditProduct(props: { obj: Product; id:number; open: boolean; handleClose: any }) {
   const { obj, id, open, handleClose } = props;
@@ -119,7 +125,7 @@ function EditProduct(props: { obj: Product; id:number; open: boolean; handleClos
                 <Button type="submit" color="secondary" variant="contained">
                   Cancel
                 </Button>
-                <Button type="submit" color="primary" variant="contained">
+                <Button onClick={refreshPage} type="submit" color="primary" variant="contained">
                   Save
                 </Button>
               </Box>

@@ -1,8 +1,26 @@
 import React, { useState } from 'react';
-import { Button, FormGroup, InputLabel, MenuItem, Select, TextField} from '@mui/material';
+import { Box, Button, FormGroup, InputLabel, MenuItem, Select, TextField} from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import axios from 'axios';
 /* import useSWR from 'swr'; */
+
+type FieldTypes = {
+  label: string;
+  name: string;
+  
+};
+
+const editFormFieldsData: FieldTypes[] = [
+  { label: 'Sku', name: 'sku' },
+  { label: 'Name', name: 'name' },
+  { label: 'Description', name: 'description' },
+  { label: 'Price', name: 'price' },
+  { label: 'is_active', name: 'Active' },
+  { label: 'Created At', name: 'created_at' },
+  { label: 'Updated At', name: 'updated_at' },
+  { label: 'Stock', name: 'stock' },
+  { label: 'Image', name: 'photo_file_name' },
+];
 const initProduct = {
   id: 3,
   sku: '',
@@ -16,9 +34,16 @@ const initProduct = {
   photo_file_name: '',
 };
 
+function refreshPage() {
+  window.location.reload();
+}
+
 function AddProduct() {
   const [newProduct, setNewProduct] = useState(initProduct);
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
 
+  
   
 
   /* Add new Product */
@@ -41,157 +66,45 @@ function AddProduct() {
     <>
       <DialogTitle>Create a new product: </DialogTitle>
       <form onSubmit={onFormSubmit}>
-        <FormGroup>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Sku"
-            name="sku"
-            value={newProduct.sku}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
+        
+        
+        <DialogTitle>
+            Update:
+            <form onSubmit={onFormSubmit}>
+              {editFormFieldsData?.map((field: FieldTypes) => {
+                return (
+                  <FormGroup key={field.label}>
+                    <TextField
+                      size="small"
+                      margin="normal"
+                      variant="outlined"
+                      label={field.label}
+                      name={field.name}
+                      
+                      onChange={onInputChnage}
+                      id="outlined-basic"
+                    />
+                  </FormGroup>
+                );
+              })}
 
-        <FormGroup>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Name"
-            name="name"
-            value={newProduct.name}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Description"
-            name="description"
-            value={newProduct.description}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <label>Price:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Price"
-            name="price"
-            value={newProduct.price}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          {/*           <label>Is Active:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Active"
-            name="is_active"
-            value={newProduct.is_active}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          /> */}
-
-          <InputLabel id="demo-simple-select-label">Is active</InputLabel>
-          <Select
-            name = "is_active"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={newProduct.is_active}
-            label="Is Active"
-            onChange={onInputChnage}
-          >
-            <MenuItem value={1}>Yes</MenuItem>
-            <MenuItem value={0}>No</MenuItem>
-          </Select>
-        </FormGroup>
-
-        <FormGroup>
-          <label>Created At:</label>
-          <TextField
-            type="date"
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            name="created_at"
-            value={newProduct.created_at}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <label>Updated At:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            type="date"
-            name="updated_at"
-            value={newProduct.updated_at}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <label>Stock:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Stock"
-            name="stock"
-            value={newProduct.stock}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <label>Photo File Name:</label>
-          <TextField
-            size="small"
-            margin="normal"
-            variant="outlined"
-            color="error"
-            label="Image"
-            name="photo_file_name"
-            value={newProduct.photo_file_name}
-            onChange={onInputChnage}
-            id="outlined-basic"
-          />
-        </FormGroup>
-        <br />
-        <Button type="submit" color="primary" variant="contained">
+              
+            </form>
+          </DialogTitle>
+          <Button onClick={refreshPage}type="submit" color="primary" variant="contained">
           {' '}
           Agregar
         </Button>
+
+        <Button onClick={handleClose} type="submit" color="primary" variant="contained">
+          {' '}
+          Close
+          
+        </Button>
+        
       </form>
     </>
+    
   );
 }
 
