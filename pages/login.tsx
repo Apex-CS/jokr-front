@@ -12,7 +12,7 @@ function Login() {
   return (
     <>
     <Container>
-      <Card sx={{ minWidth: 275, textAlign: "center"}}>
+      <Card sx={{ minWidth: 500, textAlign: "center"}}>
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Word of the Day

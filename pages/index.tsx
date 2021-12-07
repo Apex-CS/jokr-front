@@ -2,11 +2,23 @@ import axios from 'axios';
 import Head from 'next/head';
 import { useContext, useState } from 'react';
 import useSWR from 'swr';
-import { Card, styled } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Collapse from '@mui/material/Collapse';
+import Avatar from '@mui/material/Avatar';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ItemProduct from '@/components/ItemProduct';
-import { TodosContext } from '@/components/contexts/GlobalProvider';
+import { NineK } from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 
+import { TodosContext } from '@/components/contexts/GlobalProvider';
+import { Paper } from '@mui/material';
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -35,6 +47,12 @@ export type CartItemType = {
   photo_file_name: string;
   amount: number;
 };
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(2),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -93,12 +111,39 @@ function Home() {
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (
+    
     <>
-      <Card sx={{ maxWidth: 345 }}>
-        {data?.map((item: CartItemType) => {
-          return <ItemProduct key={item.id} product={item} handleAddToCart={handleAddToCart} />;
-        })}
-      </Card>
+    <Container>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container /* spacing={1} */spacing={{ xs: 2, md: 3 }}   columns={{ xs: 4, sm: 8, md: 12 }} >
+        
+          {
+        
+        data?.map((item: CartItemType)=> {
+          
+
+          
+           return (
+             
+         
+           
+          <>
+          <Grid item  xs={3} sm={4} md={4}>
+          <Item>
+         <ItemProduct key={item.id} product={item} handleAddToCart={handleAddToCart}  />
+         </Item>
+         </Grid>
+       </>
+         
+           )}
+       )
+     }
+       
+      </Grid>
+    </Box>
+    
+    
+    </Container>
     </>
   );
 }
