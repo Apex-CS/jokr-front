@@ -56,20 +56,38 @@ jobs:
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker push $IMAGE_NAME:latest
+  heroku-deploy:
+      machine: true
+      steps:
+        - checkout
+        - run:
+            name: Build and push Docker image to Heroku
+            command: |
+              set -x
+              sudo curl https://cli-assets.heroku.com/install.sh | sh
+              HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:login
+              HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:push -a jokr-front web
+              HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:release -a jokr-front web
 workflows:
   version: 2
   app-docker-push:
     jobs:
       - build
-      - docker-build:
+      # - docker-build:
+      #     requires:
+      #       - build
+      #     # filters:
+      #     #   branches:
+      #     #     only: master
+      # - publish-latest:
+      #     requires:
+      #       - docker-build
+      #     # filters:
+      #     #   branches:
+      #     #     only: master
+      - heroku-deploy:
           requires:
             - build
-          filters:
-            branches:
-              only: master
-      - publish-latest:
-          requires:
-            - docker-build
-          filters:
-            branches:
-              only: master
+          # filters:
+          #   branches:
+          #     only: master
