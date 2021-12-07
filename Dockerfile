@@ -31,10 +31,6 @@ COPY --from=builder /app/package.json ./package.json
 
 USER nextjs
 
-EXPOSE 3000
-
-ENV PORT 3000
-
 ENV NEXT_TELEMETRY_DISABLED 1
 
-CMD ["npm", "run","start"]
+CMD ["npm", "run", "start"]
