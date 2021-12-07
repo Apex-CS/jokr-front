@@ -1,25 +1,29 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import { 
+  Toolbar,
+  Box,
+  List,
+  CssBaseline,
+  Typography,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Badge, MenuItem
+} from '@mui/material';
+
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Shop from '@mui/icons-material/AddShoppingCart';
-
-import { Badge, MenuItem } from '@mui/material';
+import { TodosContext } from '@/components/contexts/GlobalProvider';
+import Cart from '@/components/default/Cart';
 
 const drawerWidth = 240;
 
@@ -57,8 +61,6 @@ interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
-
-
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
@@ -94,27 +96,21 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   })
 );
 
-// Types
-export type CartItemType = {
-  id: number;
-  category: string;
-  description: string;
-  image: string;
-  price: number;
-  title: string;
-  amount: number;
-};
-
-
 function MiniDrawer() {
-  /*  SHOPCart */
+  /*  ShopCart */
+  const { cartItems, addCart } = useContext(TodosContext);
   const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([] as CartItemType[]);
 
-  const getTotalItems = (items: CartItemType[]) =>
-  items.reduce((ack: number, item) => ack + item.amount, 0);
+  const getTotalItems = (cartItems: any) => {
+    let total = cartItems.reduce(
+      (ack: number, cartItems: { id: number; sku: string; amount: number }) =>
+        ack + cartItems.amount,
+      0
+    );
+    return total;
+  };
 
-  /* Shop Cart */
+  /* ShopCart */
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
@@ -146,23 +142,21 @@ function MiniDrawer() {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              Mini variant drawer
+             JOKR
             </Typography>
+            <MuiDrawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
+              <Cart 
+              cartItems={cartItems} 
+              />
+            </MuiDrawer>
 
             <MenuItem onClick={() => setCartOpen(true)}>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={getTotalItems(cartItems)} color="error" >
-            <Shop />
-          </Badge>
-        </IconButton>
-        
-      </MenuItem>
-
-      
+              <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+                <Badge badgeContent={getTotalItems(cartItems)} color="error">
+                  <Shop />
+                </Badge>
+              </IconButton>
+            </MenuItem>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -181,14 +175,14 @@ function MiniDrawer() {
             ))}
           </List>
           <Divider />
-          <List>
+          {/*           <List>
             {['All mail', 'Trash', 'Spam'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
             ))}
-          </List>
+          </List> */}
         </Drawer>
 
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
