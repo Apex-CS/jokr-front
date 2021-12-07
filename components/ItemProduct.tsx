@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -19,36 +19,36 @@ import Container from '@mui/material/Container';
 /* import { CartItemType } from '@/pages/index';   */
 import { Button, FormGroup, Grid } from '@mui/material';
 
- export type CartItemType = {
-    id: number;
-    sku: string;
-    name: string;
-    description: string;
-    price: number;
-    is_active: number;
-    created_at: string;
-    updated_at: string;
-    stock: number;
-    photo_file_name: string;
-    amount: number;
-  }; 
+export type CartItemType = {
+  id: number;
+  sku: string;
+  name: string;
+  description: string;
+  price: number;
+  is_active: number;
+  created_at: string;
+  updated_at: string;
+  stock: number;
+  photo_file_name: string;
+  amount: number;
+};
 
 interface ExpandMoreProps extends IconButtonProps {
-    expand: boolean;
-  }
-  
-const ExpandMore = styled((props: ExpandMoreProps) => {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
-  })(({ theme, expand }) => ({
-    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  }));
+  expand: boolean;
+}
 
- /*  function ListProducts(props: { product: Product; key: number }) { */
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+/*  function ListProducts(props: { product: Product; key: number }) { */
 /* const  ItemProduct = (props:Props) :JSX.Element => { */
 function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart:(clickedItem: CartItemType) => void}) {
     const [expanded, setExpanded] = useState(false);  
@@ -72,11 +72,10 @@ function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart
             <MoreVertIcon />
           </IconButton>
         }
-        title= {props.product.name}
+        title={props.product.name}
         subheader={`SKU: ${props.product.sku}`}
       />
-      
-      
+
       <CardMedia
         component="img"
         height="194"
@@ -85,7 +84,7 @@ function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {props.product.description} 
+          {props.product.description}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -95,7 +94,7 @@ function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
-        <Button   onClick={() => props.handleAddToCart(props.product)}  >Add to cart</Button>
+        <Button onClick={() => props.handleAddToCart(props.product)}>Add to cart</Button>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -109,8 +108,8 @@ function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart
         <CardContent>
           <Typography paragraph>Method:</Typography>
           <Typography paragraph>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-            aside for 10 minutes.
+            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
+            minutes.
           </Typography>
           <Typography paragraph>
             Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
@@ -132,4 +131,4 @@ function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart
     )
 }
 
-export default ItemProduct
+export default ItemProduct;

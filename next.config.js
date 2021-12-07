@@ -1,5 +1,8 @@
 module.exports = {
   reactStrictMode: true, 
+  images: {
+    domains: ['novaradio.com.ar', 'novaradio.com.ar'],
+  },
   async rewrites() {
     return [
       {
