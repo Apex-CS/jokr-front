@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, FormGroup, TextField } from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import { Modal, Box, Backdrop, Fade } from '@mui/material';
+import axios from 'axios';
 
 type Product = {
   id: number;
@@ -22,8 +23,8 @@ type FieldTypes = {
   value: string | number;
 };
 
-function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
-  const { obj, open, handleClose } = props;
+function EditProduct(props: { obj: Product; id:number; open: boolean; handleClose: any }) {
+  const { obj, id, open, handleClose } = props;
   const initProduct = {
     id: obj.id,
     sku: obj.sku,
@@ -40,8 +41,8 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
   const [productData, setEditNewProduct] = useState(initProduct);
 
   const editFormFieldsData: FieldTypes[] = [
-    { label: 'Sku', name: 'sku', value: productData.id },
-    { label: 'Name', name: 'name', value: productData.sku },
+    { label: 'Sku', name: 'sku', value: productData.sku },
+    { label: 'Name', name: 'name', value: productData.name },
     { label: 'Description', name: 'description', value: productData.description },
     { label: 'Price', name: 'price', value: productData.price },
     { label: 'is_active', name: 'Active', value: productData.is_active },
@@ -55,10 +56,12 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
     setEditNewProduct({ ...productData, [name]: value });
   };
 
-  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onFormSubmit =  (e: React.FormEvent<HTMLFormElement>) => {
     // Here will go the axios.post() to edit the selected product
     e.preventDefault();
-    console.log(productData);
+    // axios.put('http://localhost:8080/products/${id}', { ...productData});
+    axios.put(`http://localhost:8080/products/${productData.id}`, { ...productData});
+    setEditNewProduct(initProduct);
   };
 
   return (

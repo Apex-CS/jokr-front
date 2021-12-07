@@ -3,7 +3,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, TableCell, TableRow, Backdrop, Fade, Modal, Box } from '@mui/material';
 import EditProduct from '@/components/EditProduct';
-
+// import DeleteProduct from '@/components/DeleteProduct';
 type Product = {
   id: number;
   sku: string;
@@ -17,23 +17,24 @@ type Product = {
   photo_file_name: string;
 };
 
-function ListProducts(props: { product: Product; key: number }) {
-  const [product, setProduct] = useState<Product>(props.product);
-  const [open, setOpen] = useState(false);
-  const [iduser, setIdProduct] = useState<number>();
+function ListProducts(props: { product: Product }) {
+  const { product } = props;
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openDel, setOpenDel] = useState(false);
+  const [iduser, setIdProduct] = useState<number>(0);
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => setOpenEdit(false);
+  const handleDelClose = () => setOpenDel(false);
 
   const changeStateEdit = () => {
-    setOpen(true);
+    setOpenEdit(true);
     setIdProduct(product.id);
   };
 
-  useEffect(() => {
-    if (open) {
-      console.log(iduser);
-    }
-  });
+  const changeStateDelete = () => {
+    setOpenDel(true);
+    setIdProduct(product.id);
+  };
 
   return (
     <>
@@ -52,12 +53,13 @@ function ListProducts(props: { product: Product; key: number }) {
           <IconButton color="warning" onClick={changeStateEdit}>
             <BorderColorIcon />
           </IconButton>
-          <IconButton color="error">
+          <IconButton color="error" onClick={changeStateDelete}>
             <DeleteForeverIcon />
           </IconButton>
         </TableCell>
       </TableRow>
-      <EditProduct obj={product} open={open} handleClose={handleClose} />
+      <EditProduct obj={product} id={iduser} open={openEdit} handleClose={handleClose} />
+      {/* <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} /> */}
     </>
   );
 }
