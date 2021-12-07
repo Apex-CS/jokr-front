@@ -85,18 +85,18 @@ workflows:
       - docker-build:
           requires:
             - build
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: master
       - publish-latest:
           requires:
             - docker-build
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: master
       - heroku-release:
           requires:
             - publish-latest
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: master
