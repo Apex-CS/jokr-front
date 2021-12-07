@@ -58,7 +58,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: Load archived Docker image
-          command: docker load -i /tmp/workspace/image.
+          command: docker load -i /tmp/workspace/image.tar
       - run:
           name: Tag image for Heroku push
           command: docker tag $IMAGE_NAME:latest $HEROKU_IMAGE:release
