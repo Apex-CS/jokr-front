@@ -3,7 +3,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, TableCell, TableRow, Backdrop, Fade, Modal, Box } from '@mui/material';
 import EditProduct from '@/components/EditProduct';
-// import DeleteProduct from '@/components/DeleteProduct';
+import DeleteProduct from '@/components/DeleteProduct';
 type Product = {
   id: number;
   sku: string;
@@ -59,7 +59,7 @@ function ListProducts(props: { product: Product }) {
         </TableCell>
       </TableRow>
       <EditProduct obj={product} id={iduser} open={openEdit} handleClose={handleClose} />
-      {/* <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} /> */}
+      <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} />
     </>
   );
 }
