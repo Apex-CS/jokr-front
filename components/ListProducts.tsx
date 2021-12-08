@@ -5,7 +5,7 @@ import { IconButton, TableCell, TableRow, Backdrop, Fade, Modal, Box } from '@mu
 import EditProduct from '@/components/EditProduct';
 import DeleteProduct from '@/components/DeleteProduct';
 type Product = {
-  id: number;
+  di: number;
   sku: string;
   name: string;
   description: string;
@@ -17,29 +17,29 @@ type Product = {
   photo_file_name: string;
 };
 
-function ListProducts(props: { product: Product }) {
+function ListProducts(props: { key: number ; product: Product; }) {
   const { product } = props;
   const [openEdit, setOpenEdit] = useState(false);
   const [openDel, setOpenDel] = useState(false);
   const [iduser, setIdProduct] = useState<number>(0);
-
+  console.log(props);
   const handleClose = () => setOpenEdit(false);
   const handleDelClose = () => setOpenDel(false);
 
   const changeStateEdit = () => {
     setOpenEdit(true);
-    setIdProduct(product.id);
+    setIdProduct(product.di);
   };
 
   const changeStateDelete = () => {
     setOpenDel(true);
-    setIdProduct(product.id);
+    setIdProduct(product.di);
   };
 
   return (
     <>
       <TableRow hover>
-        <TableCell align="right">{product.id}</TableCell>
+        <TableCell align="right">{product.di}</TableCell>
         <TableCell align="right">{product.sku}</TableCell>
         <TableCell align="right">{product.name}</TableCell>
         <TableCell align="right">{product.description}</TableCell>

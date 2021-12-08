@@ -7,7 +7,7 @@ import axios from 'axios';
 
 
 type Product = {
-  id: number;
+  di: number;
   sku: string;
   name: string;
   description: string;
@@ -32,7 +32,7 @@ function refreshPage() {
 function EditProduct(props: { obj: Product; id:number; open: boolean; handleClose: any }) {
   const { obj, id, open, handleClose } = props;
   const initProduct = {
-    id: obj.id,
+    id: obj.di,
     sku: obj.sku,
     name: obj.name,
     description: obj.description,

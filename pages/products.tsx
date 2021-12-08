@@ -45,7 +45,7 @@ const tableHeader: string[] = [
 ];
 
 type Product = {
-  id: number;
+  di: number;
   sku: string;
   name: string;
   description: string;
@@ -110,7 +110,7 @@ function Products() {
               </TableHead>
               <TableBody>
                 {data?.map((pro: Product) => {
-                  return <ListProducts key={pro.id} product={pro} />;
+                  return <ListProducts key={1} product={pro} />;
                 })}
               </TableBody>
             </Table>
