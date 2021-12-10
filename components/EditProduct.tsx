@@ -66,6 +66,7 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
     // axios.put('http://localhost:8080/products/${id}', { ...productData});
     await axios.put(`/api/v1/products/${productData.id}`, { ...productData});
     setEditNewProduct(initProduct);
+    window.location.reload();
   };
   return (
     <Modal
