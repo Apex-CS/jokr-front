@@ -12,6 +12,10 @@ module.exports = {
       {
         source: '/api/v1/products/:id',
         destination: 'http://localhost:8080/api/v1/products/:id'
+      },
+      {
+        source: '/api/v1/Users',
+        destination: 'http://localhost:8080/api/v1/Users'
       }
     ]
   },
