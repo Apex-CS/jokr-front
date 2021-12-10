@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, FormGroup, InputLabel, MenuItem, Select, TextField} from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import axios from 'axios';
+import ShippingForm  from "@/components/ValidateFields";
 /* import useSWR from 'swr'; */
 
 type FieldTypes = {
@@ -9,6 +10,8 @@ type FieldTypes = {
   name: string;
   
 };
+
+
 
 const editFormFieldsData: FieldTypes[] = [
   { label: 'Sku', name: 'sku' },
@@ -32,6 +35,7 @@ const initProduct = {
   updated_at: '',
   stock: 0,
   photo_file_name: '',
+  subcategory: ''
 };
 
 function refreshPage() {
@@ -43,8 +47,6 @@ function AddProduct() {
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
 
-  
-  
 
   /* Add new Product */
   const onInputChnage = (e: { preventDefault: () => void; target: { name: any; value: any; }; }) => {
@@ -58,51 +60,17 @@ function AddProduct() {
     if (error) return 'An error has occurred.' + error;
     if (!data) return 'Loading...'; */
 
-     await axios.post('/api/addProducts', { ...newProduct });
+     await axios.post('/api/v1/products', { ...newProduct });
+     setOpen(false);
     setNewProduct(initProduct); 
   };
 
   return (
     <>
-      <DialogTitle>Create a new product: </DialogTitle>
-      <form onSubmit={onFormSubmit}>
-        
-        
-        <DialogTitle>
-            Update:
-            <form onSubmit={onFormSubmit}>
-              {editFormFieldsData?.map((field: FieldTypes) => {
-                return (
-                  <FormGroup key={field.label}>
-                    <TextField
-                      size="small"
-                      margin="normal"
-                      variant="outlined"
-                      label={field.label}
-                      name={field.name}
-                      
-                      onChange={onInputChnage}
-                      id="outlined-basic"
-                    />
-                  </FormGroup>
-                );
-              })}
+    <ShippingForm/>
 
-              
-            </form>
-          </DialogTitle>
-          <Button onClick={refreshPage}type="submit" color="primary" variant="contained">
-          {' '}
-          Agregar
-        </Button>
 
-        <Button onClick={handleClose} type="submit" color="primary" variant="contained">
-          {' '}
-          Close
-          
-        </Button>
-        
-      </form>
+      
     </>
     
   );

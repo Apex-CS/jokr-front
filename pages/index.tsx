@@ -45,6 +45,7 @@ export type CartItemType = {
   updated_at: string;
   stock: number;
   photo_file_name: string;
+  subcategory: string;
   amount: number;
 };
 const Item = styled(Paper)(({ theme }) => ({
@@ -77,6 +78,7 @@ function Home() {
       clickedItem.created_at,
       clickedItem.updated_at,
       clickedItem.stock,
+      clickedItem.subcategory,
       clickedItem.photo_file_name,
       0
     );
@@ -107,7 +109,7 @@ function Home() {
     );
   };
 
-  const { data, error } = useSWR('/api/showProducts', fetcher);
+  const { data, error } = useSWR('/api/v1/products', fetcher);
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (

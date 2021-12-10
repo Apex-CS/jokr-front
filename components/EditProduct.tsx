@@ -4,10 +4,8 @@ import { DialogTitle } from '@mui/material';
 import { Modal, Box, Backdrop, Fade } from '@mui/material';
 import axios from 'axios';
 
-
-
 type Product = {
-  di: number;
+  id: number;
   sku: string;
   name: string;
   description: string;
@@ -16,6 +14,7 @@ type Product = {
   created_at: string;
   updated_at: string;
   stock: number;
+  subcategory: string;
   photo_file_name: string;
 };
 
@@ -25,14 +24,10 @@ type FieldTypes = {
   value: string | number;
 };
 
-function refreshPage() {
-  window.location.reload();
-}
-
-function EditProduct(props: { obj: Product; id:number; open: boolean; handleClose: any }) {
-  const { obj, id, open, handleClose } = props;
+function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
+  const { obj, open, handleClose } = props;
   const initProduct = {
-    id: obj.di,
+    id: obj.id,
     sku: obj.sku,
     name: obj.name,
     description: obj.description,
@@ -40,6 +35,7 @@ function EditProduct(props: { obj: Product; id:number; open: boolean; handleClos
     is_active: obj.is_active,
     created_at: obj.created_at,
     updated_at: obj.updated_at,
+    subcategory: obj.subcategory,
     stock: obj.stock,
     photo_file_name: obj.photo_file_name,
   };
@@ -55,6 +51,7 @@ function EditProduct(props: { obj: Product; id:number; open: boolean; handleClos
     { label: 'Created At', name: 'created_at', value: productData.created_at },
     { label: 'Updated At', name: 'updated_at', value: productData.updated_at },
     { label: 'Stock', name: 'stock', value: productData.stock },
+    { label: 'Subcategory', name: 'subcategory', value: productData.subcategory },
     { label: 'Image', name: 'photo_file_name', value: productData.photo_file_name },
   ];
   const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,14 +59,14 @@ function EditProduct(props: { obj: Product; id:number; open: boolean; handleClos
     setEditNewProduct({ ...productData, [name]: value });
   };
 
-  const onFormSubmit =  (e: React.FormEvent<HTMLFormElement>) => {
+  const onFormSubmit  =  async(e: React.FormEvent<HTMLFormElement>) => {
     // Here will go the axios.post() to edit the selected product
     e.preventDefault();
+    console.log(productData);
     // axios.put('http://localhost:8080/products/${id}', { ...productData});
-    axios.put(`http://localhost:8080/products/${productData.id}`, { ...productData});
+    await axios.put(`/api/v1/products/${productData.id}`, { ...productData});
     setEditNewProduct(initProduct);
   };
-
   return (
     <Modal
       open={open}
@@ -125,7 +122,7 @@ function EditProduct(props: { obj: Product; id:number; open: boolean; handleClos
                 <Button type="submit" color="secondary" variant="contained">
                   Cancel
                 </Button>
-                <Button onClick={refreshPage} type="submit" color="primary" variant="contained">
+                <Button type="submit" color="primary" variant="contained">
                   Save
                 </Button>
               </Box>

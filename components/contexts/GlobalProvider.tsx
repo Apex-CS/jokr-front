@@ -21,7 +21,7 @@ const contextDefaultValues: TodosContextState = {
   todos: 0,
   addTodo: () => 0,
   cartItems: [],
-  addCart: () => {},
+  addCart: () => ({}),
 };
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
@@ -41,6 +41,7 @@ const GlobalProvider: FC = ({ children }) => {
     created_at: string,
     updated_at: string,
     stock: number,
+    subcategory: string,
     photo_file_name: string,
     amount: number
   ) =>
@@ -64,6 +65,7 @@ const GlobalProvider: FC = ({ children }) => {
           updated_at: updated_at,
           stock: stock,
           photo_file_name: photo_file_name,
+          subcategory: subcategory,
           amount: amount + 1,
         },
       ];

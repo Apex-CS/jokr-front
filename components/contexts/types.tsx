@@ -13,6 +13,7 @@ export type TodosContextState = {
       updated_at: string,
       stock: number,
       photo_file_name: string,
+      subcategory: string,
       amount:number
     }>;
     addCart:(
@@ -26,6 +27,7 @@ export type TodosContextState = {
       updated_at: string,
       stock: number,
       photo_file_name: string,
+      subcategory: string,
       amount:number 
       ) => void;
   };

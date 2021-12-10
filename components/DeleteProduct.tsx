@@ -26,7 +26,7 @@ function DeleteProduct(props: { open: boolean; id: number; handleClose: () => vo
 
   const deleteProduct = () => {
     // Make the function async
-    axios.delete(`http://localhost:8080/products/${id}`);
+    axios.delete(`/api/v1/products/${id}`);
     // TODO: Make snackbar appear on successfull/error at delete
     handleClose();
   };

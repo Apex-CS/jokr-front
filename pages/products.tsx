@@ -40,12 +40,13 @@ const tableHeader: string[] = [
   'Created At',
   'Updated At',
   'Stock',
+  'Subcategory',
   'Photo File Name',
   'Options',
 ];
 
 type Product = {
-  di: number;
+  id: number;
   sku: string;
   name: string;
   description: string;
@@ -54,7 +55,9 @@ type Product = {
   created_at: string;
   updated_at: string;
   stock: number;
+  subcategory: string;
   photo_file_name: string;
+  
 };
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
@@ -78,7 +81,8 @@ function Products() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { data, error } = useSWR('/api/showProducts', fetcher);
+  const { data, error } = useSWR('/api/v1/products', fetcher);
+  console.log(data)
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (
@@ -110,7 +114,7 @@ function Products() {
               </TableHead>
               <TableBody>
                 {data?.map((pro: Product) => {
-                  return <ListProducts key={1} product={pro} />;
+                  return <ListProducts key={pro.id} product={pro} />;
                 })}
               </TableBody>
             </Table>
