@@ -58,7 +58,7 @@ interface ShippingData {
   
 }
 
-function ShippingForm() {
+function ShippingFormUser() {
 
   const [newProduct, setNewProduct] = useState(initProduct);
   const [open, setOpen] = useState(false);
@@ -72,7 +72,6 @@ function ShippingForm() {
   };
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("hola");
 /*     const fetcher = (url: string) => axios.post(url,newProduct);
     const { data, error } = useSWR('/api/addProducts', fetcher);
     if (error) return 'An error has occurred.' + error;
@@ -131,7 +130,7 @@ function ShippingForm() {
         setTimeout(async() => {
             console.log("hola");
           setSubmitting(false);
-          
+          console.log(values)
           await axios.post('/api/v1/Users', { ...values });
           window.location.reload();
         }, 500);
@@ -161,7 +160,7 @@ function ShippingForm() {
 
               <Field component={TextField} name="email" type="email" label="Email" />
               <Field component={TextField} name="is_active" type="is_active" label="Is_active" />
-              <Field component={TextField} type="lastname" name="lastname" label="LastName" />
+              <Field component={TextField} type="lastname" name="lastName" label="LastName" />
               <Field component={TextField} name="name" type="name" label="Name" />
               <Field component={TextField} name="password" type="password" label="Password" />
               <Field component={TextField} name="role" type="role" label="Role" />
@@ -186,10 +185,10 @@ function ShippingForm() {
               
               <Button
                 variant="contained"
-                color="primary"
+                color="secondary"
                 disabled={isSubmitting}
                 onClick={submitForm}
-                
+                style= {{marginTop:'10rem'}}
               >
                 Submit
               </Button>
@@ -242,4 +241,4 @@ function ShippingForm() {
   );
 }
 
-export default ShippingForm;
+export default ShippingFormUser;

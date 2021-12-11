@@ -100,6 +100,8 @@ function ShippingForm() {
         photo_file_name: ''
       }}
       validate={(values) => {
+
+        console.log(values)
         const errors: Partial<ShippingData> = {};
         //
         !values.sku && (errors.sku = 'Required Field');

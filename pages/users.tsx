@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 /* import { Iproduct } from '@/components/interfaces/InterfaceProduct'; */
 import axios from 'axios';
 import useSWR from 'swr';
-import AddProduct from '@/components/AddUser';
+import AddUser from '@/components/AddUser';
 import {
   Modal,
   Button,
@@ -79,7 +79,7 @@ function Users() {
   const handleClose = () => setOpen(false);
 
   const { data, error } = useSWR('/api/v1/Users', fetcher);
-  console.log(data)
+  console.log("Collection",data)
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (
@@ -165,7 +165,7 @@ function Users() {
             }}
           >
             {/* AQUI LLAMO EL RESTO DEL MODAL el form para agregar Nuevo Productos */}
-            <AddProduct />
+            <AddUser />
           </Box>
         </Fade>
       </Modal>

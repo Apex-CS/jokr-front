@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, FormGroup, InputLabel, MenuItem, Select, TextField} from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import axios from 'axios';
-import ShippingForm  from "@/components/ValidateFieldsUser";
+import ShippingFormUser  from "@/components/ValidateFieldsUser";
 /* import useSWR from 'swr'; */
 
 type FieldTypes = {
@@ -43,7 +43,7 @@ function refreshPage() {
   window.location.reload();
 }
 
-function AddProduct() {
+function AddUser() {
   const [newProduct, setNewProduct] = useState(initProduct);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -68,7 +68,7 @@ function AddProduct() {
 
   return (
     <>
-    <ShippingForm/>
+    <ShippingFormUser/>
 
 
       
@@ -77,4 +77,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default AddUser;
