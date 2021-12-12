@@ -33,6 +33,8 @@ export type CartItemType = {
   amount: number;
 };
 
+
+
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -50,22 +52,26 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 /*  function ListProducts(props: { product: Product; key: number }) { */
 /* const  ItemProduct = (props:Props) :JSX.Element => { */
-function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart:(clickedItem: CartItemType) => void}) {
-    const [expanded, setExpanded] = useState(false);  
-    
+
+/* function  ItemProduct( props: { product:CartItemType; handleAddToCart:(clickedItem: CartItemType) => void; id:number}) { */
+  function ItemProduct(props: { product:CartItemType; handleAddToCart:(clickedItem: CartItemType) => void; id:number}) {  
+  const [expanded, setExpanded] = useState(false);  
+  const {id} = props
+
     const handleExpandClick = () => {
         setExpanded(!expanded);
       };
       
     return (
         <>
-       {/*  <Container maxWidth="sm"> */}
+         <Container maxWidth="sm"> 
         <FormGroup>
          <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
+          
           </Avatar>
+        
         }
         action={
           <IconButton aria-label="settings">
@@ -94,7 +100,7 @@ function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
-        <Button onClick={() => props.handleAddToCart(props.product)}>Add to cart</Button>
+         <Button onClick={() => props.handleAddToCart(props.product)}>Add to cart</Button> 
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -126,7 +132,7 @@ function  ItemProduct(props: { key:number; product:CartItemType; handleAddToCart
         
       </Collapse>  
       </FormGroup> 
-    {/*   </Container> */}
+       </Container> 
         </>
     )
 }

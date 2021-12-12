@@ -24,7 +24,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import Shop from '@mui/icons-material/AddShoppingCart';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import Cart from '@/components/default/Cart';
-
+import Link from 'next/link'
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -102,11 +102,8 @@ function MiniDrawer() {
   const [cartOpen, setCartOpen] = useState(false);
 
   const getTotalItems = (cartItems: any) => {
-    let total = cartItems.reduce(
-      (ack: number, cartItems: { id: number; sku: string; amount: number }) =>
-        ack + cartItems.amount,
-      0
-    );
+    const total = cartItems.reduce(
+      (ack: number, cartItems: { id: number; sku: string; amount: number }) => ack + cartItems.amount,0);
     return total;
   };
 
@@ -173,6 +170,14 @@ function MiniDrawer() {
                 <ListItemText primary={text} />
               </ListItem>
             ))}
+
+        <Link href="/products">
+          <a>Admin</a>
+        </Link>
+<br/>
+        <Link href="/">
+          <a>Home</a>
+        </Link>
           </List>
           <Divider />
           {/*           <List>

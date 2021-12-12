@@ -10,25 +10,30 @@ type Props = {
     removeFromCart: (id: number) => void; */
 };
 
-/* setCartItems((prev) =>
-prev.reduce((ack, item) => {
-  if (item.id === id) {
-    if (item.amount === 1) return ack;
-    return [...ack, { ...item, amount: item.amount - 1 }];
-  } else {
-    return [...ack, item];
-  }
-}, [] as CartItemType[])
-); */
   
 function CartItem({ item }: Props) {
    /*  const [cartItems, setCartItems] = useState([] as CartItemType[]); */
     const { cartItems, addCart } = useContext(TodosContext);
-
+    const { DeletedCart } = useContext(TodosContext);
+    
     const handleRemoveFromCart = (id: number) => {
-        console.log(id)
-      console.log(cartItems)
-      /* addCart(id,'ds','sds','hhg',0,0,'ghg','hj',0,'hjh',0) */
+        /* setisDeleted(true,id); */
+        
+
+  DeletedCart(
+    id, 
+    item.sku, 
+    item.name, 
+    item.description, 
+    item.price, 
+    item.is_active, 
+    item.created_at, 
+    item.updated_at, 
+    item.stock,
+    item.photo_file_name, 
+    item.amount,
+    true
+  )
       };
       
   return (
