@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, FormGroup, InputLabel, MenuItem, Select, TextField} from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import axios from 'axios';
-import ShippingForm  from "@/components/ValidateFields";
+import ShippingFormUser  from "@/components/ValidateFieldsUser";
 /* import useSWR from 'swr'; */
 
 type FieldTypes = {
@@ -13,36 +13,37 @@ type FieldTypes = {
 
 
 
+
 const editFormFieldsData: FieldTypes[] = [
-  { label: 'Sku', name: 'sku' },
+  { label: 'ID', name: 'id' },  
+  { label: 'Email', name: 'email' },
   { label: 'Name', name: 'name' },
-  { label: 'Description', name: 'description' },
-  { label: 'Price', name: 'price' },
-  { label: 'is_active', name: 'Active' },
-  { label: 'Created At', name: 'created_at' },
+  { label: 'is_active', name: 'is_active' },
+  { label: 'LastName', name: 'lastname' },
+  { label: 'Password', name: 'password' },
+  { label: 'Role', name: 'role' },
+  { label: 'Created_at', name: 'created_at' },
   { label: 'Updated At', name: 'updated_at' },
-  { label: 'Stock', name: 'stock' },
-  { label: 'Image', name: 'photo_file_name' },
+  { label: 'delete_at', name: 'delete_at' }
 ];
 const initProduct = {
   id: 3,
-  sku: '',
+  email: '',
   name: '',
-  description: '',
-  price: 0,
   is_active: 0,
+  lastname: '',
+  password: '',
+  role: '',
   created_at: '',
   updated_at: '',
-  stock: 0,
-  photo_file_name: '',
-  subcategory: ''
+  delete_at: ''
 };
 
 function refreshPage() {
   window.location.reload();
 }
 
-function AddProduct() {
+function AddUser() {
   const [newProduct, setNewProduct] = useState(initProduct);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -67,7 +68,7 @@ function AddProduct() {
 
   return (
     <>
-    <ShippingForm/>
+    <ShippingFormUser/>
 
 
       
@@ -76,4 +77,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default AddUser;

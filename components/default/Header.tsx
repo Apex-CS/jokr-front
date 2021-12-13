@@ -1,23 +1,34 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import {
+  Toolbar,
+  Box,
+  List,
+  CssBaseline,
+  Typography,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Badge,
+  MenuItem,
+} from '@mui/material';
+
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-
+import ListAlt from '@mui/icons-material/ListAlt';
+import Storefront from '@mui/icons-material/Storefront';
+import PeopleAltOutlined from '@mui/icons-material/PeopleAltOutlined';
+import Shop from '@mui/icons-material/AddShoppingCart';
+import { TodosContext } from '@/components/contexts/GlobalProvider';
+import Cart from '@/components/default/Cart';
+import Link from 'next/link';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -90,6 +101,20 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 function MiniDrawer() {
+  /*  ShopCart */
+  const { cartItems, addCart } = useContext(TodosContext);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  const getTotalItems = (cartItems: any) => {
+    const total = cartItems.reduce(
+      (ack: number, cartItems: { id: number; sku: string; amount: number }) =>
+        ack + cartItems.amount,
+      0
+    );
+    return total;
+  };
+
+  /* ShopCart */
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
@@ -121,8 +146,19 @@ function MiniDrawer() {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              Mini variant drawer
+              JOKR
             </Typography>
+            <MuiDrawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
+              <Cart cartItems={cartItems} />
+            </MuiDrawer>
+
+            <MenuItem onClick={() => setCartOpen(true)}>
+              <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+                <Badge badgeContent={getTotalItems(cartItems)} color="error">
+                  <Shop />
+                </Badge>
+              </IconButton>
+            </MenuItem>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -133,22 +169,60 @@ function MiniDrawer() {
           </DrawerHeader>
           <Divider />
           <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            {/*         {['products', 'AdminPro', 'AdminUser'].map((text, index) => (
               <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemIcon>{index % 3 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
-            ))}
+            ))}  */}
+
+            <ListItem>
+              <ListItemIcon>
+                <Link href="/products">
+                  <a>
+                    <ListAlt />
+                  </a>
+                </Link>
+              </ListItemIcon>
+              <ListItemText > Products options</ListItemText>
+            </ListItem>
+            
+            <ListItem>
+              <ListItemIcon>
+                <Link href="/users">
+                  <a>
+                    <PeopleAltOutlined />
+                  </a>
+                </Link>
+              </ListItemIcon>
+              <ListItemText > Users options</ListItemText>
+            </ListItem>
+            
+
+            <ListItem>
+              <ListItemIcon>
+                <Link href="/">
+                  <a>
+                    <Storefront />
+                  </a>
+                </Link>
+              </ListItemIcon>
+              <ListItemText > JOKR products</ListItemText>
+            </ListItem>
+
+
+  
+     
           </List>
           <Divider />
-          <List>
+          {/*           <List>
             {['All mail', 'Trash', 'Spam'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
             ))}
-          </List>
+          </List> */}
         </Drawer>
 
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
