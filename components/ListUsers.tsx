@@ -2,8 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, TableCell, TableRow, Backdrop, Fade, Modal, Box } from '@mui/material';
-import EditProduct from '@/components/EditProduct';
-import DeleteProduct from '@/components/DeleteProduct';
+
+import EditUser from '@/components/EditUser';
+import DeleteUser from '@/components/DeleteUser';
+
 type User = {
   id: number;
   email: string;
@@ -51,9 +53,6 @@ function ListUsers(props: { user: User}) {
         <TableCell align="right">{user.created_at}</TableCell>
         <TableCell align="right">{user.delete_at}</TableCell>
         <TableCell align="right">{user.updated_at}</TableCell>
-
-
-        
         
         <TableCell align="right">
           <IconButton color="warning" onClick={changeStateEdit}>
@@ -64,8 +63,10 @@ function ListUsers(props: { user: User}) {
           </IconButton>
         </TableCell>
       </TableRow>
-      {/* <EditProduct obj={product} open={openEdit} handleClose={handleClose} /> */}
-      <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} />
+
+      <EditUser obj={user} open={openEdit} handleClose={handleClose} />
+      <DeleteUser id={iduser} open={openDel} handleClose={handleDelClose} />
+
     </Fragment>
   );
 }

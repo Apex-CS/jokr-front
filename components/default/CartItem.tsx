@@ -9,28 +9,13 @@ type Props = {
   /*     addToCart: (clickedItem: CartItemType) => void;
     removeFromCart: (id: number) => void; */
 };
+
   
 function CartItem({ item }: Props) {
    /*  const [cartItems, setCartItems] = useState([] as CartItemType[]); */
     const { cartItems, addCart } = useContext(TodosContext);
     const { DeletedCart } = useContext(TodosContext);
 
-    const handleAddFromCart = (addtoCart:CartItemType) => {
-      addCart(
-        addtoCart.id, 
-        addtoCart.sku, 
-        addtoCart.name, 
-        addtoCart.description, 
-        addtoCart.price, 
-        addtoCart.is_active, 
-        addtoCart.created_at, 
-        addtoCart.updated_at, 
-        addtoCart.stock,
-        addtoCart.subcategory,
-        addtoCart.photo_file_name, 
-        addtoCart.amount,
-      )
-    }
     
     const handleRemoveFromCart = (id: number) => {
         /* setisDeleted(true,id); */
@@ -80,6 +65,7 @@ function CartItem({ item }: Props) {
               disableElevation
               variant="contained"
                 onClick={() => handleAddFromCart(item)} 
+
             >
               +
             </Button>
