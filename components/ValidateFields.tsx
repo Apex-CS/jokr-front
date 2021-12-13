@@ -3,6 +3,7 @@ import { Box, FormGroup, InputLabel, MenuItem, Select } from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import axios from 'axios';
 import { Button, LinearProgress , Grid } from '@mui/material';
+
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
 import { PhoneAndroid } from '@material-ui/icons';
@@ -170,6 +171,7 @@ function ShippingForm() {
               <Field component={TextField} name="updated_at" type="date" label="" />
               <Field component={TextField} name="stock" type="number" label="Stock" />
               <Field component={TextField} name="subcategory" type="subcategory" label="Subcategory"/>
+
               <Field component={TextField} name="photo_file_name" type="photo_file_name" label="Photo_file_name" />
               {/* <Field
                 component={TextField}

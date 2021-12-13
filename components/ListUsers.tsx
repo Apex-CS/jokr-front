@@ -2,8 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, TableCell, TableRow, Backdrop, Fade, Modal, Box } from '@mui/material';
+
 import EditUser from '@/components/EditUser';
 import DeleteUser from '@/components/DeleteUser';
+
 type User = {
   id: number;
   email: string;
@@ -61,8 +63,10 @@ function ListUsers(props: { user: User}) {
           </IconButton>
         </TableCell>
       </TableRow>
+
       <EditUser obj={user} open={openEdit} handleClose={handleClose} />
       <DeleteUser id={iduser} open={openDel} handleClose={handleDelClose} />
+
     </Fragment>
   );
 }

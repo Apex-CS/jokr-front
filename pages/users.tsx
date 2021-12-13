@@ -45,6 +45,7 @@ const tableHeader: string[] = [
   'Delete_at',
   'Updated_at',
   'Options'
+
 ];
 
 type User = {
@@ -122,35 +123,7 @@ function Users() {
 
 
               
-              {/* {data?.map((pro: User) => (
-                <TableRow
-                  key={pro.name}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell align="right">{pro.id.toString()}</TableCell>
-                  <TableCell align="right">{pro.email}</TableCell>
-                  <TableCell align="right">{pro.name}</TableCell>
-                  <TableCell align="right">{pro.is_active.toString()}</TableCell>
-                  <TableCell align="right">{pro.lastName}</TableCell>
-                  <TableCell align="right">{pro.password}</TableCell>
-                  <TableCell align="right">{pro.role}</TableCell>
-                  <TableCell align="right">{pro.created_at.toString()}</TableCell>
-                  <TableCell align="right">{pro.delete_at}</TableCell>
-                  <TableCell align="right">{pro.updated_at}</TableCell>
 
-                  <TableCell align="right">
-          <IconButton color="warning" >
-            <BorderColorIcon />
-          </IconButton>
-          <IconButton color="error" >
-            <DeleteForeverIcon />
-          </IconButton>
-        </TableCell>
-                  
-
-                  
-                </TableRow>
-              ))} */}
               </TableBody>
             </Table>
           </TableContainer>
