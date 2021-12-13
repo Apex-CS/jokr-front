@@ -29,6 +29,7 @@ export type CartItemType = {
   created_at: string;
   updated_at: string;
   stock: number;
+  subcategory:string;
   photo_file_name: string;
   amount: number;
 };
@@ -64,20 +65,11 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
       
     return (
         <>
-         <Container maxWidth="sm"> 
-        <FormGroup>
+ 
+      
          <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-          
-          </Avatar>
-        
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
+
+       
         title={props.product.name}
         subheader={`SKU: ${props.product.sku}`}
       />
@@ -94,12 +86,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+
          <Button onClick={() => props.handleAddToCart(props.product)}>Add to cart</Button> 
         <ExpandMore
           expand={expanded}
@@ -131,8 +118,9 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
         </CardContent>
         
       </Collapse>  
-      </FormGroup> 
-       </Container> 
+      
+     
+       
         </>
     )
 }

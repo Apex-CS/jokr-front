@@ -24,16 +24,7 @@ interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+
 
 export type CartItemType = {
   id: number;
@@ -45,6 +36,7 @@ export type CartItemType = {
   created_at: string;
   updated_at: string;
   stock: number;
+  subcategory:string
   photo_file_name: string;
   amount: number;
 };
@@ -84,9 +76,9 @@ function Home() {
       clickedItem.created_at,
       clickedItem.updated_at,
       clickedItem.stock,
+      clickedItem.subcategory,
       clickedItem.photo_file_name,
-      0,
-      false
+      0
     );
 
 
@@ -127,7 +119,7 @@ function Home() {
     }
     getListProducts()
   },[]) */
-const { data, error } = useSWR('/api/showProducts', fetcher);
+const { data, error } = useSWR('/api/v1/products', fetcher);
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...'; 
 
@@ -141,21 +133,18 @@ const { data, error } = useSWR('/api/showProducts', fetcher);
 
        <Container>
          
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid
-            container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
+                  <Grid
+             container spacing={{ xs: 2, md: 3 }} columns={{ xs: 3, sm: 8, md: 12 }}
           > 
 
             {data?.map((item: CartItemType,index:number) => { 
               return ( 
                 <div key={index}>
                   <br/>
-                    <Grid item xs={10} sm={9} md={10} > 
-                    <Item>            
+                    <Grid item xs={3} sm={4} md={10} > 
+                           <Item> 
                         <ItemProduct  product={item} handleAddToCart={handleAddToCart}  id={item.id} key={index}/>  
-                      </Item> 
+                    </Item>
                    </Grid>  
                  </div> 
               ); 
@@ -183,7 +172,7 @@ const { data, error } = useSWR('/api/showProducts', fetcher);
 
 
            </Grid>
-        </Box>
+
       </Container> 
     </>
   );

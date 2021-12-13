@@ -71,9 +71,9 @@ const GlobalProvider: FC = ({ children }) => {
     created_at: string,
     updated_at: string,
     stock: number,
+    subcategory: string,
     photo_file_name: string,
     amount: number,
-    isdeleted: boolean
   ) =>
  
     setCartItems((prev) => {
@@ -106,9 +106,9 @@ const GlobalProvider: FC = ({ children }) => {
           created_at: created_at,
           updated_at: updated_at,
           stock: stock,
+          subcategory:subcategory,
           photo_file_name: photo_file_name,
           amount: amount - 1,
-          isdeleted: isdeleted,
         },
       ]; 
     });  
@@ -123,9 +123,9 @@ const GlobalProvider: FC = ({ children }) => {
     created_at: string,
     updated_at: string,
     stock: number,
+    subcategory:string,
     photo_file_name: string,
-    amount: number,
-    isdeleted: boolean
+    amount: number
   ) =>
     setCartItems((prev) => {
         console.log("opcion agregar")
@@ -150,8 +150,8 @@ const GlobalProvider: FC = ({ children }) => {
           updated_at: updated_at,
           stock: stock,
           photo_file_name: photo_file_name,
-          amount: amount + 1,
-          isdeleted: isdeleted,
+          subcategory: subcategory,
+          amount: amount + 1
         },
       ];
 

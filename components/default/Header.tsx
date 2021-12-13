@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import { 
+import {
   Toolbar,
   Box,
   List,
@@ -11,7 +11,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Badge, MenuItem
+  Badge,
+  MenuItem,
 } from '@mui/material';
 
 import MuiDrawer from '@mui/material/Drawer';
@@ -21,10 +22,13 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import ListAlt from '@mui/icons-material/ListAlt';
+import Storefront from '@mui/icons-material/Storefront';
+import PeopleAltOutlined from '@mui/icons-material/PeopleAltOutlined';
 import Shop from '@mui/icons-material/AddShoppingCart';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import Cart from '@/components/default/Cart';
-import Link from 'next/link'
+import Link from 'next/link';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -103,7 +107,10 @@ function MiniDrawer() {
 
   const getTotalItems = (cartItems: any) => {
     const total = cartItems.reduce(
-      (ack: number, cartItems: { id: number; sku: string; amount: number }) => ack + cartItems.amount,0);
+      (ack: number, cartItems: { id: number; sku: string; amount: number }) =>
+        ack + cartItems.amount,
+      0
+    );
     return total;
   };
 
@@ -139,12 +146,10 @@ function MiniDrawer() {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-             JOKR
+              JOKR
             </Typography>
             <MuiDrawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
-              <Cart 
-              cartItems={cartItems} 
-              />
+              <Cart cartItems={cartItems} />
             </MuiDrawer>
 
             <MenuItem onClick={() => setCartOpen(true)}>
@@ -164,20 +169,50 @@ function MiniDrawer() {
           </DrawerHeader>
           <Divider />
           <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            {/*         {['products', 'AdminPro', 'AdminUser'].map((text, index) => (
               <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemIcon>{index % 3 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
-            ))}
+            ))}  */}
 
-        <Link href="/products">
-          <a>Admin</a>
-        </Link>
-<br/>
-        <Link href="/">
-          <a>Home</a>
-        </Link>
+            <ListItem>
+              <ListItemIcon>
+                <Link href="/products">
+                  <a>
+                    <ListAlt />
+                  </a>
+                </Link>
+              </ListItemIcon>
+              <ListItemText > Products options</ListItemText>
+            </ListItem>
+            
+            <ListItem>
+              <ListItemIcon>
+                <Link href="/users">
+                  <a>
+                    <PeopleAltOutlined />
+                  </a>
+                </Link>
+              </ListItemIcon>
+              <ListItemText > Users options</ListItemText>
+            </ListItem>
+            
+
+            <ListItem>
+              <ListItemIcon>
+                <Link href="/">
+                  <a>
+                    <Storefront />
+                  </a>
+                </Link>
+              </ListItemIcon>
+              <ListItemText > JOKR products</ListItemText>
+            </ListItem>
+
+
+  
+     
           </List>
           <Divider />
           {/*           <List>

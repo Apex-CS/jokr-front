@@ -21,7 +21,7 @@ export default function MyApp({ Component, pageProps }) {
     <>
      <GlobalProvider> 
         <Header />
-        <Box sx={{ flexGrow: 1, p: 11, marginTop: -20, sm: 10 }}>
+        <Box sx={{ flexGrow: 1, p: 12, marginTop: -20, sm: 12 }}>
           <DrawerHeader />
           <Component {...pageProps} />
         </Box>

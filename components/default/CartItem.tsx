@@ -30,9 +30,9 @@ function CartItem({ item }: Props) {
     item.created_at, 
     item.updated_at, 
     item.stock,
+    item.subcategory,
     item.photo_file_name, 
     item.amount,
-    true
   )
       };
       

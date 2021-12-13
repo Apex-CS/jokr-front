@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
-import ListProducts from '@/components/ListProducts';
+import ListUsers from '@/components/ListUsers';
 import { styled } from '@mui/material/styles';
 /* import { Iproduct } from '@/components/interfaces/InterfaceProduct'; */
 import axios from 'axios';
 import useSWR from 'swr';
-import AddProduct from '@/components/AddProduct';
+import AddUser from '@/components/AddUser';
 import {
   Modal,
   Button,
@@ -32,36 +32,33 @@ import {
 
 const tableHeader: string[] = [
   'ID',
-  'Sku',
+  'Email',
+  'Is_active',
+  'Lastname',
   'Name',
-  'Description',
-  'Price',
-  'Is Active',
-  'Created At',
-  'Updated At',
-  'Stock',
-  'Subcategory',
-  'Photo File Name',
-  'Options',
+  'Password',
+  'Role',
+  'Created_at',
+  'Delete_at',
+  'Updated_at'
 ];
 
-type Product = {
+type User = {
   id: number;
-  sku: string;
+  email: string;
   name: string;
-  description: string;
-  price: number;
   is_active: number;
+  lastName: string;
+  password: string;
+  role: string;
   created_at: string;
+  delete_at: string;
   updated_at: string;
-  stock: number;
-  subcategory: string;
-  photo_file_name: string;
   
 };
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-function Products() {
+function Users() {
   /* Saber si el conext edit esta activo pero no sirve el cambio de estados entre componentees UseContext */
   /*   let state: any = {}; state = React.useContext(ToolsContext);
   const [ModalEditActive,setModalEditActive] = React.useState<Boolean>(state.state.ProductAdmin.isModalProducts)
@@ -81,8 +78,8 @@ function Products() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { data, error } = useSWR('/api/v1/products', fetcher);
-  console.log(data)
+  const { data, error } = useSWR('/api/v1/Users', fetcher);
+  console.log("Collection",data)
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (
@@ -95,7 +92,7 @@ function Products() {
       <Container>
         <FormGroup>
           <Button variant="contained" color="primary" onClick={handleOpen}>
-            New Product
+            New User
           </Button>
 
           <TableContainer component={Paper}>
@@ -113,9 +110,26 @@ function Products() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.map((pro: Product) => {
-                  return <ListProducts key={pro.id} product={pro} />;
-                })}
+              
+              {data?.map((pro: User) => (
+                <TableRow
+                  key={pro.name}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell align="right">{pro.id.toString()}</TableCell>
+                  <TableCell align="right">{pro.email}</TableCell>
+                  <TableCell align="right">{pro.name}</TableCell>
+                  <TableCell align="right">{pro.is_active.toString()}1</TableCell>
+                  <TableCell align="right">{pro.lastName}</TableCell>
+                  <TableCell align="right">{pro.password}</TableCell>
+                  <TableCell align="right">{pro.role}</TableCell>
+                  <TableCell align="right">{pro.created_at.toString()}</TableCell>
+                  <TableCell align="right">{pro.delete_at}</TableCell>
+                  <TableCell align="right">{pro.updated_at}</TableCell>
+
+                  
+                </TableRow>
+              ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -151,7 +165,7 @@ function Products() {
             }}
           >
             {/* AQUI LLAMO EL RESTO DEL MODAL el form para agregar Nuevo Productos */}
-            <AddProduct />
+            <AddUser />
           </Box>
         </Fade>
       </Modal>
@@ -159,4 +173,4 @@ function Products() {
   );
 }
 
-export default Products;
+export default Users;

@@ -1,43 +1,6 @@
-export type RemoveCart ={
-  removeState:boolean;
-  id:number;
-}
-
-
-
-/* fin */
-export type  CartItemType = {
-  id: number;
-  sku: string;
-  name: string;
-  description: string;
-  price: number;
-  is_active: number;
-  created_at: string;
-  updated_at: string;
-  stock: number;
-  photo_file_name: string;
-  amount: number;
-}
-
-/* fin */
-
 export type TodosContextState = {
     todos: number;
     addTodo: (quantiy:number) => void;
-
-
-    isDeletedState: boolean;
-    IsDeletedCartId: number;
-    setRemove: (state:boolean) => void;
-    setRemoveId: (id:number) => void;
-
-
-
-    setisDeleted:(
-      setdelete:boolean,
-      setIdDelete:number
-      ) => void;
 
     cartItems:Array<{
       id:number,
@@ -49,9 +12,9 @@ export type TodosContextState = {
       created_at: string,
       updated_at: string,
       stock: number,
+      subcategory: string,
       photo_file_name: string,
-      amount:number,
-      isdeleted:boolean
+      amount:number
     }>;
 
     addCart:(
@@ -64,9 +27,9 @@ export type TodosContextState = {
       created_at: string,
       updated_at: string,
       stock: number,
+      subcategory: string,
       photo_file_name: string,
-      amount:number ,
-      isdeleted:boolean
+      amount:number 
       ) => void;
 
      DeletedCart:(
@@ -79,9 +42,9 @@ export type TodosContextState = {
         created_at: string,
         updated_at: string,
         stock: number,
+        subcategory: string,
         photo_file_name: string,
         amount:number ,
-        isdeleted:boolean
         ) => void;
 
     };
