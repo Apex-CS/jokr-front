@@ -84,7 +84,7 @@ function ShippingForm(props: { obj: Product; id:number; open: boolean; handleClo
     // Here will go the axios.post() to edit the selected product
     e.preventDefault();
     // axios.put('http://localhost:8080/products/${id}', { ...productData});
-    axios.put(`http://localhost:8080/products/${productData.id}`, { ...productData});
+    axios.put(`/api/v1/products/${productData.id}`, { ...productData});
     setEditNewProduct(initProduct);
   };
   

@@ -9,12 +9,28 @@ type Props = {
   /*     addToCart: (clickedItem: CartItemType) => void;
     removeFromCart: (id: number) => void; */
 };
-
   
 function CartItem({ item }: Props) {
    /*  const [cartItems, setCartItems] = useState([] as CartItemType[]); */
     const { cartItems, addCart } = useContext(TodosContext);
     const { DeletedCart } = useContext(TodosContext);
+
+    const handleAddFromCart = (addtoCart:CartItemType) => {
+      addCart(
+        addtoCart.id, 
+        addtoCart.sku, 
+        addtoCart.name, 
+        addtoCart.description, 
+        addtoCart.price, 
+        addtoCart.is_active, 
+        addtoCart.created_at, 
+        addtoCart.updated_at, 
+        addtoCart.stock,
+        addtoCart.subcategory,
+        addtoCart.photo_file_name, 
+        addtoCart.amount,
+      )
+    }
     
     const handleRemoveFromCart = (id: number) => {
         /* setisDeleted(true,id); */
@@ -63,7 +79,7 @@ function CartItem({ item }: Props) {
               size="small"
               disableElevation
               variant="contained"
-              /*  onClick={() => addToCart(item)} */
+                onClick={() => handleAddFromCart(item)} 
             >
               +
             </Button>
@@ -73,7 +89,7 @@ function CartItem({ item }: Props) {
         <CardMedia
           component="img"
           sx={{ width: 150 }}
-          image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB_SJ_yCbswI_pLjJUZvvfKUL0lRl_L1x64pacYw5WVx1JFE0Tle5zVya7mJ-PSlLgCSI&usqp=CAU"
+          image="https://mui.com/static/images/cards/paella.jpg"
           alt="Live from space album cover"
         />
       </Card>
