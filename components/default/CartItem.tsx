@@ -16,6 +16,23 @@ function CartItem({ item }: Props) {
     const { cartItems, addCart } = useContext(TodosContext);
     const { DeletedCart } = useContext(TodosContext);
 
+    const handleAddFromCart = (item: CartItemType) => {
+      addCart(
+        item.id, 
+        item.sku, 
+        item.name, 
+        item.description, 
+        item.price, 
+        item.is_active, 
+        item.created_at, 
+        item.updated_at, 
+        item.stock,
+        item.subcategory,
+        item.photo_file_name, 
+        item.amount,
+      )
+    }
+
     
     const handleRemoveFromCart = (id: number) => {
         /* setisDeleted(true,id); */
