@@ -170,7 +170,8 @@ function ShippingForm() {
               <Field component={TextField} name="created_at" type="date" label="" />
               <Field component={TextField} name="updated_at" type="date" label="" />
               <Field component={TextField} name="stock" type="number" label="Stock" />
-              <Field component={TextField} name="subcategory" type="subcategory" label="Subcategory" />
+              <Field component={TextField} name="subcategory" type="subcategory" label="Subcategory"/>
+
               <Field component={TextField} name="photo_file_name" type="photo_file_name" label="Photo_file_name" />
               {/* <Field
                 component={TextField}
