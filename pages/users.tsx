@@ -2,6 +2,8 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import ListUsers from '@/components/ListUsers';
 import { styled } from '@mui/material/styles';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 /* import { Iproduct } from '@/components/interfaces/InterfaceProduct'; */
 import axios from 'axios';
 import useSWR from 'swr';
@@ -22,6 +24,7 @@ import {
   Fade,
   FormGroup,
   Container,
+  IconButton,
 } from '@mui/material';
 
 /* interface IProps {
@@ -40,7 +43,8 @@ const tableHeader: string[] = [
   'Role',
   'Created_at',
   'Delete_at',
-  'Updated_at'
+  'Updated_at',
+  'Options'
 ];
 
 type User = {
@@ -110,8 +114,15 @@ function Users() {
                 </TableRow>
               </TableHead>
               <TableBody>
+
+              {data?.map((user: User) => {
+                  return <ListUsers key={user.id} user={user} />;
+                })}
+
+
+
               
-              {data?.map((pro: User) => (
+              {/* {data?.map((pro: User) => (
                 <TableRow
                   key={pro.name}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -119,7 +130,7 @@ function Users() {
                   <TableCell align="right">{pro.id.toString()}</TableCell>
                   <TableCell align="right">{pro.email}</TableCell>
                   <TableCell align="right">{pro.name}</TableCell>
-                  <TableCell align="right">{pro.is_active.toString()}1</TableCell>
+                  <TableCell align="right">{pro.is_active.toString()}</TableCell>
                   <TableCell align="right">{pro.lastName}</TableCell>
                   <TableCell align="right">{pro.password}</TableCell>
                   <TableCell align="right">{pro.role}</TableCell>
@@ -127,9 +138,19 @@ function Users() {
                   <TableCell align="right">{pro.delete_at}</TableCell>
                   <TableCell align="right">{pro.updated_at}</TableCell>
 
+                  <TableCell align="right">
+          <IconButton color="warning" >
+            <BorderColorIcon />
+          </IconButton>
+          <IconButton color="error" >
+            <DeleteForeverIcon />
+          </IconButton>
+        </TableCell>
+                  
+
                   
                 </TableRow>
-              ))}
+              ))} */}
               </TableBody>
             </Table>
           </TableContainer>

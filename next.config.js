@@ -16,7 +16,11 @@ module.exports = {
       {
         source: '/api/v1/Users',
         destination: 'http://localhost:8080/api/v1/Users'
-      }
+      },
+      {
+        source: '/api/v1/Users/:id',
+        destination: 'http://localhost:8080/api/v1/Users/:id'
+      },
     ]
   },
   webpackDevMiddleware: config => {
