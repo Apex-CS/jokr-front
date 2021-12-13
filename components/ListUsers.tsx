@@ -4,24 +4,23 @@ import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, TableCell, TableRow, Backdrop, Fade, Modal, Box } from '@mui/material';
 import EditProduct from '@/components/EditProduct';
 import DeleteProduct from '@/components/DeleteProduct';
-type Product = {
+type User = {
   id: number;
-  sku: string;
+  email: string;
   name: string;
-  description: string;
-  price: number;
   is_active: number;
+  lastName: string;
+  password: string;
+  role: string;
   created_at: string;
+  delete_at: string;
   updated_at: string;
-  stock: number;
-  subcategory: string;
-  photo_file_name: string;
-  
-};
+    
+  };
 
-function ListProducts(props: { product: Product}) {
+function ListUsers(props: { user: User}) {
 
-  const { product } = props;
+  const { user } = props;
   const [openEdit, setOpenEdit] = useState(false);
   const [openDel, setOpenDel] = useState(false);
   const [iduser, setIdProduct] = useState<number>(0);
@@ -31,28 +30,29 @@ function ListProducts(props: { product: Product}) {
 
   const changeStateEdit = () => {
     setOpenEdit(true);
-    setIdProduct(product.id);
+    setIdProduct(user.id);
   };
 
   const changeStateDelete = () => {
     setOpenDel(true);
-    setIdProduct(product.id);
+    setIdProduct(user.id);
   };
 
   return (
     <Fragment >
       <TableRow hover>
-        <TableCell align="right">{product.id.toString()}</TableCell>
-        <TableCell align="right">{product.sku}</TableCell>
-        <TableCell align="right">{product.name}</TableCell>
-        <TableCell align="right">{product.description}</TableCell>
-        <TableCell align="right">{product.price.toString()}</TableCell>
-        <TableCell align="right">{product.is_active.toString()}</TableCell>
-        <TableCell align="right">{product.created_at}</TableCell>
-        <TableCell align="right">{product.updated_at}</TableCell>
-        <TableCell align="right">{product.stock}</TableCell>
-        <TableCell align="right">{product.subcategory}</TableCell>
-        <TableCell align="right">{product.photo_file_name}</TableCell>
+        <TableCell align="right">{user.id.toString()}</TableCell>
+        <TableCell align="right">{user.email}</TableCell>
+        <TableCell align="right">{user.is_active.toString()}</TableCell>
+        <TableCell align="right">{user.lastName}</TableCell>
+        <TableCell align="right">{user.name}</TableCell>
+        <TableCell align="right">{user.password}</TableCell>
+        <TableCell align="right">{user.role}</TableCell>
+        <TableCell align="right">{user.created_at}</TableCell>
+        <TableCell align="right">{user.delete_at}</TableCell>
+        <TableCell align="right">{user.updated_at}</TableCell>
+
+
         
         
         <TableCell align="right">
@@ -64,10 +64,10 @@ function ListProducts(props: { product: Product}) {
           </IconButton>
         </TableCell>
       </TableRow>
-      <EditProduct obj={product} open={openEdit} handleClose={handleClose} />
+      {/* <EditProduct obj={product} open={openEdit} handleClose={handleClose} /> */}
       <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} />
     </Fragment>
   );
 }
 
-export default ListProducts;
+export default ListUsers;

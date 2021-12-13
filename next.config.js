@@ -1,13 +1,21 @@
 module.exports = {
   reactStrictMode: true, 
+  images: {
+    domains: ['novaradio.com.ar', 'novaradio.com.ar'],
+  },
   async rewrites() {
     return [
       {
-        source: '/api/addProducts',
-        destination: 'http://localhost:8080/products'
-      },{
-        source: '/api/showProducts',
-        destination: 'http://localhost:8080/products'
+        source: '/api/v1/products',
+        destination: 'http://localhost:8080/api/v1/products'
+      },
+      {
+        source: '/api/v1/products/:id',
+        destination: 'http://localhost:8080/api/v1/products/:id'
+      },
+      {
+        source: '/api/v1/Users',
+        destination: 'http://localhost:8080/api/v1/Users'
       }
     ]
   },

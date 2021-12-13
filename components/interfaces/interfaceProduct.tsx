@@ -7,7 +7,9 @@ export interface NewProduct {
   created_at: string;
   updated_at: string;
   stock: number;
+  subcategory: string;
   photo_file_name: string;
+  
 }
 
 export interface Iproduct extends NewProduct {
