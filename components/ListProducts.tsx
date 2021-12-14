@@ -10,9 +10,9 @@ type Product = {
   name: string;
   description: string;
   price: number;
-  is_active: number;
-  created_at: string;
-  updated_at: string;
+  // is_active: number;
+  // created_at: string;
+  // updated_at: string;
   stock: number;
   subcategory: string;
   photo_file_name: string;
@@ -40,14 +40,14 @@ function ListProducts(props: { product: Product }) {
   return (
     <Fragment>
       <TableRow hover>
-        <TableCell align="right">{product.id.toString()}</TableCell>
+        {/* <TableCell align="right">{product.id.toString()}</TableCell> */}
         <TableCell align="right">{product.sku}</TableCell>
         <TableCell align="right">{product.name}</TableCell>
         <TableCell align="right">{product.description}</TableCell>
         <TableCell align="right">{product.price.toString()}</TableCell>
-        <TableCell align="right">{product.is_active.toString()}</TableCell>
+        {/* <TableCell align="right">{product.is_active.toString()}</TableCell>
         <TableCell align="right">{product.created_at}</TableCell>
-        <TableCell align="right">{product.updated_at}</TableCell>
+        <TableCell align="right">{product.updated_at}</TableCell> */}
         <TableCell align="right">{product.stock}</TableCell>
         <TableCell align="right">{product.subcategory}</TableCell>
         <TableCell align="right">{product.photo_file_name}</TableCell>

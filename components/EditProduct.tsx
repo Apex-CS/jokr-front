@@ -10,9 +10,9 @@ type Product = {
   name: string;
   description: string;
   price: number;
-  is_active: number;
-  created_at: string;
-  updated_at: string;
+  // is_active: number;
+  // created_at: string;
+  // updated_at: string;
   stock: number;
   subcategory: string;
   photo_file_name: string;
@@ -32,9 +32,9 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
     name: obj.name,
     description: obj.description,
     price: obj.price,
-    is_active: obj.is_active,
-    created_at: obj.created_at,
-    updated_at: obj.updated_at,
+    // is_active: obj.is_active,
+    // created_at: obj.created_at,
+    // updated_at: obj.updated_at,
     subcategory: obj.subcategory,
     stock: obj.stock,
     photo_file_name: obj.photo_file_name,
@@ -47,9 +47,9 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
     { label: 'Name', name: 'name', value: productData.name },
     { label: 'Description', name: 'description', value: productData.description },
     { label: 'Price', name: 'price', value: productData.price },
-    { label: 'is_active', name: 'Active', value: productData.is_active },
-    { label: 'Created At', name: 'created_at', value: productData.created_at },
-    { label: 'Updated At', name: 'updated_at', value: productData.updated_at },
+    // { label: 'is_active', name: 'Active', value: productData.is_active },
+    // { label: 'Created At', name: 'created_at', value: productData.created_at },
+    // { label: 'Updated At', name: 'updated_at', value: productData.updated_at },
     { label: 'Stock', name: 'stock', value: productData.stock },
     { label: 'Subcategory', name: 'subcategory', value: productData.subcategory },
     { label: 'Image', name: 'photo_file_name', value: productData.photo_file_name },

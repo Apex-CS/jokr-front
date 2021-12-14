@@ -5,17 +5,13 @@ import { Modal, Box, Backdrop, Fade } from '@mui/material';
 import axios from 'axios';
 
 type User = {
-  id: number;
-  email: string;
-  name: string;
-  is_active: number;
-  lastName: string;
-  password: string;
-  role: string;
-  created_at: string;
-  delete_at: string;
-  updated_at: string;
-};
+    id: number;
+    email: string;
+    name: string;
+    lastName: string;
+    role: string;
+      
+    };
 
 type FieldTypes = {
   label: string;
@@ -29,13 +25,8 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
     id: obj.id,
     email: obj.email,
     name: obj.name,
-    is_active: obj.is_active,
     lastName: obj.lastName,
-    password: obj.password,
     role: obj.role,
-    created_at: obj.created_at,
-    delete_at: obj.delete_at,
-    updated_at: obj.updated_at,
   };
 
   const [productData, setEditNewProduct] = useState(initProduct);
@@ -44,13 +35,13 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
     { label: 'id', name: 'id', value: productData.id },
     { label: 'email', name: 'email', value: productData.email },
     { label: 'name', name: 'name', value: productData.name },
-    { label: 'is_active', name: 'is_active', value: productData.is_active },
+    // { label: 'is_active', name: 'is_active', value: productData.is_active },
     { label: 'lastName', name: 'lastName', value: productData.lastName },
-    { label: 'password', name: 'password', value: productData.password },
+    // { label: 'password', name: 'password', value: productData.password },
     { label: 'role', name: 'role', value: productData.role },
-    { label: 'created_at', name: 'created_at', value: productData.created_at },
-    { label: 'delete_at', name: 'delete_at', value: productData.delete_at },
-    { label: 'updated_at', name: 'updated_at', value: productData.updated_at },
+    // { label: 'created_at', name: 'created_at', value: productData.created_at },
+    // { label: 'delete_at', name: 'delete_at', value: productData.delete_at },
+    // { label: 'updated_at', name: 'updated_at', value: productData.updated_at }
   ];
   const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

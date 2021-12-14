@@ -10,9 +10,7 @@ type User = {
   id: number;
   email: string;
   name: string;
-  is_active: number;
   lastName: string;
-  password: string;
   role: string;
   created_at: string;
   delete_at: string;
@@ -41,17 +39,17 @@ function ListUsers(props: { user: User }) {
   return (
     <Fragment>
       <TableRow hover>
-        <TableCell align="right">{user.id.toString()}</TableCell>
+        {/* <TableCell align="right">{user.id.toString()}</TableCell> */}
         <TableCell align="right">{user.email}</TableCell>
-        <TableCell align="right">{user.is_active.toString()}</TableCell>
+        {/* <TableCell align="right">{user.is_active.toString()}</TableCell> */}
         <TableCell align="right">{user.lastName}</TableCell>
         <TableCell align="right">{user.name}</TableCell>
-        <TableCell align="right">{user.password}</TableCell>
+        {/* <TableCell align="right">{user.password}</TableCell> */}
         <TableCell align="right">{user.role}</TableCell>
-        <TableCell align="right">{user.created_at}</TableCell>
+        {/* <TableCell align="right">{user.created_at}</TableCell>
         <TableCell align="right">{user.delete_at}</TableCell>
-        <TableCell align="right">{user.updated_at}</TableCell>
-
+        <TableCell align="right">{user.updated_at}</TableCell> */}
+        
         <TableCell align="right">
           <IconButton color="warning" onClick={changeStateEdit}>
             <BorderColorIcon />
