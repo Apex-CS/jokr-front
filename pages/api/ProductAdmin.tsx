@@ -1,10 +1,3 @@
-import { useState } from 'react';
-
-interface EnableModal {
-  Logeado:boolean;
-}
-
-
 export type CartItemType = {
   id: number;
   sku: string;
@@ -17,16 +10,13 @@ export type CartItemType = {
   stock: number;
   photo_file_name: string;
   amount: number;
-}
+};
 
-
-
-function ProductAdmin(props: { /* Logeado: EnableModal */ product:CartItemType}) {
+function ProductAdmin(props: { /* Logeado: EnableModal */ product: CartItemType }) {
   /* const [ModalEditActive, setModalEditActive] = useState<boolean>(false);
   const {Logeado} = props 
    */
-
-  const {product} = props 
+console.log("Ejemplo de props",props)
   return {
     /* isModalProducts:[ModalEditActive,setModalEditActive], */
   };

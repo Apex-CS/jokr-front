@@ -8,19 +8,6 @@ import {
 } from '@mui/material/';
 import axios from 'axios';
 
-type User = {
-  id: number;
-  sku: string;
-  name: string;
-  description: string;
-  price: number;
-  is_active: number;
-  created_at: string;
-  updated_at: string;
-  stock: number;
-  photo_file_name: string;
-};
-
 function DeleteProduct(props: { open: boolean; id: number; handleClose: () => void }) {
   const { id, open, handleClose } = props;
 

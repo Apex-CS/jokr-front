@@ -1,89 +1,24 @@
-import React, { useState } from 'react';
-import { Box, FormGroup, InputLabel, MenuItem, Select } from '@mui/material';
-import { DialogTitle } from '@mui/material';
+import React from 'react';
 import axios from 'axios';
-import { Button, LinearProgress,Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
-import { PhoneAndroid } from '@material-ui/icons';
-
-type FieldTypes = {
-  label: string;
-  name: string;
-  
-};
-
-function refreshPage() {
-  window.location.reload();
-}
-
-
-const initProduct = {
-  id: 3,
-  email: '',
-  is_active: '',
-  lastName: '',
-  name: 0,
-  password: 0,
-  role: '',
-  created_at: '',
-  delete_at: '',
-  updated_at: ''
-};
-
-const editFormFieldsData: FieldTypes[] = [
-  { label: 'Email', name: 'email' },
-  { label: 'Is_active', name: 'is_active' },
-  { label: 'Lastname', name: 'lastName' },
-  { label: 'Name', name: 'name' },
-  { label: 'Password', name: 'password' },
-  { label: 'Role', name: 'role' },
-  { label: 'Created_at', name: 'created_at' },
-  { label: 'Delete_at', name: 'delete_at' },
-  { label: 'Updated_at', name: 'updated_at' },
-];
 
 interface ShippingData {
-    id: string;
-    email: string;
-    name: string;
-    is_active: string;
-    lastName: string;
-    password: string;
-    role: string;
-    created_at: string;
-    delete_at: string;
-    updated_at: string;
-  
+  id: string;
+  email: string;
+  name: string;
+  is_active: string;
+  lastName: string;
+  password: string;
+  role: string;
+  created_at: string;
+  delete_at: string;
+  updated_at: string;
 }
 
 function ShippingFormUser() {
-
-  const [newProduct, setNewProduct] = useState(initProduct);
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-
-
-  /* Add new Product */
-  const onInputChnage = (e: { preventDefault: () => void; target: { name: any; value: any; }; }) => {
-    const { name, value } = e.target;
-    setNewProduct({ ...newProduct, [name]: value });
-  };
-  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-/*     const fetcher = (url: string) => axios.post(url,newProduct);
-    const { data, error } = useSWR('/api/addProducts', fetcher);
-    if (error) return 'An error has occurred.' + error;
-    if (!data) return 'Loading...'; */
-
-     
-     setOpen(false);
-    setNewProduct(initProduct); 
-  };
-
-
   return (
-
     <Formik
       initialValues={{
         email: '',
@@ -94,7 +29,7 @@ function ShippingFormUser() {
         role: '',
         created_at: '',
         delete_at: '',
-        updated_at: ''
+        updated_at: '',
       }}
       validate={(values) => {
         const errors: Partial<ShippingData> = {};
@@ -108,15 +43,15 @@ function ShippingFormUser() {
         !values.created_at && (errors.created_at = 'Required Field');
         !values.delete_at && (errors.created_at = 'Required Field');
         !values.updated_at && (errors.updated_at = 'Required Field');
-        
+
         // Alphanumeric chars
         // if (!/^[\w\-\s]+$/.test(values.zipcode)) {
         //   errors.zipcode = 'Incorrect zip code';
         // }
         //Phone number of 10 chars
-         if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.name)) {
-          errors.name ="Incorrect price";
-          }
+        if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.name)) {
+          errors.name = 'Incorrect price';
+        }
         //  if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.Active)) {
         //   errors.Active ="0/1";
         //   }
@@ -126,20 +61,16 @@ function ShippingFormUser() {
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
-        setTimeout(async() => {
-            console.log("hola");
+        setTimeout(async () => {
           setSubmitting(false);
-          console.log(values)
           await axios.post('/api/v1/Users', { ...values });
           window.location.reload();
         }, 500);
-       
-      }
-    }
+      }}
     >
       {({ submitForm, isSubmitting }) => (
         <Grid
-/*           container
+        /*           container
           item
           xs={12}
           sm={6}
@@ -152,11 +83,7 @@ function ShippingFormUser() {
             item
             style={{ display: 'flex', flexDirection: 'column', maxWidth: 400, minWidth: 300 }}
           >
-           
-            
-            
-            <Form onSubmit={onFormSubmit}>
-
+            <Form>
               <Field component={TextField} name="email" type="email" label="Email" />
               <Field component={TextField} name="is_active" type="is_active" label="Is_active" />
               <Field component={TextField} type="lastname" name="lastName" label="LastName" />
@@ -181,58 +108,17 @@ function ShippingFormUser() {
                   ),
                 }}
               /> */}
-              
+
               <Button
                 variant="contained"
                 color="secondary"
                 disabled={isSubmitting}
                 onClick={submitForm}
-                style= {{marginTop:'10rem'}}
+                style={{ marginTop: '10rem' }}
               >
                 Submit
               </Button>
-
             </Form>
-            
-        
-        
-        
-            {/* Update:
-            <form onSubmit={onFormSubmit}>
-              {editFormFieldsData?.map((field: FieldTypes) => {
-                return (
-                  <Form key={field.label}>
-                    <Field
-                      component={TextField}
-                      size="small"
-                      margin="normal"
-                      variant="outlined"
-                      label={field.label}
-                      name={field.name}
-                      id="outlined-basic"
-                    />
-                  </Form>
-                );
-              })}
-
-              
-            </form>
-          </DialogTitle>
-          <Button onClick={refreshPage}type="submit" color="primary" variant="contained">
-          {' '}
-          Agregar
-        </Button>
-
-        <Button onClick={handleClose} type="submit" color="primary" variant="contained">
-          {' '}
-          Close
-          
-        </Button> */}
-        
-      
-
-
-
           </Grid>
         </Grid>
       )}

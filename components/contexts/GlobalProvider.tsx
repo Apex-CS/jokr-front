@@ -15,9 +15,8 @@ export const GlobalProvider = ({ children }: any) => {
 }; */
 /*eslint no-empty: "error"*/
 
-import React, { createContext, useState, FC, useEffect } from 'react';
+import React, { createContext, useState, FC } from 'react';
 import { TodosContextState } from './types';
-
 
 export type CartItemType = {
   id: number;
@@ -36,32 +35,20 @@ export type CartItemType = {
 const contextDefaultValues: TodosContextState = {
   todos: 0,
   addTodo: () => 0,
-  /* isDeleted: {} as any, */
   cartItems: [],
   addCart: () => ({}),
-  DeletedCart:() => []
+  DeletedCart: () => [],
 };
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
 
 const GlobalProvider: FC = ({ children }) => {
-
-  //const [isDeleted, setRemove] = useState(contextDefaultValues.isDeletedState);
-  //const setisDeleted = (State: boolean, _id: number) => {
-   /*  setRemove({ removeState: State, id: _id }); */
-  // setRemove({ removeState:some.removeState,id:some.id});
-  //};
-  
-
- 
   const [todos, setTodos] = useState<number>(contextDefaultValues.todos);
   const addTodo = () => setTodos(todos + 1);
 
-  
   const [cartItems, setCartItems] = useState(contextDefaultValues.cartItems);
 
-
-  const DeletedCart  = (
+  const DeletedCart = (
     id: number,
     addSku: string,
     name: string,
@@ -73,26 +60,18 @@ const GlobalProvider: FC = ({ children }) => {
     stock: number,
     subcategory: string,
     photo_file_name: string,
-    amount: number,
+    amount: number
   ) =>
- 
     setCartItems((prev) => {
-
       const isItemInCart = prev.find((item) => item.id === id);
       const isItemInAmount = prev.find((item) => item.amount === 1 && item.id === id);
 
-        if (isItemInAmount) {
-        return prev.filter((item) => 
-         item.id !== id
-        );
-
-        }
-        if (isItemInCart) {
-          return prev.map((item) =>
-            item.id === id ? { ...item, amount: item.amount - 1 } : item
-          );
-        }
-      
+      if (isItemInAmount) {
+        return prev.filter((item) => item.id !== id);
+      }
+      if (isItemInCart) {
+        return prev.map((item) => (item.id === id ? { ...item, amount: item.amount - 1 } : item));
+      }
 
       return [
         ...prev,
@@ -106,14 +85,14 @@ const GlobalProvider: FC = ({ children }) => {
           created_at: created_at,
           updated_at: updated_at,
           stock: stock,
-          subcategory:subcategory,
+          subcategory: subcategory,
           photo_file_name: photo_file_name,
           amount: amount - 1,
         },
-      ]; 
-    });  
-  
-   const addCart = (
+      ];
+    });
+
+  const addCart = (
     addId: number,
     addSku: string,
     name: string,
@@ -123,19 +102,17 @@ const GlobalProvider: FC = ({ children }) => {
     created_at: string,
     updated_at: string,
     stock: number,
-    subcategory:string,
+    subcategory: string,
     photo_file_name: string,
     amount: number
   ) =>
     setCartItems((prev) => {
-        console.log("opcion agregar")
-        const isItemInCart = prev.find((item) => item.id === addId);
-        if (isItemInCart) {
-          return prev.map((item) =>
-            item.id === addId ? { ...item, amount: item.amount + 1 } : item
-          );
-        }
-      
+      const isItemInCart = prev.find((item) => item.id === addId);
+      if (isItemInCart) {
+        return prev.map((item) =>
+          item.id === addId ? { ...item, amount: item.amount + 1 } : item
+        );
+      }
 
       return [
         ...prev,
@@ -151,15 +128,11 @@ const GlobalProvider: FC = ({ children }) => {
           stock: stock,
           photo_file_name: photo_file_name,
           subcategory: subcategory,
-          amount: amount + 1
+          amount: amount + 1,
         },
       ];
+    });
 
-    });  
-  
-  
-
-    
   return (
     <TodosContext.Provider
       value={{
@@ -167,8 +140,7 @@ const GlobalProvider: FC = ({ children }) => {
         addTodo,
         cartItems,
         addCart,
-        DeletedCart
-      
+        DeletedCart,
       }}
     >
       {children}

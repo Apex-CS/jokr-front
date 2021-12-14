@@ -1,7 +1,7 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
-import { IconButton, TableCell, TableRow, Backdrop, Fade, Modal, Box } from '@mui/material';
+import { IconButton, TableCell, TableRow } from '@mui/material';
 import EditProduct from '@/components/EditProduct';
 import DeleteProduct from '@/components/DeleteProduct';
 type Product = {
@@ -16,11 +16,9 @@ type Product = {
   stock: number;
   subcategory: string;
   photo_file_name: string;
-  
 };
 
-function ListProducts(props: { product: Product}) {
-
+function ListProducts(props: { product: Product }) {
   const { product } = props;
   const [openEdit, setOpenEdit] = useState(false);
   const [openDel, setOpenDel] = useState(false);
@@ -40,7 +38,7 @@ function ListProducts(props: { product: Product}) {
   };
 
   return (
-    <Fragment >
+    <Fragment>
       <TableRow hover>
         <TableCell align="right">{product.id.toString()}</TableCell>
         <TableCell align="right">{product.sku}</TableCell>
@@ -53,8 +51,7 @@ function ListProducts(props: { product: Product}) {
         <TableCell align="right">{product.stock}</TableCell>
         <TableCell align="right">{product.subcategory}</TableCell>
         <TableCell align="right">{product.photo_file_name}</TableCell>
-        
-        
+
         <TableCell align="right">
           <IconButton color="warning" onClick={changeStateEdit}>
             <BorderColorIcon />

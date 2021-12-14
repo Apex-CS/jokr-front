@@ -2,7 +2,6 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import ListProducts from '@/components/ListProducts';
 import { styled } from '@mui/material/styles';
-/* import { Iproduct } from '@/components/interfaces/InterfaceProduct'; */
 import axios from 'axios';
 import useSWR from 'swr';
 import AddProduct from '@/components/AddProduct';
@@ -23,12 +22,6 @@ import {
   FormGroup,
   Container,
 } from '@mui/material';
-
-/* interface IProps {
-  onAddProduct: (product: Iproduct) => void;
-  product: Array<Iproduct>;
-  onEdit: (product: Iproduct) => void;
-} */
 
 const tableHeader: string[] = [
   'ID',
@@ -57,16 +50,10 @@ type Product = {
   stock: number;
   subcategory: string;
   photo_file_name: string;
-  
 };
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 function Products() {
-  /* Saber si el conext edit esta activo pero no sirve el cambio de estados entre componentees UseContext */
-  /*   let state: any = {}; state = React.useContext(ToolsContext);
-  const [ModalEditActive,setModalEditActive] = React.useState<Boolean>(state.state.ProductAdmin.isModalProducts)
-   */
-  /* COLOR HEADER TABLE */
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -82,7 +69,6 @@ function Products() {
   const handleClose = () => setOpen(false);
 
   const { data, error } = useSWR('/api/v1/products', fetcher);
-  console.log(data)
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (

@@ -2,8 +2,6 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import ListUsers from '@/components/ListUsers';
 import { styled } from '@mui/material/styles';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 /* import { Iproduct } from '@/components/interfaces/InterfaceProduct'; */
 import axios from 'axios';
 import useSWR from 'swr';
@@ -24,14 +22,7 @@ import {
   Fade,
   FormGroup,
   Container,
-  IconButton,
 } from '@mui/material';
-
-/* interface IProps {
-  onAddProduct: (product: Iproduct) => void;
-  product: Array<Iproduct>;
-  onEdit: (product: Iproduct) => void;
-} */
 
 const tableHeader: string[] = [
   'ID',
@@ -44,8 +35,7 @@ const tableHeader: string[] = [
   'Created_at',
   'Delete_at',
   'Updated_at',
-  'Options'
-
+  'Options',
 ];
 
 type User = {
@@ -59,16 +49,10 @@ type User = {
   created_at: string;
   delete_at: string;
   updated_at: string;
-  
 };
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 function Users() {
-  /* Saber si el conext edit esta activo pero no sirve el cambio de estados entre componentees UseContext */
-  /*   let state: any = {}; state = React.useContext(ToolsContext);
-  const [ModalEditActive,setModalEditActive] = React.useState<Boolean>(state.state.ProductAdmin.isModalProducts)
-   */
-  /* COLOR HEADER TABLE */
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -84,7 +68,6 @@ function Users() {
   const handleClose = () => setOpen(false);
 
   const { data, error } = useSWR('/api/v1/Users', fetcher);
-  console.log("Collection",data)
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (
@@ -101,8 +84,7 @@ function Users() {
           </Button>
 
           <TableContainer component={Paper}>
-            <Table /*  sx={{ minWidth: "100%", alignItems:"center"}} */ /* aria-label="simple table" */
-            >
+            <Table>
               <TableHead>
                 <TableRow>
                   {tableHeader?.map((header: string) => {
@@ -115,15 +97,9 @@ function Users() {
                 </TableRow>
               </TableHead>
               <TableBody>
-
-              {data?.map((user: User) => {
+                {data?.map((user: User) => {
                   return <ListUsers key={user.id} user={user} />;
                 })}
-
-
-
-              
-
               </TableBody>
             </Table>
           </TableContainer>

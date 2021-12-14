@@ -59,12 +59,11 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
     setEditNewProduct({ ...productData, [name]: value });
   };
 
-  const onFormSubmit  =  async(e: React.FormEvent<HTMLFormElement>) => {
+  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // Here will go the axios.post() to edit the selected product
     e.preventDefault();
-    console.log(productData);
     // axios.put('http://localhost:8080/products/${id}', { ...productData});
-    await axios.put(`/api/v1/products/${productData.id}`, { ...productData});
+    await axios.put(`/api/v1/products/${productData.id}`, { ...productData });
     setEditNewProduct(initProduct);
     window.location.reload();
   };
