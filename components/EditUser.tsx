@@ -5,18 +5,17 @@ import { Modal, Box, Backdrop, Fade } from '@mui/material';
 import axios from 'axios';
 
 type User = {
-    id: number;
-    email: string;
-    name: string;
-    is_active: number;
-    lastName: string;
-    password: string;
-    role: string;
-    created_at: string;
-    delete_at: string;
-    updated_at: string;
-      
-    };
+  id: number;
+  email: string;
+  name: string;
+  is_active: number;
+  lastName: string;
+  password: string;
+  role: string;
+  created_at: string;
+  delete_at: string;
+  updated_at: string;
+};
 
 type FieldTypes = {
   label: string;
@@ -36,7 +35,7 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
     role: obj.role,
     created_at: obj.created_at,
     delete_at: obj.delete_at,
-    updated_at: obj.updated_at
+    updated_at: obj.updated_at,
   };
 
   const [productData, setEditNewProduct] = useState(initProduct);
@@ -51,19 +50,18 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
     { label: 'role', name: 'role', value: productData.role },
     { label: 'created_at', name: 'created_at', value: productData.created_at },
     { label: 'delete_at', name: 'delete_at', value: productData.delete_at },
-    { label: 'updated_at', name: 'updated_at', value: productData.updated_at }
+    { label: 'updated_at', name: 'updated_at', value: productData.updated_at },
   ];
   const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEditNewProduct({ ...productData, [name]: value });
   };
 
-  const onFormSubmit  =  async(e: React.FormEvent<HTMLFormElement>) => {
+  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // Here will go the axios.post() to edit the selected product
     e.preventDefault();
-    console.log(productData);
     // axios.put('http://localhost:8080/products/${id}', { ...productData});
-    await axios.put(`/api/v1/Users/${productData.id}`, { ...productData});
+    await axios.put(`/api/v1/Users/${productData.id}`, { ...productData });
     setEditNewProduct(initProduct);
     window.location.reload();
   };

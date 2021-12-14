@@ -1,7 +1,7 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
-import { IconButton, TableCell, TableRow, Backdrop, Fade, Modal, Box } from '@mui/material';
+import { IconButton, TableCell, TableRow } from '@mui/material';
 
 import EditUser from '@/components/EditUser';
 import DeleteUser from '@/components/DeleteUser';
@@ -17,11 +17,9 @@ type User = {
   created_at: string;
   delete_at: string;
   updated_at: string;
-    
-  };
+};
 
-function ListUsers(props: { user: User}) {
-
+function ListUsers(props: { user: User }) {
   const { user } = props;
   const [openEdit, setOpenEdit] = useState(false);
   const [openDel, setOpenDel] = useState(false);
@@ -41,7 +39,7 @@ function ListUsers(props: { user: User}) {
   };
 
   return (
-    <Fragment >
+    <Fragment>
       <TableRow hover>
         <TableCell align="right">{user.id.toString()}</TableCell>
         <TableCell align="right">{user.email}</TableCell>
@@ -53,7 +51,7 @@ function ListUsers(props: { user: User}) {
         <TableCell align="right">{user.created_at}</TableCell>
         <TableCell align="right">{user.delete_at}</TableCell>
         <TableCell align="right">{user.updated_at}</TableCell>
-        
+
         <TableCell align="right">
           <IconButton color="warning" onClick={changeStateEdit}>
             <BorderColorIcon />
@@ -66,7 +64,6 @@ function ListUsers(props: { user: User}) {
 
       <EditUser obj={user} open={openEdit} handleClose={handleClose} />
       <DeleteUser id={iduser} open={openDel} handleClose={handleDelClose} />
-
     </Fragment>
   );
 }

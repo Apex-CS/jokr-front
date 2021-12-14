@@ -9,21 +9,8 @@ import {
 import axios from 'axios';
 
 function refreshPage() {
-    window.location.reload();
-  }
-
-type User = {
-    id: number;
-    email: string;
-    name: string;
-    is_active: number;
-    lastName: string;
-    password: string;
-    role: string;
-    created_at: string;
-    delete_at: string;
-    updated_at: string;
-};
+  window.location.reload();
+}
 
 function DeleteUser(props: { open: boolean; id: number; handleClose: () => void }) {
   const { id, open, handleClose } = props;
