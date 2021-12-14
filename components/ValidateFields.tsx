@@ -11,9 +11,9 @@ interface ShippingData {
   name: string;
   description: string;
   price: string;
-  Active: string;
-  created_at: string;
-  updated_at: string;
+  // Active: string;
+  // created_at: string;
+  // updated_at: string;
   stock: string;
   subcategory: string;
   photo_file_name: string;
@@ -27,12 +27,12 @@ function ShippingForm() {
         name: '',
         description: '',
         price: '',
-        Active: '',
-        created_at: '',
-        updated_at: '',
+        // Active: '1',
+        // created_at: '1',
+        // updated_at: '1',
         stock: '',
-        subcategory: '',
-        photo_file_name: '',
+        subcategory: 'DEPORTIVA',
+        photo_file_name: ''
       }}
       validate={(values) => {
         const errors: Partial<ShippingData> = {};
@@ -41,9 +41,9 @@ function ShippingForm() {
         !values.name && (errors.name = 'Required Field');
         !values.description && (errors.description = 'Required Field');
         !values.price && (errors.price = 'Required Field');
-        !values.Active && (errors.Active = 'Required Field');
-        !values.created_at && (errors.created_at = 'Required Field');
-        !values.updated_at && (errors.updated_at = 'Required Field');
+        // !values.Active && (errors.Active = 'Required Field');
+        // !values.created_at && (errors.created_at = 'Required Field');
+        // !values.updated_at && (errors.updated_at = 'Required Field');
         !values.stock && (errors.stock = 'Required Field');
         !values.photo_file_name && (errors.photo_file_name = 'Required Field');
         !values.subcategory && (errors.subcategory = 'Required Field');
@@ -53,15 +53,15 @@ function ShippingForm() {
         //   errors.zipcode = 'Incorrect zip code';
         // }
         //Phone number of 10 chars
-        if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.price)) {
-          errors.price = 'Incorrect price';
-        }
-        if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.Active)) {
-          errors.Active = '0/1';
-        }
-        if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.stock)) {
-          errors.stock = 'Incorrect number';
-        }
+         if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.price)) {
+         errors.price ="Incorrect price";
+         }
+        //  if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.Active)) {
+        //   errors.Active ="0/1";
+        //   }
+          if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.stock)) {
+            errors.stock ="Incorrect number";
+            }
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
@@ -98,24 +98,14 @@ function ShippingForm() {
                 label="Description"
               />
               <Field component={TextField} type="number" name="price" label="Price" />
-              <Field component={TextField} name="Active" type="number" label="Active" />
+              {/* <Field component={TextField} name="Active" type="number" label="Active" />
               <Field component={TextField} name="created_at" type="date" label="" />
-              <Field component={TextField} name="updated_at" type="date" label="" />
+              <Field component={TextField} name="updated_at" type="date" label="" /> */}
               <Field component={TextField} name="stock" type="number" label="Stock" />
-              <Field
-                component={TextField}
-                name="subcategory"
-                type="subcategory"
-                label="Subcategory"
-              />
-
-              <Field
-                component={TextField}
-                name="photo_file_name"
-                type="photo_file_name"
-                label="Photo_file_name"
-              />
-
+              <Field component={TextField} name="subcategory" type="subcategory" label="Subcategory"/>
+              <Field component={TextField} name="photo_file_name" type="photo_file_name" label="Photo_file_name" />
+              <br></br>
+              
               <Button
                 variant="contained"
                 color="primary"

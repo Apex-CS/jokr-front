@@ -24,14 +24,10 @@ import {
 } from '@mui/material';
 
 const tableHeader: string[] = [
-  'ID',
   'Sku',
   'Name',
   'Description',
   'Price',
-  'Is Active',
-  'Created At',
-  'Updated At',
   'Stock',
   'Subcategory',
   'Photo File Name',
@@ -44,9 +40,9 @@ type Product = {
   name: string;
   description: string;
   price: number;
-  is_active: number;
-  created_at: string;
-  updated_at: string;
+  // is_active: number;
+  // created_at: string;
+  // updated_at: string;
   stock: number;
   subcategory: string;
   photo_file_name: string;
@@ -79,10 +75,11 @@ function Products() {
       </Head>
 
       <Container>
-        <FormGroup>
-          <Button variant="contained" color="primary" onClick={handleOpen}>
+      <Button variant="contained" color="primary" onClick={handleOpen}>
             New Product
           </Button>
+        <FormGroup>
+          
 
           <TableContainer component={Paper}>
             <Table /*  sx={{ minWidth: "100%", alignItems:"center"}} */ /* aria-label="simple table" */

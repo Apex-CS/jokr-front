@@ -25,26 +25,19 @@ import {
 } from '@mui/material';
 
 const tableHeader: string[] = [
-  'ID',
   'Email',
-  'Is_active',
   'Lastname',
   'Name',
-  'Password',
   'Role',
-  'Created_at',
-  'Delete_at',
-  'Updated_at',
-  'Options',
+  'Options'
+
 ];
 
 type User = {
   id: number;
   email: string;
   name: string;
-  is_active: number;
   lastName: string;
-  password: string;
   role: string;
   created_at: string;
   delete_at: string;
@@ -78,10 +71,11 @@ function Users() {
       </Head>
 
       <Container>
-        <FormGroup>
-          <Button variant="contained" color="primary" onClick={handleOpen}>
+      <Button variant="contained" color="primary" onClick={handleOpen}>
             New User
           </Button>
+        <FormGroup>
+          
 
           <TableContainer component={Paper}>
             <Table>
