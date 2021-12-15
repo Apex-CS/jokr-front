@@ -2,8 +2,8 @@ import React, { Fragment, useState } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, TableCell, TableRow } from '@mui/material';
-import EditProduct from '@/components/EditProduct';
-import DeleteProduct from '@/components/DeleteProduct';
+import EditProduct from '@/components/Product/EditProduct';
+import DeleteProduct from '@/components/Product/DeleteProduct';
 type Product = {
   id: number;
   sku: string;

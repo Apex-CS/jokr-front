@@ -3,8 +3,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, TableCell, TableRow } from '@mui/material';
 
-import EditUser from '@/components/EditUser';
-import DeleteUser from '@/components/DeleteUser';
+import EditUser from '@/components/User/EditUser';
+import DeleteUser from '@/components/User/DeleteUser';
 
 type User = {
   id: number;

@@ -1,5 +1,5 @@
 import React from 'react';
-import ShippingForm  from "@/components/ValidateFields";
+import ShippingForm  from "@/components/Product/ValidateFields";
 
 function AddProduct() {
   return (

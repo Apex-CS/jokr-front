@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
-import ListProducts from '@/components/ListProducts';
+import ListProducts from '@/components/Product/ListProducts';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import useSWR from 'swr';
-import AddProduct from '@/components/AddProduct';
+import AddProduct from '@/components/Product/AddProduct';
 import {
   Modal,
   Button,

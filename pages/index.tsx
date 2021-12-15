@@ -4,7 +4,7 @@ import { useContext} from 'react';
 import useSWR from 'swr';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
-import ItemProduct from '@/components/ItemProduct';
+import ItemProduct from '@/components/Product/ItemProduct';
 import Container from '@mui/material/Container';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import { Paper } from '@mui/material';

@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
-import ListUsers from '@/components/ListUsers';
+import ListUsers from '@/components/User/ListUsers';
 import { styled } from '@mui/material/styles';
 /* import { Iproduct } from '@/components/interfaces/InterfaceProduct'; */
 import axios from 'axios';
 import useSWR from 'swr';
-import AddUser from '@/components/AddUser';
+import AddUser from '@/components/User/AddUser';
 import {
   Modal,
   Button,

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Button, FormGroup, TextField } from '@mui/material';
+import { Button, FormGroup } from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import { Modal, Box, Backdrop, Fade } from '@mui/material';
 import axios from 'axios';
+import { Formik, Form, Field } from 'formik';
+import { TextField } from 'formik-mui';
 
 type Product = {
   id: number;
@@ -24,6 +26,10 @@ type FieldTypes = {
   value: string | number;
 };
 
+
+
+
+
 function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
   const { obj, open, handleClose } = props;
   const initProduct = {
@@ -42,6 +48,19 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
 
   const [productData, setEditNewProduct] = useState(initProduct);
 
+  interface ShippingData {
+    sku: string;
+    name: string;
+    description: string;
+    price: string;
+    // Active: string;
+    // created_at: string;
+    // updated_at: string;
+    stock: string;
+    subcategory: string;
+    photo_file_name: string;
+  }
+
   const editFormFieldsData: FieldTypes[] = [
     { label: 'Sku', name: 'sku', value: productData.sku },
     { label: 'Name', name: 'name', value: productData.name },
@@ -56,8 +75,34 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
   ];
   const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setEditNewProduct({ ...productData, [name]: value });
+   /*  const onlyNums = e.target.value.replace(/[^0-9]/g, ''); */
+
+    /* if (onlyNums.length > 5) {
+      
+      window.alert("Hello world!");
+      console.log("Only 5 numbers");
+  } */
+
+  setEditNewProduct({ ...productData, [name]: value });
+
+// if (productData.price.toString().length > 5) {
+
+//     setEditNewProduct({...initProduct})
+//     window.alert("Hello world!");
+//     console.log("Only 5 numbers");
+  
+// }
+
+
+    
+
+    
+    
   };
+
+  
+  
+  
 
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // Here will go the axios.post() to edit the selected product
@@ -98,23 +143,80 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
             borderRadius: '2%',
           }}
         >
+
           <DialogTitle>
-            Update {obj.name} product:
-            <form onSubmit={onFormSubmit}>
+          <Formik
+      initialValues={{
+        sku: `${productData.sku}`,
+        name: `${productData.name}`,
+        description: `${productData.description}`,
+        price: `${productData.price}`,
+        // Active: '1',
+        // created_at: '1',
+        // updated_at: '1',
+        stock: `${productData.stock}`,
+        subcategory: 'DEPORTIVA',
+        photo_file_name: `${productData.photo_file_name}`
+      }}
+      validate={(values) => {
+        const errors: Partial<ShippingData> = {};
+        //
+
+        !values.sku && (errors.sku = 'Required Field');
+        !values.name && (errors.name = 'Required Field');
+        !values.description && (errors.description = 'Required Field');
+        !values.price && (errors.price = 'Required Field');
+        !values.stock && (errors.stock = 'Required Field');
+        !values.photo_file_name && (errors.photo_file_name = 'Required Field');
+        !values.subcategory && (errors.subcategory = 'Required Field');
+
+        if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.price)) {
+          errors.price ="Incorrect price, not a number";
+          }
+
+        if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.stock)) {
+            errors.price ="Incorrect stock, not a number";
+          }
+
+        if(values.sku.length>10){
+          errors.sku="Too long";
+        }
+
+        return errors;
+      }}    
+
+      onSubmit={(values, { setSubmitting }) => {
+        setTimeout(async () => {
+           setSubmitting(false);
+           // axios.put('http://localhost:8080/products/${id}', { ...productData});
+           await axios.put(`/api/v1/products/${productData.id}`, { ...values });
+           setEditNewProduct(initProduct);
+           window.location.reload();
+        }, 500);
+      }}
+    >
+
+{({ submitForm, isSubmitting }) => (
+    <React.Fragment>
+
+            Update {obj.name} product: 
+          
               {editFormFieldsData?.map((field: FieldTypes) => {
                 return (
-                  <FormGroup key={field.label}>
-                    <TextField
+                  <Form key={field.label}>
+                    <Field
+                    component={TextField} 
                       size="small"
                       margin="normal"
                       variant="outlined"
                       label={field.label}
                       name={field.name}
-                      value={field.value}
-                      onChange={onInputChnage}
+                     
+                    /*    value={field.value}  */
+                     /*  onChange={onInputChnage} */
                       id="outlined-basic"
                     />
-                  </FormGroup>
+                  </Form>
                 );
               })}
 
@@ -122,12 +224,26 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
                 <Button type="submit" color="secondary" variant="contained">
                   Cancel
                 </Button>
-                <Button type="submit" color="primary" variant="contained">
+                <Button  disabled={isSubmitting}
+                onClick={submitForm}  color="primary" variant="contained">
                   Save
                 </Button>
               </Box>
-            </form>
+              </React.Fragment>
+          
+        
+            )}
+
+            </Formik>
+
           </DialogTitle>
+
+
+        
+
+
+
+
         </Box>
       </Fade>
     </Modal>

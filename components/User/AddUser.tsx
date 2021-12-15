@@ -1,5 +1,5 @@
 import React from 'react';
-import ShippingFormUser from '@/components/ValidateFieldsUser';
+import ShippingFormUser from '@/components/User/ValidateFieldsUser';
 
 function AddUser() {
   return (
