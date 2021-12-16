@@ -124,14 +124,26 @@ function Products() {
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: 400,
+              width: 350,
               bgcolor: 'background.paper',
               boxShadow: 24,
               p: 4,
-              maxHeight: '90%',
-              marginTop: '-1rem',
-              overflow: 'scroll',
+              maxHeight: '98%',
+              marginTop: '.1rem',
+              borderRadius:'12px',
+              overflowX:'scroll',
+              '&::-webkit-scrollbar':{
+                  width:0,
+              }
+         
+          
+          
+            
+
+
             }}
+
+           
           >
             {/* AQUI LLAMO EL RESTO DEL MODAL el form para agregar Nuevo Productos */}
             <AddProduct />
