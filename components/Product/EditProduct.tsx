@@ -100,9 +100,6 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
     
   };
 
-  
-  
-  
 
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // Here will go the axios.post() to edit the selected product

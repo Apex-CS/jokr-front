@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Button, FormGroup, TextField } from '@mui/material';
+import { Button, FormGroup} from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import { Modal, Box, Backdrop, Fade } from '@mui/material';
 import axios from 'axios';
+import { Field, Form, Formik } from 'formik';
+import { TextField } from 'formik-mui';
 
 type User = {
     id: number;
@@ -31,17 +33,20 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
 
   const [productData, setEditNewProduct] = useState(initProduct);
 
+  interface ShippingData {
+    email: string;
+    name: string;
+    lastName: string;
+    role: string;
+
+  }
+
+
   const editFormFieldsData: FieldTypes[] = [
-    { label: 'id', name: 'id', value: productData.id },
     { label: 'email', name: 'email', value: productData.email },
     { label: 'name', name: 'name', value: productData.name },
-    // { label: 'is_active', name: 'is_active', value: productData.is_active },
     { label: 'lastName', name: 'lastName', value: productData.lastName },
-    // { label: 'password', name: 'password', value: productData.password },
-    { label: 'role', name: 'role', value: productData.role },
-    // { label: 'created_at', name: 'created_at', value: productData.created_at },
-    // { label: 'delete_at', name: 'delete_at', value: productData.delete_at },
-    // { label: 'updated_at', name: 'updated_at', value: productData.updated_at }
+    { label: 'role', name: 'role', value: productData.role }
   ];
   const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -86,24 +91,86 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
             height: '100%',
             borderRadius: '2%',
           }}
+          
         >
           <DialogTitle>
+            <Formik
+            initialValues={{
+              email: `${productData.email}`,
+              name: `${productData.name}`,
+              lastName: `${productData.lastName}`,
+              role: `${productData.role}`
+            }}
+            validate={(values) => {
+              const errors: Partial<ShippingData> = {};
+              //
+      
+              !values.email && (errors.email = 'Required Field');
+        !values.name && (errors.name = 'Required Field');
+        !values.lastName && (errors.lastName = 'Required Field');
+        !values.role && (errors.role = 'Required Field');
+      
+        if (!/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i.test(values.email)) {
+          errors.email = 'email is incorrect ';
+      }
+           if (values.email.length>30) {
+             errors.email = 'Field is too long ';
+         }
+  
+         if (/[1234567890|<>]/g.test(values.name)) {
+          errors.name = 'No numbers ';
+      }
+    
+      if (values.name.length>10) {
+        errors.name = 'Field is too long ';
+    }
+  
+    if (/[1234567890|<>]/g.test(values.lastName)) {
+      errors.lastName = 'No numbers ';
+  }
+  
+  if (values.lastName.length>10) {
+    errors.lastName = 'Field is too long ';
+  }
+  
+  if (/[1234567890|<>]/g.test(values.role)) {
+    errors.role = 'No numbers ';
+  }
+  
+  if (values.role.length>10) {
+  errors.role = 'Field is too long ';
+  }
+      
+              return errors;
+            }}    
+      
+            onSubmit={(values, { setSubmitting }) => {
+              setTimeout(async () => {
+                 setSubmitting(false);
+                 // axios.put('http://localhost:8080/products/${id}', { ...productData});
+                 await axios.put(`/api/v1/products/${productData.id}`, { ...values });
+                 setEditNewProduct(initProduct);
+                 window.location.reload();
+              }, 500);
+            }}
+            >
+            {({ submitForm, isSubmitting }) => (
+    <React.Fragment>
             Update {obj.name} product:
-            <form onSubmit={onFormSubmit}>
+           
               {editFormFieldsData?.map((field: FieldTypes) => {
                 return (
-                  <FormGroup key={field.label}>
-                    <TextField
+                  <Form key={field.label}>
+                    <Field
+                      component={TextField} 
                       size="small"
                       margin="normal"
                       variant="outlined"
                       label={field.label}
                       name={field.name}
-                      value={field.value}
-                      onChange={onInputChnage}
                       id="outlined-basic"
                     />
-                  </FormGroup>
+                  </Form>
                 );
               })}
 
@@ -111,11 +178,15 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
                 <Button type="submit" color="secondary" variant="contained">
                   Cancel
                 </Button>
-                <Button type="submit" color="primary" variant="contained">
+                <Button disabled={isSubmitting}
+                onClick={submitForm}  color="primary" variant="contained">
                   Save
                 </Button>
               </Box>
-            </form>
+              </React.Fragment>
+            )}
+            </Formik>
+            
           </DialogTitle>
         </Box>
       </Fade>

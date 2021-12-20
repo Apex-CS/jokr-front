@@ -20,36 +20,25 @@ const initProduct = {
   id: 3,
   email: '',
   lastName: '',
-  name: 0,
-  role: '',
-  // created_at: '',
-  // delete_at: '',
-  // updated_at: ''
+  name: '',
+  role: ''
 };
+
+const regex = /[A-Za-z]/;
 
 const editFormFieldsData: FieldTypes[] = [
   { label: 'Email', name: 'email' },
-  // { label: 'Is_active', name: 'is_active' },
   { label: 'Lastname', name: 'lastName' },
   { label: 'Name', name: 'name' },
-  // { label: 'Password', name: 'password' },
-  { label: 'Role', name: 'role' },
-  // { label: 'Created_at', name: 'created_at' },
-  // { label: 'Delete_at', name: 'delete_at' },
-  // { label: 'Updated_at', name: 'updated_at' },
+  { label: 'Role', name: 'role' }
 ];
 
 interface ShippingData {
     id: string;
     email: string;
     name: string;
-    // is_active: string;
     lastName: string;
-    // password: string;
     role: string;
-    // created_at: string;
-    // delete_at: string;
-    // updated_at: string;
   
 }
 
@@ -59,41 +48,53 @@ function ShippingFormUser() {
       initialValues={{
         email: '',
         name: '',
-        // is_active: '',
         lastName: '',
-        // password: '',
-        role: '',
-        // created_at: '',
-        // delete_at: '',
-        // updated_at: ''
+        role: ''
+
       }}
       validate={(values) => {
         const errors: Partial<ShippingData> = {};
-        //
-        !values.email && (errors.email = 'Required Field');
-        // !values.is_active && (errors.is_active = 'Required Field');
-        !values.lastName && (errors.lastName = 'Required Field');
-        !values.name && (errors.lastName = 'Required Field');
-        // !values.password && (errors.password = 'Required Field');
-        !values.role && (errors.role = 'Required Field');
-        // !values.created_at && (errors.created_at = 'Required Field');
-        // !values.delete_at && (errors.created_at = 'Required Field');
-        // !values.updated_at && (errors.updated_at = 'Required Field');
         
-        // Alphanumeric chars
-        // if (!/^[\w\-\s]+$/.test(values.zipcode)) {
-        //   errors.zipcode = 'Incorrect zip code';
-        // }
-        //Phone number of 10 chars
-        //  if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.name)) {
-        //   errors.name ="Incorrect price";
-        //   }
-        //  if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.Active)) {
-        //   errors.Active ="0/1";
-        //   }
-        //   if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.stock)) {
-        //     errors.stock ="Incorrect number";
-        //     }
+        !values.email && (errors.email = 'Required Field');
+        !values.name && (errors.lastName = 'Required Field');
+        !values.lastName && (errors.lastName = 'Required Field');
+        !values.role && (errors.role = 'Required Field');
+      
+        
+       // Alphanumeric chars
+
+       if (!/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i.test(values.email)) {
+        errors.email = 'email is incorrect ';
+    }
+         if (values.email.length>30) {
+           errors.email = 'Field is too long ';
+       }
+
+       if (/[1234567890|<>]/g.test(values.name)) {
+        errors.name = 'No numbers ';
+    }
+  
+    if (values.name.length>10) {
+      errors.name = 'Field is too long ';
+  }
+
+  if (/[1234567890|<>]/g.test(values.lastName)) {
+    errors.lastName = 'No numbers ';
+}
+
+if (values.lastName.length>10) {
+  errors.lastName = 'Field is too long ';
+}
+
+if (/[1234567890|<>]/g.test(values.role)) {
+  errors.role = 'No numbers ';
+}
+
+if (values.role.length>10) {
+errors.role = 'Field is too long ';
+}
+
+       
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
@@ -121,29 +122,10 @@ function ShippingFormUser() {
           >
             <Form>
               <Field component={TextField} name="email" type="email" label="Email" />
-              {/* <Field component={TextField} name="is_active" type="is_active" label="Is_active" /> */}
-              <Field component={TextField} type="lastname" name="lastName" label="LastName" />
               <Field component={TextField} name="name" type="name" label="Name" />
-              {/* <Field component={TextField} name="password" type="password" label="Password" /> */}
+              <Field component={TextField} type="lastname" name="lastName" label="LastName" />
               <Field component={TextField} name="role" type="role" label="Role" />
-              {/* <Field component={TextField} name="created_at" type="created_at" label="Created_at" />
-              <Field component={TextField} name="delete_at" type="Delete_at" label="Delete_at" />
-              <Field component={TextField} name="updated_at" type="updated_at" label="Updated_at" /> */}
-              {/* <Field
-                component={TextField}
-                name="phone"
-                type="phone"
-                label="Phone"
-                margin="normal"
-                style={{ textTransform: 'none' }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PhoneAndroid />
-                    </InputAdornment>
-                  ),
-                }}
-              /> */}
+    
 
               <Button
                 variant="contained"

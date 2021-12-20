@@ -70,10 +70,17 @@ function Users() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container>
       <Button variant="contained" color="primary" onClick={handleOpen}>
             New User
           </Button>
+
+
+      <Container>
+        
+          
+      
+          <br></br>
+          
         <FormGroup>
           
 
