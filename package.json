@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p ${PORT:=3000}",
-    "test": "jest --env=jsdom"
+    "test": "jest --env=jsdom",
+    "test:ci": "jest --env=jsdom --collectCoverage=true"
   },
   "dependencies": {
     "@emotion/react": "^11.6.0",
