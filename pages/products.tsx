@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ListProducts from '@/components/Product/ListProducts';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import AddProduct from '@/components/Product/AddProduct';
 import {
   Modal,
-  Button,
+  Tooltip,
   Table,
   Box,
   TableBody,
@@ -22,6 +22,7 @@ import {
   FormGroup,
   Container,
 } from '@mui/material';
+import { TodosContext } from '@/components/contexts';
 
 const tableHeader: string[] = [
   'Sku',
@@ -60,9 +61,9 @@ function Products() {
     },
   }));
   /* Check if state edit is enable */
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { open , isOpen} = useContext(TodosContext);
+  const handleOpen = () => isOpen(true);
+/*   const handleClose = () => isOpen(false); */
 
   const { data, error } = useSWR('/api/v1/products', fetcher);
   if (error) return 'An error has occurred.' + error;
@@ -74,13 +75,17 @@ function Products() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container>
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-            New Product
-          </Button>
-        <FormGroup>
-          
+      <Tooltip title="Add a new Product" placement="top">
+      <div className="wrap">
+        <button className="ADD btn5" onClick={handleOpen}>
+          +
+        </button>
+      </div>
+      </Tooltip>
+      
 
+      <Container >
+        <FormGroup>
           <TableContainer component={Paper}>
             <Table /*  sx={{ minWidth: "100%", alignItems:"center"}} */ /* aria-label="simple table" */
             >
@@ -107,7 +112,7 @@ function Products() {
 
       <Modal
         open={open}
-        onClose={handleClose}
+/*         onClose={handleClose} */
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         closeAfterTransition
@@ -130,26 +135,20 @@ function Products() {
               p: 4,
               maxHeight: '98%',
               marginTop: '.1rem',
-              borderRadius:'12px',
-              overflowX:'scroll',
-              '&::-webkit-scrollbar':{
-                  width:0,
-              }
-         
-          
-          
-            
-
-
+              borderRadius: '12px',
+              overflowX: 'scroll',
+              '&::-webkit-scrollbar': {
+                width: 0,
+              },
             }}
-
-           
           >
             {/* AQUI LLAMO EL RESTO DEL MODAL el form para agregar Nuevo Productos */}
             <AddProduct />
+            
           </Box>
         </Fade>
       </Modal>
+      
     </>
   );
 }

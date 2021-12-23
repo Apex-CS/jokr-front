@@ -1,5 +1,7 @@
 import React from 'react';
 import { Box, Button, Card, CardContent, Container, Typography } from '@mui/material';
+import GlobalLoader from '@/components/Loader/GlobalLoader';
+
 function Login() {
   const bull = (
     <Box component="span" sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}>
@@ -8,7 +10,8 @@ function Login() {
   );
   return (
     <>
-      <Container>
+    <GlobalLoader></GlobalLoader>
+     {/*  <Container>
         <Card sx={{ minWidth: 500, textAlign: 'center' }}>
           <CardContent>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -28,7 +31,7 @@ function Login() {
           </CardContent>
           <Button size="small">Learn More</Button>
         </Card>
-      </Container>
+      </Container> */}
     </>
   );
 }

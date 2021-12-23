@@ -16,6 +16,7 @@ export type TodosContextState = {
       photo_file_name: string,
       amount:number
     }>;
+    /* Add items to cart */
 
     addCart:(
       id:number,
@@ -46,5 +47,11 @@ export type TodosContextState = {
         photo_file_name: string,
         amount:number ,
         ) => void;
+      /* Check if modal is open or closer */
+      open:boolean;
+      isOpen: (open:boolean) => void;
 
+
+      success:boolean;
+      isSuccess: (success:boolean) => void;
     };

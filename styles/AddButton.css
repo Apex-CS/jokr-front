@@ -1,0 +1,94 @@
+/* Demo styling */
+
+/* Buttons at the center */
+.wrap {
+  width: 180px;
+  height: 250px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.ADD {
+  position: relative;
+  color: #f3af2f;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: #ffffff 1px 0 10px;
+  height: 175px;
+  width: 175px;
+  border: solid 3px #f3af2f;
+  border-radius: 175px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 10rem;
+  background-color: #fcfcfc;
+}
+
+/* General styling for the links */
+.ADD::before {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 175px;
+}
+
+/* BUTTON 5 */
+
+.btn5:hover,
+.btn5:focus,
+.btn5:link:hover,
+.btn5:link:focus,
+.btn5:visited:hover,
+.btn5:visited:focus {
+  transition-timing-function: cubic-bezier(0.6, 4, 0.3, 0.8);
+  -webkit-animation: gelatine 0.5s 1;
+  animation: gelatine 0.5s 1;
+}
+
+@keyframes gelatine {
+  from,
+  to {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(0.9, 1.1);
+  }
+  50% {
+    transform: scale(1.1, 0.9);
+  }
+  75% {
+    transform: scale(0.95, 1.05);
+  }
+  from,
+  to {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(0.9, 1.1);
+  }
+  50% {
+    transform: scale(1.1, 0.9);
+  }
+  75% {
+    transform: scale(0.95, 1.05);
+  }
+}
+/*  @media only screen and (max-height:100px)  {
+  .wrap{
+    margin-left: 22rem;
+}
+
+} */
+/*@media only screen and (max-height:1350px) and (max-width:600){
+  .wrap{
+    margin-top: -10rem;
+}
+
+} */
+
+
+
+

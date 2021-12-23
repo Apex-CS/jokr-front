@@ -35,9 +35,17 @@ export type CartItemType = {
 const contextDefaultValues: TodosContextState = {
   todos: 0,
   addTodo: () => 0,
+
   cartItems: [],
   addCart: () => ({}),
   DeletedCart: () => [],
+
+  open:false,
+  isOpen:() => false,
+
+  success:false,
+  isSuccess: () => false
+
 };
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
@@ -46,8 +54,8 @@ const GlobalProvider: FC = ({ children }) => {
   const [todos, setTodos] = useState<number>(contextDefaultValues.todos);
   const addTodo = () => setTodos(todos + 1);
 
+  /* Add items to cart adn delete */
   const [cartItems, setCartItems] = useState(contextDefaultValues.cartItems);
-
   const DeletedCart = (
     id: number,
     addSku: string,
@@ -132,6 +140,13 @@ const GlobalProvider: FC = ({ children }) => {
         },
       ];
     });
+/* Modal check if is open or close */
+
+const [open, setOpen] = useState<boolean>(contextDefaultValues.open);
+const isOpen = (open:boolean) => setOpen(open);
+
+const [success, setSuccess] = useState<boolean>(contextDefaultValues.success);
+const isSuccess = (success:boolean) => setSuccess(success);
 
   return (
     <TodosContext.Provider
@@ -141,6 +156,12 @@ const GlobalProvider: FC = ({ children }) => {
         cartItems,
         addCart,
         DeletedCart,
+
+        open,
+        isOpen,
+
+        success,
+        isSuccess
       }}
     >
       {children}
