@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p ${PORT:=3000}",
-    "test": "jest --env=jsdom"
+    "test": "jest --env=jsdom",
+    "test:ci": "jest --env=jsdom --collectCoverage=true --collectCoverageFrom pages/**/*.{js,jsx,ts,tsx}"
   },
   "dependencies": {
     "@emotion/react": "^11.6.0",
@@ -42,6 +43,14 @@
     "typescript": "^4.4.4"
   },
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
+      }
+    }
   }
 }
