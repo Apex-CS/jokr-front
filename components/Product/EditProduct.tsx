@@ -94,6 +94,7 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
 
   const handleDestroy = async () => {
     try {
+      console.log("desttroy", imagesUrl,"ID:::", imagesId )
       setLoading(true);
       const imageId = imagesId.toString();
       await axios.delete(`/api/v1/products/image/${imageId}`);
@@ -292,18 +293,6 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
                   </Tooltip>
                   {editFormFieldsData?.map((field: FieldTypes) => {
                     return (
-                      /*                       <Form key={field.label}>
-                        <Field
-                          component={TextField}
-                          size="small"
-                          margin="normal"
-                          variant="outlined"
-                          label={field.label}
-                          name={field.name}
-                          id="outlined-basic"
-                        />
-                      </Form> */
-
                       <FormGroup key={field.name}>
                         <FormControl sx={{ m: 1 }}>
                           <Field
