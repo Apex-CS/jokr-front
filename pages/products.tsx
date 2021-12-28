@@ -1,13 +1,12 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import ListProducts from '@/components/Product/ListProducts';
 import { styled } from '@mui/material/styles';
-import axios from 'axios';
-import useSWR from 'swr';
+
 import AddProduct from '@/components/Product/AddProduct';
 import {
   Modal,
-  Button,
+  Tooltip,
   Table,
   Box,
   TableBody,
@@ -22,6 +21,9 @@ import {
   FormGroup,
   Container,
 } from '@mui/material';
+import { TodosContext } from '@/components/contexts/GlobalProvider';
+/* import Loader from '@/components/Loader/GlobalLoader'; */
+import toast, { Toaster } from 'react-hot-toast';
 
 const tableHeader: string[] = [
   'Sku',
@@ -29,26 +31,30 @@ const tableHeader: string[] = [
   'Description',
   'Price',
   'Stock',
+  'Category',
   'Subcategory',
   'Photo File Name',
   'Options',
 ];
 
 type Product = {
-  id: number;
-  sku: string;
-  name: string;
   description: string;
+  id: number;
+  name: string;
+  photoPublicId: string;
+  photoUrl: string;
   price: number;
-  // is_active: number;
-  // created_at: string;
-  // updated_at: string;
+  sku: string;
   stock: number;
-  subcategory: string;
-  photo_file_name: string;
+  subcategories: {
+    categories: {
+      id: number;
+      name: string;
+    };
+  };
+  subcategoriesName: string;
 };
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 function Products() {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -60,27 +66,35 @@ function Products() {
     },
   }));
   /* Check if state edit is enable */
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { open, isOpen } = useContext(TodosContext);
+  const handleOpen = () => isOpen(true);
 
-  const { data, error } = useSWR('/api/v1/products', fetcher);
-  if (error) return 'An error has occurred.' + error;
-  if (!data) return 'Loading...';
+  const { AllProducts } = useContext(TodosContext);
+  const { success, isSuccess } = useContext(TodosContext);
+
+  useEffect(() => {
+    if (success) toast.success('Action done correctly!');
+    isSuccess(false);
+  }, [success]);
+
   return (
     <>
+      <Toaster position="bottom-center" reverseOrder={false} />
       <Head>
         <title>ApexShop</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container>
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-            New Product
-          </Button>
-        <FormGroup>
-          
+      <Tooltip title="Add a new Product" placement="top">
+        <div className="wrap">
+          <button className="ADD btn5" onClick={handleOpen}>
+            +
+          </button>
+        </div>
+      </Tooltip>
 
+      <Container>
+        <FormGroup>
           <TableContainer component={Paper}>
             <Table /*  sx={{ minWidth: "100%", alignItems:"center"}} */ /* aria-label="simple table" */
             >
@@ -96,7 +110,7 @@ function Products() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.map((pro: Product) => {
+                {AllProducts?.map((pro: Product) => {
                   return <ListProducts key={pro.id} product={pro} />;
                 })}
               </TableBody>
@@ -107,7 +121,7 @@ function Products() {
 
       <Modal
         open={open}
-        onClose={handleClose}
+           /* onClose={handleClose}  */
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         closeAfterTransition
@@ -124,13 +138,17 @@ function Products() {
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: 400,
+              width: 350,
               bgcolor: 'background.paper',
               boxShadow: 24,
               p: 4,
-              maxHeight: '90%',
-              marginTop: '-1rem',
-              overflow: 'scroll',
+              maxHeight: '98%',
+              marginTop: '.1rem',
+              borderRadius: '12px',
+              overflowX: 'scroll',
+              '&::-webkit-scrollbar': {
+                width: 0,
+              },
             }}
           >
             {/* AQUI LLAMO EL RESTO DEL MODAL el form para agregar Nuevo Productos */}

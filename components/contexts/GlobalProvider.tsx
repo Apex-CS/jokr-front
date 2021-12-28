@@ -15,8 +15,11 @@ export const GlobalProvider = ({ children }: any) => {
 }; */
 /*eslint no-empty: "error"*/
 
-import React, { createContext, useState, FC } from 'react';
+import React, { createContext, useState, FC, useEffect } from 'react';
 import { TodosContextState } from './types';
+import axios from 'axios';
+import useSWR from 'swr';
+import Loader from '@/components/Loader/GlobalLoader';
 
 export type CartItemType = {
   id: number;
@@ -35,10 +38,28 @@ export type CartItemType = {
 const contextDefaultValues: TodosContextState = {
   todos: 0,
   addTodo: () => 0,
+
   cartItems: [],
   addCart: () => ({}),
   DeletedCart: () => [],
+
+  open:false,
+  isOpen:() => false,
+
+  success:false,
+  isSuccess: () => false,
+
+  callback:false,
+  isCallback:() => false,
+
+  loaderShow:true,
+  isLoader:() => true,
+
+  AllProducts:[],
+  
+
 };
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
 
@@ -46,8 +67,8 @@ const GlobalProvider: FC = ({ children }) => {
   const [todos, setTodos] = useState<number>(contextDefaultValues.todos);
   const addTodo = () => setTodos(todos + 1);
 
+  /* Add items to cart adn delete */
   const [cartItems, setCartItems] = useState(contextDefaultValues.cartItems);
-
   const DeletedCart = (
     id: number,
     addSku: string,
@@ -132,6 +153,35 @@ const GlobalProvider: FC = ({ children }) => {
         },
       ];
     });
+/* Modal check if is open or close */
+
+const [open, setOpen] = useState<boolean>(contextDefaultValues.open);
+const isOpen = (open:boolean) => setOpen(open);
+
+const [success, setSuccess] = useState<boolean>(contextDefaultValues.success);
+const isSuccess = (success:boolean) => setSuccess(success);
+
+const [loaderShow, setLoaderShow] = useState<boolean>(contextDefaultValues.loaderShow);
+const isLoader = (loaderShow:boolean) => setLoaderShow(loaderShow);
+
+const [callback, setCallback] = useState<boolean>(contextDefaultValues.callback);
+const isCallback = (callback:boolean) => setCallback(callback);
+
+
+const [ AllProducts,setProducts] = useState(contextDefaultValues.AllProducts);
+
+
+useEffect(() => {
+ const  AllProductsFunction = async () => {
+  const res= await axios.get('/api/v1/products')
+  setProducts(res.data) 
+  setLoaderShow(false) 
+}  
+  AllProductsFunction() 
+}, [callback]);
+
+ if (loaderShow) return (<Loader/>);
+
 
   return (
     <TodosContext.Provider
@@ -141,6 +191,21 @@ const GlobalProvider: FC = ({ children }) => {
         cartItems,
         addCart,
         DeletedCart,
+
+        open,
+        isOpen,
+
+        success,
+        isSuccess,
+
+        loaderShow,
+        isLoader,
+
+        callback,
+        isCallback,
+        /* Get all products */
+        AllProducts,
+    
       }}
     >
       {children}

@@ -53,6 +53,7 @@ function Home() {
   };
 
   const { data, error } = useSWR('/api/v1/products', fetcher);
+  console.log(data)
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
 

@@ -1,24 +1,36 @@
-import React, { useState } from 'react';
-import { Button, FormGroup } from '@mui/material';
-import { DialogTitle } from '@mui/material';
-import { Modal, Box, Backdrop, Fade } from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  Button,
+  Grid,
+  CardHeader,
+  Divider,
+  FormControl,
+  InputAdornment,
+  FormGroup,
+  Tooltip,
+  InputLabel,
+  Select,
+  SelectChangeEvent,
+  MenuItem,
+  DialogActions,
+  FormHelperText,
+  Modal,
+  Backdrop,
+  Fade,
+  Box,
+  Typography,
+} from '@mui/material';
+import Image from 'next/image';
+import Back from '@/public/back.jpg';
 import axios from 'axios';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import { TextField } from 'formik-mui';
-
-type Product = {
-  id: number;
-  sku: string;
-  name: string;
-  description: string;
-  price: number;
-  // is_active: number;
-  // created_at: string;
-  // updated_at: string;
-  stock: number;
-  subcategory: string;
-  photo_file_name: string;
-};
+import { Product } from '@/components/Product/ListProducts';
+import { ShippingData } from '@/components/Product/ValidateFields';
+import { FieldCategory } from '@/components/Product/ValidateFields';
+import useSWR from 'swr';
+import Loader from '@/components/Loader/loader';
+import { TodosContext } from '@/components/contexts/GlobalProvider';
 
 type FieldTypes = {
   label: string;
@@ -26,96 +38,112 @@ type FieldTypes = {
   value: string | number;
 };
 
-
-
-
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
   const { obj, open, handleClose } = props;
-  const initProduct = {
-    id: obj.id,
-    sku: obj.sku,
-    name: obj.name,
-    description: obj.description,
-    price: obj.price,
-    // is_active: obj.is_active,
-    // created_at: obj.created_at,
-    // updated_at: obj.updated_at,
-    subcategory: obj.subcategory,
-    stock: obj.stock,
-    photo_file_name: obj.photo_file_name,
+  const { isOpen } = useContext(TodosContext);
+  const { callback, isCallback } = useContext(TodosContext);
+  const { isSuccess } = useContext(TodosContext);
+  const { isLoader } = useContext(TodosContext);
+
+  /* CLOSE MODAL */
+
+  /* CATEGORY */
+  const { data } = useSWR('/api/v1/categories', fetcher);
+  const [idSub, setIdsub] = useState<number>(obj.subcategories.categories.id);
+  const [listSub, setListSub] = useState([]);
+
+  useEffect(() => {
+    const getSubFuction = async () => {
+      const res = await axios.get(`/api/v1/subcategories/categories/${idSub}`);
+      setListSub(res.data);
+    };
+    getSubFuction();
+  }, [idSub]);
+
+  const [disableSub, SetdisableSub] = useState(false);
+  const [category, setCategory] = useState<string>(obj.subcategories.categories.name);
+  const [subCategory, setSubCategory] = useState<string>(obj.subcategoriesName);
+
+  const CategorySearch = (id: any) => async () => {
+    const res = await axios.get(`/api/v1/subcategories/categories/${id}`);
+    setListSub(res.data);
+    SetdisableSub(true);
+
+    setIdsub(id);
   };
 
-  const [productData, setEditNewProduct] = useState(initProduct);
+  const handleChangeCategory = async (event: SelectChangeEvent) => {
+    setCategory(event.target.value as string);
+    setSubCategory('');
+  };
 
-  interface ShippingData {
-    sku: string;
-    name: string;
-    description: string;
-    price: string;
-    // Active: string;
-    // created_at: string;
-    // updated_at: string;
-    stock: string;
-    subcategory: string;
-    photo_file_name: string;
-  }
+  const handleChangeSubCategory = async (event: SelectChangeEvent) => {
+    setSubCategory(event.target.value as string);
+  };
+
+  /* IMAGES */
+  const [imagesId, setImagesId] = useState<string>(obj.photoPublicId);
+  const [imagesUrl, setImagesUrl] = useState<string>(obj.photoUrl);
+  const [loading, setLoading] = useState(false);
+
+  const styleUpload = {
+    display: imagesUrl ? 'block' : 'none',
+  };
+
+  const handleDestroy = async () => {
+    try {
+      console.log("desttroy", imagesUrl,"ID:::", imagesId )
+      setLoading(true);
+      const imageId = imagesId.toString();
+      await axios.delete(`/api/v1/products/image/${imageId}`);
+      setImagesId('');
+      setImagesUrl('');
+
+      setLoading(false);
+    } catch (err) {
+      /*  alert(err.response.data.msg) */
+    }
+  };
+
+  const handleUpload = async (event: any) => {
+    try {
+      if (!event.files) return alert('No image Selected');
+
+      const file = event.files;
+      const formData = new FormData();
+      formData.append('file', file);
+      if (file.size > 1024 * 1024) return alert('File extended size, it must be of 1080 px');
+      if (file.type !== 'image/jpeg' && file.type !== 'image/png')
+        return alert('File format is incorrect');
+      setLoading(true);
+      const res = await axios.post('/api/v1/products/image', formData, {
+        headers: { 'content-type': 'multipart/form-data' },
+      });
+      setLoading(false);
+      setImagesId(res.data.id);
+      setImagesUrl(res.data.url);
+    } catch (err) {
+      /*  alert(err.response.data.msg) */
+    }
+  };
+
+  /* VALIDATE DATA */
 
   const editFormFieldsData: FieldTypes[] = [
-    { label: 'Sku', name: 'sku', value: productData.sku },
-    { label: 'Name', name: 'name', value: productData.name },
-    { label: 'Description', name: 'description', value: productData.description },
-    { label: 'Price', name: 'price', value: productData.price },
-    // { label: 'is_active', name: 'Active', value: productData.is_active },
-    // { label: 'Created At', name: 'created_at', value: productData.created_at },
-    // { label: 'Updated At', name: 'updated_at', value: productData.updated_at },
-    { label: 'Stock', name: 'stock', value: productData.stock },
-    { label: 'Subcategory', name: 'subcategory', value: productData.subcategory },
-    { label: 'Image', name: 'photo_file_name', value: productData.photo_file_name },
+    { label: 'Sku', name: 'sku', value: obj.sku },
+    { label: 'Name', name: 'name', value: obj.name },
+    { label: 'Description', name: 'description', value: obj.description },
+    { label: 'Price', name: 'price', value: obj.price },
+    { label: 'Stock', name: 'stock', value: obj.stock },
+    /*     { label: 'Subcategory', name: 'subcategory', value: obj.subcategory },
+    { label: 'Image', name: 'photo_file_name', value: obj.photo_file_name }, */
   ];
-  const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-   /*  const onlyNums = e.target.value.replace(/[^0-9]/g, ''); */
 
-    /* if (onlyNums.length > 5) {
-      
-      window.alert("Hello world!");
-      console.log("Only 5 numbers");
-  } */
-
-  setEditNewProduct({ ...productData, [name]: value });
-
-// if (productData.price.toString().length > 5) {
-
-//     setEditNewProduct({...initProduct})
-//     window.alert("Hello world!");
-//     console.log("Only 5 numbers");
-  
-// }
-
-
-    
-
-    
-    
-  };
-
-  
-  
-  
-
-  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    // Here will go the axios.post() to edit the selected product
-    e.preventDefault();
-    // axios.put('http://localhost:8080/products/${id}', { ...productData});
-    await axios.put(`/api/v1/products/${productData.id}`, { ...productData });
-    setEditNewProduct(initProduct);
-    window.location.reload();
-  };
   return (
     <Modal
       open={open}
-      onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       closeAfterTransition
@@ -132,118 +160,240 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 400,
+            width: 350,
             bgcolor: 'background.paper',
             boxShadow: 24,
             p: 4,
-            maxHeight: '90%',
-            marginTop: '-1rem',
-            overflow: 'scroll',
-            height: '100%',
-            borderRadius: '2%',
+            maxHeight: '98%',
+            marginTop: '.1rem',
+            borderRadius: '12px',
+            overflowX: 'scroll',
+            '&::-webkit-scrollbar': {
+              width: 0,
+            },
           }}
         >
-
-          <DialogTitle>
           <Formik
-      initialValues={{
-        sku: `${productData.sku}`,
-        name: `${productData.name}`,
-        description: `${productData.description}`,
-        price: `${productData.price}`,
-        // Active: '1',
-        // created_at: '1',
-        // updated_at: '1',
-        stock: `${productData.stock}`,
-        subcategory: 'DEPORTIVA',
-        photo_file_name: `${productData.photo_file_name}`
-      }}
-      validate={(values) => {
-        const errors: Partial<ShippingData> = {};
-        //
+            initialValues={{
+              sku: `${obj.sku}`,
+              name: `${obj.name}`,
+              description: `${obj.description}`,
+              price: `${obj.price}`,
+              stock: `${obj.stock}`,
+              subcategories: {},
+              photoPublicId: '',
+              photoUrl: '',
+            }}
+            validate={(values) => {
+              const errors: Partial<ShippingData> = {};
+              //
 
-        !values.sku && (errors.sku = 'Required Field');
-        !values.name && (errors.name = 'Required Field');
-        !values.description && (errors.description = 'Required Field');
-        !values.price && (errors.price = 'Required Field');
-        !values.stock && (errors.stock = 'Required Field');
-        !values.photo_file_name && (errors.photo_file_name = 'Required Field');
-        !values.subcategory && (errors.subcategory = 'Required Field');
+              !values.sku && (errors.sku = 'Required Field');
+              !values.name && (errors.name = 'Required Field');
+              !values.description && (errors.description = 'Required Field');
+              !values.price && (errors.price = 'Required Field');
+              !values.stock && (errors.stock = 'Required Field');
 
-        if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.price)) {
-          errors.price ="Incorrect price, not a number";
-          }
+              if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.price)) {
+                errors.price = 'Incorrect price, not a number';
+              }
 
-        if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.stock)) {
-            errors.price ="Incorrect stock, not a number";
-          }
+              if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.stock)) {
+                errors.price = 'Incorrect stock, not a number';
+              }
 
-        if(values.sku.length>10){
-          errors.sku="Too long";
-        }
+              if (values.sku.length > 10) {
+                errors.sku = 'Too long';
+              }
 
-        return errors;
-      }}    
+              return errors;
+            }}
+            onSubmit={async (values, { setSubmitting }) => {
+              values.subcategories = { name: subCategory };
+              values.photoPublicId = imagesId.toString();
+              values.photoUrl = imagesUrl.toString();
+              console.log(values);
+              setSubmitting(false);
+              await axios.put(`/api/v1/products/${obj.id}`, { ...values });
+              isOpen(false);
+              isCallback(!callback);
+              isSuccess(true);
+              isLoader(true);
+            }}
+          >
+            {() => (
+              <Grid
+                item
+                style={{
+                  marginTop: '-15px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  maxWidth: 300,
+                  minWidth: 300,
+                  alignItems: 'center', 
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Tooltip title="Close">
+                  <Button
+                    style={{marginLeft:'15rem'}}
+                    className="button-close"
+                    color="error"
+                    variant="outlined"
+                    size="small"
+                    onClick={handleClose}
+                  >
+                    <b>X</b>
+                  </Button>
+                </Tooltip>
 
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(async () => {
-           setSubmitting(false);
-           // axios.put('http://localhost:8080/products/${id}', { ...productData});
-           await axios.put(`/api/v1/products/${productData.id}`, { ...values });
-           setEditNewProduct(initProduct);
-           window.location.reload();
-        }, 500);
-      }}
-    >
+                <CardHeader
+                  sx={{ m: -2, paddingBottom: '-2rem', textAlign: 'center' }}
+                  title="Update product: "
+                />
 
-{({ submitForm, isSubmitting }) => (
-    <React.Fragment>
+                <Typography sx={{ textAlign: 'center' }} variant="h5" component="div">
+                  {obj.name}
+                </Typography>
+                <Form>
+                  <Divider />
 
-            Update {obj.name} product: 
-          
-              {editFormFieldsData?.map((field: FieldTypes) => {
-                return (
-                  <Form key={field.label}>
-                    <Field
-                    component={TextField} 
-                      size="small"
-                      margin="normal"
-                      variant="outlined"
-                      label={field.label}
-                      name={field.name}
-                     
-                    /*    value={field.value}  */
-                     /*  onChange={onInputChnage} */
-                      id="outlined-basic"
-                    />
-                  </Form>
-                );
-              })}
+                  <div className="imageTitle">Select a image: </div>
+                  <Tooltip title="Add a image " placement="top">
+                    <div className="upload">
+                      <input
+                        type="file"
+                        name="file"
+                        id="file_up"
+                        onChange={(event: any) => {
+                          handleUpload({ files: event.currentTarget.files[0] });
+                        }}
+                      ></input>
 
-              <Box>
-                <Button type="submit" color="secondary" variant="contained">
-                  Cancel
-                </Button>
-                <Button  disabled={isSubmitting}
-                onClick={submitForm}  color="primary" variant="contained">
-                  Save
-                </Button>
-              </Box>
-              </React.Fragment>
-          
-        
+                      {loading ? (
+                        <div id="file_Loader">
+                          {' '}
+                          <Loader />{' '}
+                        </div>
+                      ) : (
+                        <div id="file_img" style={styleUpload}>
+                          <Image
+                            src={imagesUrl ? imagesUrl : Back}
+                            width={500}
+                            height={500}
+                            alt="Pro_Image"
+                          />
+
+                          <span id="file_img_delete" onClick={handleDestroy}>
+                            X
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </Tooltip>
+                  {editFormFieldsData?.map((field: FieldTypes) => {
+                    return (
+                      <FormGroup key={field.name}>
+                        <FormControl sx={{ m: 1 }}>
+                          <Field
+                            size="small"
+                            component={TextField}
+                            margin="normal"
+                            label={field.label}
+                            name={field.name}
+                            variant="outlined"
+                            id="outlined-basic"
+                            InputProps={{
+                              startAdornment: <InputAdornment position="start"></InputAdornment>,
+                            }}
+                          />
+                        </FormControl>
+                      </FormGroup>
+                    );
+                  })}
+                  <FormGroup>
+                    <FormControl fullWidth error={category ? false : true}>
+                      <InputLabel>Category</InputLabel>
+                      <Select
+                        name="category"
+                        sx={{ m: 1 }}
+                        size="small"
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        label="Category"
+                        value={category ? category : ''}
+                        onChange={handleChangeCategory}
+                        required
+                      >
+                        {data?.map((field: FieldCategory) => {
+                          return (
+                            <MenuItem
+                              key={field.id}
+                              value={field.name}
+                              onClick={CategorySearch(field.id)}
+                            >
+                              {field.name}{' '}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                      <FormHelperText sx={{ marginBottom: '1rem' }}>
+                        Select a category and then a subcategory
+                      </FormHelperText>
+                    </FormControl>
+                  </FormGroup>
+                  <FormGroup>
+                    <FormControl
+                      fullWidth
+                      disabled={disableSub ? false : true}
+                      error={subCategory ? false : true}
+                    >
+                      <InputLabel sx={{ padding: '10px' }}> Sub Category</InputLabel>
+                      <Select
+                        sx={{ m: 1 }}
+                        required
+                        name="subcategory"
+                        size="small"
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        label="Sub Category"
+                        value={subCategory ? subCategory : ''}
+                        onChange={handleChangeSubCategory}
+                      >
+                        {listSub?.map((field: FieldCategory) => {
+                          return (
+                            <MenuItem key={field.id} value={field.name}>
+                              {field.name}{' '}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+
+                      <FormHelperText>Select a subcategory</FormHelperText>
+                    </FormControl>
+                  </FormGroup>
+                  <DialogActions>
+                    <Button type="submit" variant="outlined" sx={{ m: 0.5 }}>
+                      Submit
+                    </Button>
+                  </DialogActions>
+                  {/*  <Box>
+                    <Button type="submit" color="secondary" variant="contained" sx= {{marginRight:'5px'}}>
+                      Cancel
+                    </Button>
+                    <Button
+                      disabled={isSubmitting}
+                      onClick={submitForm}
+                      color="primary"
+                      variant="contained"
+                    >
+                      Save
+                    </Button>
+                  </Box> */}
+                </Form>
+              </Grid>
             )}
-
-            </Formik>
-
-          </DialogTitle>
-
-
-        
-
-
-
-
+          </Formik>
         </Box>
       </Fade>
     </Modal>
