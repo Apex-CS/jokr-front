@@ -4,18 +4,23 @@ import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, TableCell, TableRow } from '@mui/material';
 import EditProduct from '@/components/Product/EditProduct';
 import DeleteProduct from '@/components/Product/DeleteProduct';
-type Product = {
-  id: number;
-  sku: string;
-  name: string;
-  description: string;
-  price: number;
-  // is_active: number;
-  // created_at: string;
-  // updated_at: string;
-  stock: number;
-  subcategory: string;
-  photo_file_name: string;
+
+export type Product = {
+  description: string,
+  id: number,
+  name: string,
+  photoPublicId: string,
+  photoUrl:string,
+  price: number,
+  sku: string,
+  stock: number,
+  subcategories:{
+    categories: {
+      id:number,
+      name:string
+    }
+  },
+  subcategoriesName: string
 };
 
 function ListProducts(props: { product: Product }) {
@@ -37,6 +42,7 @@ function ListProducts(props: { product: Product }) {
     setIdProduct(product.id);
   };
 
+
   return (
     <Fragment>
       <TableRow hover>
@@ -45,13 +51,10 @@ function ListProducts(props: { product: Product }) {
         <TableCell align="right">{product.name}</TableCell>
         <TableCell align="right">{product.description}</TableCell>
         <TableCell align="right">{product.price.toString()}</TableCell>
-        {/* <TableCell align="right">{product.is_active.toString()}</TableCell>
-        <TableCell align="right">{product.created_at}</TableCell>
-        <TableCell align="right">{product.updated_at}</TableCell> */}
         <TableCell align="right">{product.stock}</TableCell>
-        <TableCell align="right">{product.subcategory}</TableCell>
-        <TableCell align="right">{product.photo_file_name}</TableCell>
-
+        <TableCell align="right">{product.subcategories.categories.name}</TableCell>
+        <TableCell align="right">{product.subcategoriesName}</TableCell>
+        <TableCell align="right">{product.photoUrl}</TableCell> 
         <TableCell align="right">
           <IconButton color="warning" onClick={changeStateEdit}>
             <BorderColorIcon />

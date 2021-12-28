@@ -34,8 +34,8 @@ module.exports = {
         destination: `${process.env.SPRING_API_KEY}/api/v1/categories`
       },
       {
-        source: '/api/v1/subcategories/:id',
-        destination: `${process.env.SPRING_API_KEY}/api/v1/subcategories/:id`
+        source: '/api/v1/subcategories/categories/:id',
+        destination: `${process.env.SPRING_API_KEY}/api/v1/subcategories/categories/:id`
       },
     ]
   },

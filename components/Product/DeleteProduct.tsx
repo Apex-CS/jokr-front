@@ -1,4 +1,6 @@
 import Button from '@mui/material/Button';
+import axios from 'axios';
+import { TodosContext } from '@/components/contexts/GlobalProvider';
 import {
   Dialog,
   DialogContent,
@@ -6,34 +8,21 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material/';
-import axios from 'axios';
+import { useContext } from 'react';
 
-type User = {
-  id: number;
-  sku: string;
-  name: string;
-  description: string;
-  price: number;
-  is_active: number;
-  created_at: string;
-  updated_at: string;
-  stock: number;
-  photo_file_name: string;
-};
-
-function refreshPage() {
-  window.location.reload();
-}
 
 function DeleteProduct(props: { open: boolean; id: number; handleClose: () => void }) {
   const { id, open, handleClose } = props;
-
-  const deleteProduct = () => {
+  const { callback, isCallback } = useContext(TodosContext);
+  const {  isSuccess } = useContext(TodosContext);
+  const deleteProduct = async() => {
     // Make the function async
-    axios.delete(`/api/v1/products/${id}`);
+    await axios.delete(`/api/v1/products/${id}`);
     // TODO: Make snackbar appear on successfull/error at delete
-    refreshPage();
     handleClose();
+    isCallback(!callback);
+    isSuccess(true);
+  
   };
 
   return (

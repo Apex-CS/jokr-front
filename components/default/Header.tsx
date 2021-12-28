@@ -14,7 +14,6 @@ import {
   Badge,
   MenuItem,
 } from '@mui/material';
-
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -128,7 +127,7 @@ function MiniDrawer() {
     <>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="fixed" open={open}>
+        <AppBar position="fixed" open={open} sx = {{backgroundColor:'#131921'}}>
           <Toolbar>
             <IconButton
               color="inherit"
@@ -150,7 +149,7 @@ function MiniDrawer() {
             </MuiDrawer>
 
             <MenuItem onClick={() => setCartOpen(true)}>
-              <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+              <IconButton size="large" aria-label="cart notifications" color="inherit">
                 <Badge badgeContent={getTotalItems(cartItems)} color="error">
                   <Shop />
                 </Badge>

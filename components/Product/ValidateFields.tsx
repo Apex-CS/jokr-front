@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import useSWR from 'swr';
 import Image from 'next/image';
-import { TodosContext } from '@/components/contexts';
+import { TodosContext } from '@/components/contexts/GlobalProvider';
 import Back from '@/public/back.jpg';
 import {
   Button,
@@ -18,8 +18,6 @@ import {
   SelectChangeEvent,
   MenuItem,
   DialogActions,
-  DialogContent,
-  Dialog,
   FormHelperText,
 } from '@mui/material';
 
@@ -27,11 +25,7 @@ import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
 import Loader from '@/components/Loader/loader';
 
-import { useForm, Controller } from 'react-hook-form';
-
-import toast, { Toaster } from 'react-hot-toast';
-
-interface ShippingData {
+export interface ShippingData {
   sku: string;
   name: string;
   description: string;
@@ -40,23 +34,19 @@ interface ShippingData {
   subcategories: {
     name: string;
   };
-  public_id: string;
-  url: string;
+  photoPublicId: string;
+  photoUrl: string;
 }
-
-type FieldImage = {
-  id: string;
-  url: string;
-};
 
 type FieldTypes = {
   name: string | number;
   type: string | number;
   label: string;
   placeholder: string;
+  value:string | number;
 };
 
-type FieldCategory = {
+export type FieldCategory = {
   id: number;
   name: string;
   categories: {
@@ -66,20 +56,21 @@ type FieldCategory = {
 };
 
 const AddlabelsConfing: FieldTypes[] = [
-  { name: 'sku', type: 'sku', label: 'New sku code', placeholder: 'Sku' },
-  { name: 'name', type: 'name', label: 'New name of product', placeholder: 'Name' },
-  { name: 'description', type: 'description', label: 'Description', placeholder: 'Description' },
-  { name: 'price', type: 'number', label: 'Price', placeholder: 'Price' },
-  { name: 'stock', type: 'number', label: 'Stock', placeholder: 'Stock' },
-  /*  { name: 'subcategory', type: 'subcategory', label: 'Subcategory', placeholder: 'Subcategory' }, */
-  /*  { name: 'photo_file_name', type: 'photo_file_name', label: 'Photo_file_name', placeholder: 'Photo_file_name' } */
+  { name: 'sku', type: 'sku', label: 'New sku code', placeholder: 'Sku' , value:''},
+  { name: 'name', type: 'name', label: 'New name of product', placeholder: 'Name' ,value:'' },
+  { name: 'description', type: 'description', label: 'Description', placeholder: 'Description',value:'' },
+  { name: 'price', type: 'number', label: 'Price', placeholder: 'Price' ,value:''},
+  { name: 'stock', type: 'number', label: 'Stock', placeholder: 'Stock' ,value:''},
 ];
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 function ShippingForm() {
-  const { open, isOpen } = useContext(TodosContext);
+  const { isOpen } = useContext(TodosContext);
+  const { callback, isCallback } = useContext(TodosContext);
   const { isSuccess } = useContext(TodosContext);
+  const { isLoader } = useContext(TodosContext);
+
   const [category, setCategory] = useState<string>('');
   const [subCategory, setSubCategory] = useState<string>('');
   const [listSub, setListSub] = useState([]);
@@ -94,48 +85,38 @@ function ShippingForm() {
     setSubCategory(event.target.value as string);
   };
 
-  /* SELECT VALIDATION */
-
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
-  const handleData = (data: any) => {
-    isSuccess(true);
-    toast.success('Always at the bottom.', {
-      position: 'bottom-center',
-    });
-  };
-  /* SLECT VALIDATION */
-
   const { data } = useSWR('/api/v1/categories', fetcher);
   /* IMAGES */
   const handleClose = () => {
     isOpen(false);
-    if (images) handleDestroyClose(images?.id);
+    if (imagesId) handleDestroyClose(imagesId);
   };
-  const [images, setImages] = useState<FieldImage>();
+  const [imagesId, setImagesId] = useState<string>('');
+  const [imagesUrl, setImagesUrl] = useState<string>('');
+  /* console.log('info', imagesUrl, typeof imagesUrl); */
+
   const [loading, setLoading] = useState(false);
 
   const styleUpload = {
-    display: images ? 'block' : 'none',
+    display: imagesUrl ? 'block' : 'none',
   };
 
-  const CategorySearch = (id: any) => async (event: any) => {
-    const res = await axios.get(`/api/v1/subcategories/${id}`);
+  const CategorySearch = (id: any) => async () => {
+    const res = await axios.get(`/api/v1/subcategories/categories/${id}`);
     setListSub(res.data);
     SetdisableSub(true);
   };
 
   const handleDestroyClose = async (id: any) => await axios.delete(`/api/v1/products/image/${id}`);
+
   const handleDestroy = async () => {
     try {
       setLoading(true);
-      const imageId = images?.id.toString();
+      const imageId = imagesId.toString();
       await axios.delete(`/api/v1/products/image/${imageId}`);
-      setImages(undefined);
+      setImagesId('');
+      setImagesUrl('');
+
       setLoading(false);
     } catch (err) {
       /*  alert(err.response.data.msg) */
@@ -145,10 +126,11 @@ function ShippingForm() {
   const handleUpload = async (event: any) => {
     try {
       if (!event.files) return alert('No image Selected');
+
       const file = event.files;
       const formData = new FormData();
       formData.append('file', file);
-      if (file.size > 1024 * 1024) return alert('File not extended size, it must be of 1080 px');
+      if (file.size > 1024 * 1024) return alert('File extended size, it must be of 1080 px');
       if (file.type !== 'image/jpeg' && file.type !== 'image/png')
         return alert('File format is incorrect');
       setLoading(true);
@@ -156,12 +138,12 @@ function ShippingForm() {
         headers: { 'content-type': 'multipart/form-data' },
       });
       setLoading(false);
-      setImages(res.data);
+      setImagesId(res.data.id);
+      setImagesUrl(res.data.url);
     } catch (err) {
       /*  alert(err.response.data.msg) */
     }
   };
-
   /* IMAGES */
   return (
     <>
@@ -171,14 +153,10 @@ function ShippingForm() {
           name: '',
           description: '',
           price: '',
-          // Active: '1',
-          // created_at: '1',
-          // updated_at: '1',
           stock: '',
           subcategories: {},
-          public_id: '',
-          url: '',
-          /* photo_file_name: '', */
+          photoPublicId: '',
+          photoUrl: '',
         }}
         validate={(values) => {
           const errors: Partial<ShippingData> = {};
@@ -187,56 +165,45 @@ function ShippingForm() {
           !values.name && (errors.name = 'Required Field');
           !values.description && (errors.description = 'Required Field');
           !values.price && (errors.price = 'Required Field');
-          // !values.Active && (errors.Active = 'Required Field');
-          // !values.created_at && (errors.created_at = 'Required Field');
-          // !values.updated_at && (errors.updated_at = 'Required Field');
           !values.stock && (errors.stock = 'Required Field');
-          /* !values.photo_file_name && (errors.photo_file_name = 'Required Field'); */
 
-          /*       !values.subcategories && (errors.subcategories!.name = 'Required Field');   */
-          // Alphanumeric chars
-          // if (!/^[\w\-\s]+$/.test(values.zipcode)) {
-          //   errors.zipcode = 'Incorrect zip code';
-          // }
-          //Phone number of 10 chars
+          /*    if(  !values.file ) {
+            toast.error("No image selected.", {
+              position: 'top-center',
+              icon: '👎👎',
+              style: {
+                position:'sticky',
+                marginTop:'51rem', 
+                borderRadius: '10px',
+                background: '#333',
+                color: '#fff',
+              }
+            })
+          } 
+          */
+
           if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.price)) {
             errors.price = 'Incorrect price';
           }
-          //  if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.Active)) {
-          //   errors.Active ="0/1";
-          //   }
           if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.stock)) {
             errors.stock = 'Incorrect number';
           }
-
-    
           return errors;
         }}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           values.subcategories = { name: subCategory };
-          values.public_id = images?.id.toString()!;
-          values.url = images?.url.toString()!;
-          toast('New Product Added!!', {
-            position: 'top-center',
-            icon: '👏',
-            style: {
-              position:'sticky',
-              marginTop:'55rem',
-              borderRadius: '10px',
-              background: '#333',
-              color: '#fff',
-            }
-          });
-          if (subCategory && images) {
-            setTimeout(async () => {
-              setSubmitting(false);
-              await axios.post('/api/v1/products', { ...values });
-              window.location.reload();
-            }, 500);
-          }
+          values.photoPublicId = imagesId.toString();
+          values.photoUrl = imagesUrl.toString();
+
+          setSubmitting(false);
+          await axios.post('/api/v1/products', { ...values });
+          isOpen(false);
+          isCallback(!callback);
+          isSuccess(true);
+          isLoader(true);
         }}
       >
-        {({ submitForm, isSubmitting }) => (
+        {() => (
           <Grid
             item
             style={{
@@ -249,10 +216,9 @@ function ShippingForm() {
               justifyContent: 'space-between',
             }}
           >
-            <Toaster position="bottom-center" reverseOrder={false} />
-
             <Tooltip title="Close">
               <Button
+                style={{marginLeft:'15rem'}}
                 className="button-close"
                 color="error"
                 variant="outlined"
@@ -277,8 +243,8 @@ function ShippingForm() {
                     type="file"
                     name="file"
                     id="file_up"
-                    onChange={(event) => {
-                      handleUpload({ files: event.currentTarget.files![0] });
+                    onChange={(event: any) => {
+                      handleUpload({ files: event.currentTarget.files[0] });
                     }}
                   ></input>
 
@@ -290,11 +256,12 @@ function ShippingForm() {
                   ) : (
                     <div id="file_img" style={styleUpload}>
                       <Image
-                        src={images ? images?.url : Back}
+                        src={imagesUrl ? imagesUrl : Back}
                         width={500}
                         height={500}
                         alt="Pro_Image"
                       />
+
                       <span id="file_img_delete" onClick={handleDestroy}>
                         X
                       </span>
@@ -322,12 +289,11 @@ function ShippingForm() {
                 );
               })}
               <FormGroup>
-                <FormControl fullWidth  error={category ? false : true}>
-                  <InputLabel >
-                    Category
-                  </InputLabel>
+                  <FormControl fullWidth error={category ? false : true}>
+                  <InputLabel>Category</InputLabel>
                   <Select
-                    sx={{ m: 1 }}
+                    name="category"
+                      sx={{ m: 1 }}
                     size="small"
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -341,7 +307,7 @@ function ShippingForm() {
                         <MenuItem
                           key={field.id}
                           value={field.name}
-                          onClick={(e) => CategorySearch(field.id)(e)}
+                          onClick={CategorySearch(field.id)}
                         >
                           {field.name}{' '}
                         </MenuItem>
@@ -372,8 +338,12 @@ function ShippingForm() {
                 })}
               </Select>
             </FormControl>  */}
-              <FormGroup >
-                <FormControl fullWidth disabled={disableSub ? false : true}  error={subCategory ? false : true}>
+              <FormGroup>
+                <FormControl
+                  fullWidth
+                  disabled={disableSub ? false : true}
+                  error={subCategory ? false : true}
+                >
                   <InputLabel> Sub Category</InputLabel>
 
                   <Select

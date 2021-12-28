@@ -54,4 +54,45 @@ export type TodosContextState = {
 
       success:boolean;
       isSuccess: (success:boolean) => void;
+
+
+      loaderShow:boolean;
+      isLoader: (loaderShow:boolean) => void;
+
+      /* GET All products */
+
+      AllProducts:Array<{
+      description: string,
+      id: number,
+      name: string,
+      photoPublicId: string,
+      photoUrl:string,
+      price: number,
+      sku: string,
+      stock: number,
+      subcategories:{
+        categories: {
+          id:number,
+          name:string
+        }
+      },
+      subcategoriesName: string
+      }>   
+      
+ /*      CallApiPro: (
+        description: string,
+        id: number,
+        name: string,
+        photoPublicId: string,
+        photoUrl:string,
+        price: number,
+        sku: string,
+        stock: number,
+        subcategories:Object,
+        subcategoriesName: string
+      ) => void  */ 
+
+      callback:boolean;
+      isCallback: (callback:boolean) => void
+
     };

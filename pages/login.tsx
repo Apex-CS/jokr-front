@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Card, CardContent, Container, Typography } from '@mui/material';
+import { Box  } from '@mui/material';
 import GlobalLoader from '@/components/Loader/GlobalLoader';
 
 function Login() {
