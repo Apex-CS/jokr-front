@@ -4,24 +4,7 @@ import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, TableCell, TableRow } from '@mui/material';
 import EditProduct from '@/components/Product/EditProduct';
 import DeleteProduct from '@/components/Product/DeleteProduct';
-
-export type Product = {
-  description: string,
-  id: number,
-  name: string,
-  photoPublicId: string,
-  photoUrl:string,
-  price: number,
-  sku: string,
-  stock: number,
-  subcategories:{
-    categories: {
-      id:number,
-      name:string
-    }
-  },
-  subcategoriesName: string
-};
+import {Product} from '@/pages/products'
 
 function ListProducts(props: { product: Product }) {
   const { product } = props;

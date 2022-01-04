@@ -180,10 +180,9 @@ function ShippingForm() {
               }
             })
           } 
-          */
-
-          if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.price)) {
-            errors.price = 'Incorrect price';
+          */ 
+          if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.price) || Number(values.price) <= 10) {
+            errors.price = 'Incorrect price it must be higher of 10';
           }
           if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.stock)) {
             errors.stock = 'Incorrect number';

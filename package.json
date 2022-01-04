@@ -14,6 +14,8 @@
     "@material-ui/icons": "^4.11.2",
     "@mui/icons-material": "^5.1.1",
     "@mui/material": "^5.1.1",
+    "@stripe/react-stripe-js": "^1.7.0",
+    "@stripe/stripe-js": "^1.22.0",
     "axios": "^0.24.0",
     "formik": "^2.2.9",
     "formik-mui": "^4.0.0-alpha.3",
@@ -25,11 +27,13 @@
     "react-hot-toast": "^2.1.1",
     "react-native": "^0.66.4",
     "redux-form": "^8.3.8",
+    "stripe": "^8.195.0",
     "swr": "^1.0.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",
+    "@types/node": "^13.1.2",
     "@types/react": "^17.0.34",
     "@types/react-native": "^0.66.8",
     "@typescript-eslint/eslint-plugin": "^5.3.1",

@@ -26,6 +26,9 @@ import Shop from '@mui/icons-material/AddShoppingCart';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import Cart from '@/components/default/Cart';
 import Link from 'next/link';
+import Image from 'next/image';
+import jokr from '@/public/jokr.png';
+import stripe from '@/public/stripe.png';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -99,7 +102,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 function MiniDrawer() {
   /*  ShopCart */
-  const { cartItems} = useContext(TodosContext);
+  const { cartItems } = useContext(TodosContext);
   const [cartOpen, setCartOpen] = useState(false);
 
   const getTotalItems = (cartItems: any) => {
@@ -127,7 +130,7 @@ function MiniDrawer() {
     <>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="fixed" open={open} sx = {{backgroundColor:'#131921'}}>
+        <AppBar position="fixed" open={open} sx={{ backgroundColor: '#131921' }}>
           <Toolbar>
             <IconButton
               color="inherit"
@@ -146,8 +149,11 @@ function MiniDrawer() {
             </Typography>
             <MuiDrawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
               <Cart cartItems={cartItems} />
+              <footer style={{ marginTop: 'auto', display: 'flex', marginLeft: 20 }}>
+                <Image src={stripe} alt="Stripe" width={120} height={55} />
+                <Image src={jokr} alt="Picture of the author" width={120} height={55} />
+              </footer>
             </MuiDrawer>
-
             <MenuItem onClick={() => setCartOpen(true)}>
               <IconButton size="large" aria-label="cart notifications" color="inherit">
                 <Badge badgeContent={getTotalItems(cartItems)} color="error">

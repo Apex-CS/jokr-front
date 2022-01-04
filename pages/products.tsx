@@ -22,7 +22,6 @@ import {
   Container,
 } from '@mui/material';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
-/* import Loader from '@/components/Loader/GlobalLoader'; */
 import toast, { Toaster } from 'react-hot-toast';
 
 const tableHeader: string[] = [
@@ -37,7 +36,7 @@ const tableHeader: string[] = [
   'Options',
 ];
 
-type Product = {
+export type Product = {
   description: string;
   id: number;
   name: string;

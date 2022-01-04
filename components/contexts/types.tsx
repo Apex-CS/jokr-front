@@ -8,12 +8,9 @@ export type TodosContextState = {
       name: string,
       description: string, 
       price: number,
-      is_active: number,
-      created_at: string,
-      updated_at: string,
       stock: number,
       subcategory: string,
-      photo_file_name: string,
+      photoUrl: string,
       amount:number
     }>;
     /* Add items to cart */
@@ -24,12 +21,9 @@ export type TodosContextState = {
       name: string,
       description: string, 
       price: number,
-      is_active: number,
-      created_at: string,
-      updated_at: string,
       stock: number,
       subcategory: string,
-      photo_file_name: string,
+      photoUrl: string,
       amount:number 
       ) => void;
 
@@ -39,12 +33,9 @@ export type TodosContextState = {
         name: string,
         description: string, 
         price: number,
-        is_active: number,
-        created_at: string,
-        updated_at: string,
         stock: number,
         subcategory: string,
-        photo_file_name: string,
+        photoUrl: string,
         amount:number ,
         ) => void;
       /* Check if modal is open or closer */

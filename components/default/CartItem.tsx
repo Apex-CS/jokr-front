@@ -18,12 +18,9 @@ function CartItem({ item }: Props) {
       item.name,
       item.description,
       item.price,
-      item.is_active,
-      item.created_at,
-      item.updated_at,
       item.stock,
       item.subcategory,
-      item.photo_file_name,
+      item.photoUrl,
       item.amount
     );
   };
@@ -35,12 +32,9 @@ function CartItem({ item }: Props) {
       item.name,
       item.description,
       item.price,
-      item.is_active,
-      item.created_at,
-      item.updated_at,
       item.stock,
       item.subcategory,
-      item.photo_file_name,
+      item.photoUrl,
       item.amount
     );
   };
@@ -48,7 +42,7 @@ function CartItem({ item }: Props) {
   return (
     <>
       <Card sx={{ display: 'flex', marginTop: '1rem' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box >
           <CardContent sx={{ flex: '1 0 auto' }}>
             <Typography component="div" variant="h6">
               {item.name}
@@ -82,7 +76,7 @@ function CartItem({ item }: Props) {
         <CardMedia
           component="img"
           sx={{ width: 150 }}
-          image="https://mui.com/static/images/cards/paella.jpg"
+          image={item.photoUrl}
           alt="Live from space album cover"
         />
       </Card>
