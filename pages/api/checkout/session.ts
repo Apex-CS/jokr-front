@@ -54,6 +54,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     payment_method_types: ['card'],
     customer_email:'test@email.com',
     phone_number_collection:{"enabled":true},
+    metadata:{"address":'zor juana', "tel 1":"1234567898", "house description": "green house", "postal":"23456"},
     line_items: items,
     mode: 'payment',
     success_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
