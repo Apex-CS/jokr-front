@@ -18,7 +18,6 @@ export const GlobalProvider = ({ children }: any) => {
 import React, { createContext, useState, FC, useEffect } from 'react';
 import { TodosContextState } from './types';
 import axios from 'axios';
-import useSWR from 'swr';
 import Loader from '@/components/Loader/GlobalLoader';
 
 export type CartItemType = {
@@ -27,11 +26,9 @@ export type CartItemType = {
   name: string;
   description: string;
   price: number;
-  is_active: number;
-  created_at: string;
-  updated_at: string;
   stock: number;
-  photo_file_name: string;
+  subcategory: string;
+  photoUrl: string;
   amount: number;
 };
 
@@ -43,23 +40,20 @@ const contextDefaultValues: TodosContextState = {
   addCart: () => ({}),
   DeletedCart: () => [],
 
-  open:false,
-  isOpen:() => false,
+  open: false,
+  isOpen: () => false,
 
-  success:false,
+  success: false,
   isSuccess: () => false,
 
-  callback:false,
-  isCallback:() => false,
+  callback: false,
+  isCallback: () => false,
 
-  loaderShow:true,
-  isLoader:() => true,
+  loaderShow: true,
+  isLoader: () => true,
 
-  AllProducts:[],
-  
-
+  AllProducts: [],
 };
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
 
@@ -71,16 +65,13 @@ const GlobalProvider: FC = ({ children }) => {
   const [cartItems, setCartItems] = useState(contextDefaultValues.cartItems);
   const DeletedCart = (
     id: number,
-    addSku: string,
+    sku: string,
     name: string,
     description: string,
     price: number,
-    is_active: number,
-    created_at: string,
-    updated_at: string,
     stock: number,
     subcategory: string,
-    photo_file_name: string,
+    photoUrl: string,
     amount: number
   ) =>
     setCartItems((prev) => {
@@ -98,90 +89,76 @@ const GlobalProvider: FC = ({ children }) => {
         ...prev,
         {
           id: id,
-          sku: addSku,
+          sku: sku,
           name: name,
           description: description,
           price: price,
-          is_active: is_active,
-          created_at: created_at,
-          updated_at: updated_at,
           stock: stock,
           subcategory: subcategory,
-          photo_file_name: photo_file_name,
+          photoUrl: photoUrl,
           amount: amount - 1,
         },
       ];
     });
 
   const addCart = (
-    addId: number,
-    addSku: string,
+    id: number,
+    sku: string,
     name: string,
     description: string,
     price: number,
-    is_active: number,
-    created_at: string,
-    updated_at: string,
     stock: number,
     subcategory: string,
-    photo_file_name: string,
+    photoUrl: string,
     amount: number
   ) =>
     setCartItems((prev) => {
-      const isItemInCart = prev.find((item) => item.id === addId);
+      const isItemInCart = prev.find((item) => item.id === id);
       if (isItemInCart) {
-        return prev.map((item) =>
-          item.id === addId ? { ...item, amount: item.amount + 1 } : item
-        );
+        return prev.map((item) => (item.id === id ? { ...item, amount: item.amount + 1 } : item));
       }
 
       return [
         ...prev,
         {
-          id: addId,
-          sku: addSku,
+          id: id,
+          sku: sku,
           name: name,
           description: description,
           price: price,
-          is_active: is_active,
-          created_at: created_at,
-          updated_at: updated_at,
           stock: stock,
-          photo_file_name: photo_file_name,
+          photoUrl: photoUrl,
           subcategory: subcategory,
           amount: amount + 1,
         },
       ];
     });
-/* Modal check if is open or close */
+  /* Modal check if is open or close */
 
-const [open, setOpen] = useState<boolean>(contextDefaultValues.open);
-const isOpen = (open:boolean) => setOpen(open);
+  const [open, setOpen] = useState<boolean>(contextDefaultValues.open);
+  const isOpen = (open: boolean) => setOpen(open);
 
-const [success, setSuccess] = useState<boolean>(contextDefaultValues.success);
-const isSuccess = (success:boolean) => setSuccess(success);
+  const [success, setSuccess] = useState<boolean>(contextDefaultValues.success);
+  const isSuccess = (success: boolean) => setSuccess(success);
 
-const [loaderShow, setLoaderShow] = useState<boolean>(contextDefaultValues.loaderShow);
-const isLoader = (loaderShow:boolean) => setLoaderShow(loaderShow);
+  const [loaderShow, setLoaderShow] = useState<boolean>(contextDefaultValues.loaderShow);
+  const isLoader = (loaderShow: boolean) => setLoaderShow(loaderShow);
 
-const [callback, setCallback] = useState<boolean>(contextDefaultValues.callback);
-const isCallback = (callback:boolean) => setCallback(callback);
+  const [callback, setCallback] = useState<boolean>(contextDefaultValues.callback);
+  const isCallback = (callback: boolean) => setCallback(callback);
 
+  const [AllProducts, setProducts] = useState(contextDefaultValues.AllProducts);
 
-const [ AllProducts,setProducts] = useState(contextDefaultValues.AllProducts);
+  useEffect(() => {
+    const AllProductsFunction = async () => {
+      const res = await axios.get('/api/v1/products');
+      setProducts(res.data);
+      setLoaderShow(false);
+    };
+    AllProductsFunction();
+  }, [callback]);
 
-
-useEffect(() => {
- const  AllProductsFunction = async () => {
-  const res= await axios.get('/api/v1/products')
-  setProducts(res.data) 
-  setLoaderShow(false) 
-}  
-  AllProductsFunction() 
-}, [callback]);
-
- if (loaderShow) return (<Loader/>);
-
+  if (loaderShow) return <Loader />;
 
   return (
     <TodosContext.Provider
@@ -205,7 +182,6 @@ useEffect(() => {
         isCallback,
         /* Get all products */
         AllProducts,
-    
       }}
     >
       {children}

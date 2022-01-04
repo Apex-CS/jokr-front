@@ -25,7 +25,7 @@ import Back from '@/public/back.jpg';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import { TextField } from 'formik-mui';
-import { Product } from '@/components/Product/ListProducts';
+import {Product } from '@/pages/products'
 import { ShippingData } from '@/components/Product/ValidateFields';
 import { FieldCategory } from '@/components/Product/ValidateFields';
 import useSWR from 'swr';

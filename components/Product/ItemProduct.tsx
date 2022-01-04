@@ -1,29 +1,13 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
+
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Button } from '@mui/material';
+import { Button, CardHeader, CardContent, CardActions, Collapse } from '@mui/material';
+import Image from 'next/image';
+import { CartItemType } from '@/pages/index';
 
-export type CartItemType = {
-  id: number;
-  sku: string;
-  name: string;
-  description: string;
-  price: number;
-  is_active: number;
-  created_at: string;
-  updated_at: string;
-  stock: number;
-  subcategory: string;
-  photo_file_name: string;
-  amount: number;
-};
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -51,15 +35,14 @@ function ItemProduct(props: {
 
   return (
     <>
-      <CardHeader title={props.product.name} subheader={`SKU: ${props.product.sku}`} />
-
-      <CardMedia
-        component="img"
-        height="194"
-        image="https://mui.com/static/images/cards/paella.jpg"
-        alt="Paella dish"
-      />
-      <CardContent>
+      <Image
+        src={props.product.photoUrl}
+        alt="Picture of the author"
+        width={310}
+        height={310}
+      ></Image>
+      <CardContent sx={{ flex: '1 0 auto' }}>
+        <CardHeader title={props.product.name} subheader={`SKU: ${props.product.sku}`} />
         <Typography variant="body2" color="text.secondary">
           {props.product.description}
         </Typography>
@@ -75,7 +58,7 @@ function ItemProduct(props: {
           <ExpandMoreIcon />
         </ExpandMore>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse in={expanded} timeout="auto" unmountOnExit sx={{ maxWidth: 350 }}>
         <CardContent>
           <Typography paragraph>Method:</Typography>
           <Typography paragraph>
