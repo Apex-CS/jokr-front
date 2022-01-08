@@ -1,161 +1,290 @@
-import React from 'react';
-import axios from 'axios';
-import { Button, Grid } from '@mui/material';
+import React, { ChangeEvent, useContext, useState } from 'react';
+import {
+  Button,
+  Grid,
+  CardHeader,
+  Divider,
+  FormControl,
+  InputAdornment,
+  FormGroup,
+  Tooltip,
+  InputLabel,
+  Select,
+  SelectChangeEvent,
+  MenuItem,
+  DialogActions,
+} from '@mui/material';
+
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
-import { PhoneAndroid } from '@material-ui/icons';
+import Loader from '@/components/Loader/loader';
+import { TodosContext } from '@/components/contexts/GlobalProvider';
+import Image from 'next/image';
+import Back from '@/public/back.jpg';
+import axios from 'axios';
 
 type FieldTypes = {
+  name: string | number;
+  type: string | number;
   label: string;
-  name: string;
-  
+  placeholder: string;
+  value: string | number;
 };
 
-function refreshPage() {
-  window.location.reload();
+export interface ShippingData {
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  lastName: string;
+  getphotoUrl: string;
+  getphotoPublicId: string;
+  customerPaymentId: string;
+  roleName: string;
+  repeat: string;
+  role: {
+    rolename: string;
+  };
 }
 
+export interface PassRepeat {
+  repeat: string;
+}
 
-const initProduct = {
-  id: 3,
-  email: '',
-  lastName: '',
-  name: 0,
-  role: '',
-  // created_at: '',
-  // delete_at: '',
-  // updated_at: ''
-};
-
-const editFormFieldsData: FieldTypes[] = [
-  { label: 'Email', name: 'email' },
-  // { label: 'Is_active', name: 'is_active' },
-  { label: 'Lastname', name: 'lastName' },
-  { label: 'Name', name: 'name' },
-  // { label: 'Password', name: 'password' },
-  { label: 'Role', name: 'role' },
-  // { label: 'Created_at', name: 'created_at' },
-  // { label: 'Delete_at', name: 'delete_at' },
-  // { label: 'Updated_at', name: 'updated_at' },
+const AddlabelsConfing: FieldTypes[] = [
+  { name: 'email', type: ' email', label: 'New Email', placeholder: 'Email', value: '' },
+  { name: 'name', type: 'text', label: 'Name', placeholder: 'Name', value: '' },
+  { name: 'lastName', type: 'text', label: 'last name', placeholder: 'Last Name', value: '' },
+  { name: 'password', type: 'password', label: 'Password', placeholder: 'Password', value: '' },
+  {
+    name: 'repeat',
+    type: 'password',
+    label: 'Password',
+    placeholder: 'Repeat Password',
+    value: '',
+  },
 ];
 
-interface ShippingData {
-    id: string;
-    email: string;
-    name: string;
-    // is_active: string;
-    lastName: string;
-    // password: string;
-    role: string;
-    // created_at: string;
-    // delete_at: string;
-    // updated_at: string;
-  
-}
-
 function ShippingFormUser() {
+  const { isOpen } = useContext(TodosContext);
+  const { callback, isCallback } = useContext(TodosContext);
+  const { isSuccess } = useContext(TodosContext);
+  const { isLoader } = useContext(TodosContext);
+
+  /* IMAGE */
+  const [CategoryRole, setCategoryRole] = useState<string>('');
+  const [repeat, setRepeat] = useState<string>('');
+
+  const handleChangeCategory = async (event: SelectChangeEvent) => {
+    setCategoryRole(event.target.value as string);
+  };
+  const handleRepeatPassword = async (e: ChangeEvent<HTMLInputElement>) => {
+    const element = e.currentTarget.value;
+    setRepeat(element);
+  };
+
+  const [imagesId, setImagesId] = useState<string>('');
+  const [imagesUrl, setImagesUrl] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+
+  const styleUpload = {
+    display: imagesUrl ? 'block' : 'none',
+  };
+
+  const handleClose = () => {
+    isOpen(false);
+    if (imagesId) handleDestroyClose(imagesId);
+  };
+
+  const handleDestroyClose = async (id: any) => await axios.delete(`/api/v1/users/image/${id}`);
+
+  const handleDestroy = async () => {
+    try {
+      setLoading(true);
+      const imageId = imagesId.toString();
+      await axios.delete(`/api/v1/users/image/${imageId}`);
+      setImagesId('');
+      setImagesUrl('');
+
+      setLoading(false);
+    } catch (err) {
+      /*  alert(err.response.data.msg) */
+    }
+  };
+
+  const handleUpload = async (event: any) => {
+    try {
+      if (!event.files) return alert('No image Selected');
+
+      const file = event.files;
+      const formData = new FormData();
+      formData.append('file', file);
+      if (file.size > 1024 * 1024) return alert('File extended size, it must be of 1080 px');
+      if (file.type !== 'image/jpeg' && file.type !== 'image/png')
+        return alert('File format is incorrect');
+      setLoading(true);
+      const res = await axios.post('/api/v1/users/image', formData, {
+        headers: { 'content-type': 'multipart/form-data' },
+      });
+      setLoading(false);
+      setImagesId(res.data.id);
+      setImagesUrl(res.data.url);
+    } catch (err) {
+      /*  alert(err.response.data.msg) */
+    }
+  };
+
   return (
     <Formik
       initialValues={{
         email: '',
         name: '',
-        // is_active: '',
+        getphotoUrl: '',
         lastName: '',
-        // password: '',
-        role: '',
-        // created_at: '',
-        // delete_at: '',
-        // updated_at: ''
+        password: '',
+        roleName: '',
+        getphotoPublicId: '',
+        repeat: '',
+        role: {
+          id: 0,
+          rolename: '',
+        },
       }}
       validate={(values) => {
         const errors: Partial<ShippingData> = {};
-        //
+
         !values.email && (errors.email = 'Required Field');
-        // !values.is_active && (errors.is_active = 'Required Field');
+        !values.name && (errors.name = 'Required Field');
+        !values.password && (errors.password = 'Required Field');
         !values.lastName && (errors.lastName = 'Required Field');
-        !values.name && (errors.lastName = 'Required Field');
-        // !values.password && (errors.password = 'Required Field');
-        !values.role && (errors.role = 'Required Field');
-        // !values.created_at && (errors.created_at = 'Required Field');
-        // !values.delete_at && (errors.created_at = 'Required Field');
-        // !values.updated_at && (errors.updated_at = 'Required Field');
-        
-        // Alphanumeric chars
-        // if (!/^[\w\-\s]+$/.test(values.zipcode)) {
-        //   errors.zipcode = 'Incorrect zip code';
-        // }
-        //Phone number of 10 chars
-        //  if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.name)) {
-        //   errors.name ="Incorrect price";
-        //   }
-        //  if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.Active)) {
-        //   errors.Active ="0/1";
-        //   }
-        //   if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.stock)) {
-        //     errors.stock ="Incorrect number";
-        //     }
+        !values.repeat && (errors.repeat = 'Required Field');
+
+        if (values.password != values.repeat) {
+          errors.password = 'Password doesnt match';
+        } else {
+          values.role.rolename = CategoryRole;
+        }
+
         return errors;
       }}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(async () => {
-          setSubmitting(false);
-          await axios.post('/api/v1/Users', { ...values });
-          window.location.reload();
-        }, 500);
+      onSubmit={async (values, { setSubmitting }) => {
+        setSubmitting(false);
+        await axios.post('/api/v1/users', { ...values });
+        isOpen(false);
+        isCallback(!callback);
+        isSuccess(true);
+        isLoader(true);
       }}
     >
-      {({ submitForm, isSubmitting }) => (
+      {() => (
         <Grid
-        /*           container
           item
-          xs={12}
-          sm={6}
-          alignItems="center"
-          direction="column"
-          justify="space-between"
-          style={{ padding: 10 }} */
+          style={{
+            marginTop: '-15px',
+            display: 'flex',
+            flexDirection: 'column',
+            maxWidth: 300,
+            minWidth: 300,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
         >
-          <Grid
-            item
-            style={{ display: 'flex', flexDirection: 'column', maxWidth: 400, minWidth: 300 }}
-          >
-            <Form>
-              <Field component={TextField} name="email" type="email" label="Email" />
-              {/* <Field component={TextField} name="is_active" type="is_active" label="Is_active" /> */}
-              <Field component={TextField} type="lastname" name="lastName" label="LastName" />
-              <Field component={TextField} name="name" type="name" label="Name" />
-              {/* <Field component={TextField} name="password" type="password" label="Password" /> */}
-              <Field component={TextField} name="role" type="role" label="Role" />
-              {/* <Field component={TextField} name="created_at" type="created_at" label="Created_at" />
-              <Field component={TextField} name="delete_at" type="Delete_at" label="Delete_at" />
-              <Field component={TextField} name="updated_at" type="updated_at" label="Updated_at" /> */}
-              {/* <Field
-                component={TextField}
-                name="phone"
-                type="phone"
-                label="Phone"
-                margin="normal"
-                style={{ textTransform: 'none' }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PhoneAndroid />
-                    </InputAdornment>
-                  ),
-                }}
-              /> */}
+          <Tooltip title="Close">
+            <Button
+              style={{ marginLeft: '15rem' }}
+              className="button-close"
+              color="error"
+              variant="outlined"
+              size="small"
+              onClick={handleClose}
+            >
+              <b>X</b>
+            </Button>
+          </Tooltip>
+          <CardHeader
+            sx={{ m: -2, paddingBottom: '-2rem', textAlign: 'center' }}
+            title="Add a new user"
+          />
+          <Form>
+            <Divider />
 
-              <Button
-                variant="contained"
-                color="secondary"
-                disabled={isSubmitting}
-                onClick={submitForm}
-                style={{ marginTop: '10rem' }}
+            {/*   <div className="imageTitle">Select a image: </div>
+            <Tooltip title="Add a image " placement="top">
+              <div className="upload">
+                <input
+                  required
+                  type="file"
+                  name="file"
+                  id="file_up"
+                  onChange={(event: any) => {
+                    handleUpload({ files: event.currentTarget.files[0] });
+                  }}
+                ></input>
+
+                {loading ? (
+                  <div id="file_Loader">
+                    {' '}
+                    <Loader />{' '}
+                  </div>
+                ) : (
+                  <div id="file_img" style={styleUpload}>
+                    <Image
+                      src={imagesUrl ? imagesUrl : Back}
+                      width={500}
+                      height={500}
+                      alt="Pro_Image"
+                    />
+
+                    <span id="file_img_delete" onClick={handleDestroy}>
+                      X
+                    </span>
+                  </div>
+                )}
+              </div>
+            </Tooltip> */}
+            {AddlabelsConfing?.map((field: FieldTypes) => {
+              return (
+                <FormGroup key={field.name}>
+                  <FormControl sx={{ m: 1 }}>
+                    <Field
+                      size="small"
+                      component={TextField}
+                      name={field.name}
+                      type={field.type}
+                      label={field.label}
+                      placeholder={field.placeholder}
+                      autoComplete="on"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start"></InputAdornment>,
+                      }}
+                    />
+                  </FormControl>
+                </FormGroup>
+              );
+            })}
+
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Role</InputLabel>
+              <Select
+                sx={{ m: 1 }}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={CategoryRole}
+                label="Role"
+                onChange={handleChangeCategory}
+                size="small"
               >
+                <MenuItem value="Shopper">Shopper</MenuItem>
+                <MenuItem value="Admin">Admin</MenuItem>
+              </Select>
+            </FormControl>
+
+            <DialogActions>
+              <Button type="submit" variant="outlined" sx={{ m: 0.5 }}>
                 Submit
               </Button>
-            </Form>
-          </Grid>
+            </DialogActions>
+          </Form>
         </Grid>
       )}
     </Formik>

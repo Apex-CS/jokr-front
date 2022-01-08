@@ -1,7 +1,7 @@
 import { TodosContext } from '@/components/contexts';
 import { loadStripe } from '@stripe/stripe-js';
 import React, { useContext } from 'react';
-import { Card, Typography, CardMedia, CardContent, CardActionArea } from '@mui/material';
+import { Card, Typography, CardMedia, CardContent, CardActionArea,Container, } from '@mui/material';
 import { CartItemType } from '@/pages/index';
 
 const stripePromise = loadStripe(
@@ -30,6 +30,7 @@ function Checkout() {
 
   return (
     <div>
+      <Container>
       {cartItems?.map((item: CartItemType) => {
         return (
           <Card sx={{ marginLeft: '25rem', maxWidth: 345, marginBottom: '1rem' }} key={item.id}>
@@ -52,10 +53,12 @@ function Checkout() {
       Total: ${calculateTotal(cartItems).toFixed(2)}
       <h1> Checkout</h1>
       {cartItems.length == 0 ? null : (
-        <button role="link" onClick={handleClick}>
+        <button className='Checkout' role="link" onClick={handleClick}>
           Checkout
         </button>
       )}
+
+</Container>
     </div>
   );
 }

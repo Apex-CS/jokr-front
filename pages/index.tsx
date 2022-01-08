@@ -87,7 +87,7 @@ function Home() {
   if (!data) return <Loader />;
   return (
     <>
-      <Grid container spacing={{ xs: 3, md: 1 }} columns={{ xs: 2, sm: 8, md: 11.5 }}>
+      <Grid container spacing={{ xs: 3, md: 1 }} columns={{ xs: 2, sm: 8, md: 11.5 }} sx={{paddingTop:-20, paddingLeft:20}}>
         {data?.map((item: CartItemType, index: number) => {
           return (
             <div key={index}>
@@ -111,5 +111,14 @@ function Home() {
     </>
   );
 }
+
+/* export async function getStaticProps() {
+  return {
+    props: {
+      protected: true
+    }
+  };
+} */
+
 
 export default Home;

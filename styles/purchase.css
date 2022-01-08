@@ -121,3 +121,7 @@ a:hover, a:focus, a:active {
   font-size: x-large;
   font-weight: 600;
 }
+
+.Checkout {
+  margin-right: 20rem;
+}

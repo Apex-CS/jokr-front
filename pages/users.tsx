@@ -1,11 +1,14 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ListUsers from '@/components/User/ListUsers';
 import { styled } from '@mui/material/styles';
 /* import { Iproduct } from '@/components/interfaces/InterfaceProduct'; */
 import axios from 'axios';
 import useSWR from 'swr';
 import AddUser from '@/components/User/AddUser';
+import { TodosContext } from '@/components/contexts/GlobalProvider';
+import toast, { Toaster } from 'react-hot-toast';
+
 import {
   Modal,
   Button,
@@ -22,26 +25,21 @@ import {
   Fade,
   FormGroup,
   Container,
+  Tooltip,
 } from '@mui/material';
 
-const tableHeader: string[] = [
-  'Email',
-  'Lastname',
-  'Name',
-  'Role',
-  'Options'
+const tableHeader: string[] = ['Email', 'Name', 'Image', 'Role', 'Options'];
 
-];
-
-type User = {
+export type User = {
   id: number;
   email: string;
+  password: string;
   name: string;
   lastName: string;
-  role: string;
-  created_at: string;
-  delete_at: string;
-  updated_at: string;
+  getphotoUrl: string;
+  getphotoPublicId: string;
+  customerPaymentId: string;
+  roleName: string;
 };
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
@@ -55,28 +53,38 @@ function Users() {
       fontSize: 14,
     },
   }));
+
+
+
   /* Check if state edit is enable */
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { open, isOpen } = useContext(TodosContext);
+  const handleOpen = () => isOpen(true);
+  const { success, isSuccess } = useContext(TodosContext);
+
+
+  useEffect(() => {
+    if (success) toast.success('Action done correctly!');
+    isSuccess(false);
+  }, [success]);
+
 
   const { data, error } = useSWR('/api/v1/Users', fetcher);
   if (error) return 'An error has occurred.' + error;
   if (!data) return 'Loading...';
   return (
     <>
-      <Head>
-        <title>ApexShop</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Toaster position="bottom-center" reverseOrder={false} />
+
+      <Tooltip title="Add a new User" placement="top">
+        <div className="wrap">
+          <button className="ADD btn5" onClick={handleOpen}>
+            +
+          </button>
+        </div>
+      </Tooltip>
 
       <Container>
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-            New User
-          </Button>
         <FormGroup>
-          
-
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -102,7 +110,6 @@ function Users() {
 
       <Modal
         open={open}
-        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         closeAfterTransition
@@ -119,16 +126,19 @@ function Users() {
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: 400,
+              width: 350,
               bgcolor: 'background.paper',
               boxShadow: 24,
               p: 4,
-              maxHeight: '90%',
-              marginTop: '-1rem',
-              overflow: 'scroll',
+              maxHeight: '98%',
+              marginTop: '.1rem',
+              borderRadius: '12px',
+              overflowX: 'scroll',
+              '&::-webkit-scrollbar': {
+                width: 0,}
             }}
           >
-            {/* AQUI LLAMO EL RESTO DEL MODAL el form para agregar Nuevo Productos */}
+            {/* Add User */}
             <AddUser />
           </Box>
         </Fade>

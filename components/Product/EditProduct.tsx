@@ -25,7 +25,7 @@ import Back from '@/public/back.jpg';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import { TextField } from 'formik-mui';
-import {Product } from '@/pages/products'
+import { Product } from '@/pages/products';
 import { ShippingData } from '@/components/Product/ValidateFields';
 import { FieldCategory } from '@/components/Product/ValidateFields';
 import useSWR from 'swr';
@@ -94,7 +94,7 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
 
   const handleDestroy = async () => {
     try {
-      console.log("desttroy", imagesUrl,"ID:::", imagesId )
+      console.log('desttroy', imagesUrl, 'ID:::', imagesId);
       setLoading(true);
       const imageId = imagesId.toString();
       await axios.delete(`/api/v1/products/image/${imageId}`);
@@ -230,13 +230,13 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
                   flexDirection: 'column',
                   maxWidth: 300,
                   minWidth: 300,
-                  alignItems: 'center', 
+                  alignItems: 'center',
                   justifyContent: 'space-between',
                 }}
               >
                 <Tooltip title="Close">
                   <Button
-                    style={{marginLeft:'15rem'}}
+                    style={{ marginLeft: '15rem' }}
                     className="button-close"
                     color="error"
                     variant="outlined"

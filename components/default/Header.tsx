@@ -29,7 +29,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import jokr from '@/public/jokr.png';
 import stripe from '@/public/stripe.png';
-const drawerWidth = 240;
+const drawerWidth = 230;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -57,6 +57,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
+
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
@@ -128,8 +129,8 @@ function MiniDrawer() {
 
   return (
     <>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
+      <Box sx={{ display: 'flex', backgroundColor: '#f4f6f9' }}>
+        {/*  <CssBaseline /> */}
         <AppBar position="fixed" open={open} sx={{ backgroundColor: '#131921' }}>
           <Toolbar>
             <IconButton
@@ -207,7 +208,7 @@ function MiniDrawer() {
           <Divider />
         </Drawer>
 
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box component="main" sx={{ flexGrow: 1, p: 4 }}>
           <DrawerHeader />
         </Box>
       </Box>

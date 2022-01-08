@@ -22,12 +22,20 @@ module.exports = {
         destination: `${process.env.SPRING_API_KEY}/api/v1/products/image/:id_image`
       },
       {
-        source: '/api/v1/Users',
+        source: '/api/v1/users',
         destination: `${process.env.SPRING_API_KEY}/api/v1/users`
       },
       {
-        source: '/api/v1/Users/:id',
-        destination: `${process.env.SPRING_API_KEY}/api/v1/Users/:id`
+        source: '/api/v1/users/:id',
+        destination: `${process.env.SPRING_API_KEY}/api/v1/users/:id`
+      },
+      {
+        source: '/api/v1/users/image',
+        destination: `${process.env.SPRING_API_KEY}/api/v1/users/image`
+      },
+      {
+        source: '/api/v1/users/image/:id_image',
+        destination: `${process.env.SPRING_API_KEY}/api/v1/users/image/:id_image`
       },
       {
         source: '/api/v1/categories',
@@ -37,6 +45,11 @@ module.exports = {
         source: '/api/v1/subcategories/categories/:id',
         destination: `${process.env.SPRING_API_KEY}/api/v1/subcategories/categories/:id`
       },
+
+      {
+        source: '/api/v1/public/Auth',
+        destination: `${process.env.SPRING_API_KEY}/api/v1/public/Auth`
+      }
     ]
   },
   webpackDevMiddleware: config => {

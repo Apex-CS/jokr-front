@@ -21,7 +21,11 @@
     border-bottom: 1px solid rgb(216, 215, 215);
   
   }
-
+.content-warp{
+  margin-top: -7rem; 
+   background-color: #f4f6f9;
+  
+}
 
   /* LOADER */
   .loaderGlobal{
@@ -33,6 +37,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+ 
   }
   
 
@@ -74,7 +79,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-color: #ffff;
+    background-color: #f4f6f9;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -28,7 +28,7 @@ function ListProducts(props: { product: Product }) {
 
   return (
     <Fragment>
-      <TableRow hover>
+      <TableRow hover >
         {/* <TableCell align="right">{product.id.toString()}</TableCell> */}
         <TableCell align="right">{product.sku}</TableCell>
         <TableCell align="right">{product.name}</TableCell>

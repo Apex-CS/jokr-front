@@ -53,6 +53,9 @@ const contextDefaultValues: TodosContextState = {
   isLoader: () => true,
 
   AllProducts: [],
+
+  Login: ({name:'',login:false,role:''}),
+  IsLogged:() => ({})
 };
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
@@ -149,6 +152,9 @@ const GlobalProvider: FC = ({ children }) => {
 
   const [AllProducts, setProducts] = useState(contextDefaultValues.AllProducts);
 
+  const [Login , setLogin] = useState(contextDefaultValues.Login)
+  const IsLogged = () => setLogin(Login)
+
   useEffect(() => {
     const AllProductsFunction = async () => {
       const res = await axios.get('/api/v1/products');
@@ -182,6 +188,9 @@ const GlobalProvider: FC = ({ children }) => {
         isCallback,
         /* Get all products */
         AllProducts,
+        /* GET LOGIN STATUS */
+        Login,
+        IsLogged
       }}
     >
       {children}

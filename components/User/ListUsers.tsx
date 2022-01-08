@@ -5,17 +5,8 @@ import { IconButton, TableCell, TableRow } from '@mui/material';
 
 import EditUser from '@/components/User/EditUser';
 import DeleteUser from '@/components/User/DeleteUser';
-
-type User = {
-  id: number;
-  email: string;
-  name: string;
-  lastName: string;
-  role: string;
-  created_at: string;
-  delete_at: string;
-  updated_at: string;
-};
+import { User } from '@/pages/users';
+import { textAlign } from '@mui/system';
 
 function ListUsers(props: { user: User }) {
   const { user } = props;
@@ -38,19 +29,12 @@ function ListUsers(props: { user: User }) {
 
   return (
     <Fragment>
-      <TableRow hover>
-        {/* <TableCell align="right">{user.id.toString()}</TableCell> */}
-        <TableCell align="right">{user.email}</TableCell>
-        {/* <TableCell align="right">{user.is_active.toString()}</TableCell> */}
-        <TableCell align="right">{user.lastName}</TableCell>
-        <TableCell align="right">{user.name}</TableCell>
-        {/* <TableCell align="right">{user.password}</TableCell> */}
-        <TableCell align="right">{user.role}</TableCell>
-        {/* <TableCell align="right">{user.created_at}</TableCell>
-        <TableCell align="right">{user.delete_at}</TableCell>
-        <TableCell align="right">{user.updated_at}</TableCell> */}
-        
-        <TableCell align="right">
+      <TableRow hover >
+        <TableCell align="center">{user.email}</TableCell>
+        <TableCell align="center"> {user.name} {user.lastName}</TableCell>
+        <TableCell align="center"> {user.getphotoUrl}</TableCell>
+        <TableCell align="center">{user.roleName}</TableCell>
+        <TableCell align="center">
           <IconButton color="warning" onClick={changeStateEdit}>
             <BorderColorIcon />
           </IconButton>
