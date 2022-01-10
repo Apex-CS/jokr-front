@@ -17,7 +17,7 @@ import {
 
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
-import Loader from '@/components/Loader/loader';
+import Loader from '@/components/Loader/LoaderCommon';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import Image from 'next/image';
 import Back from '@/public/back.jpg';

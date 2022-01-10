@@ -23,7 +23,7 @@ import {
 import axios from 'axios';
 import { User } from '@/pages/users';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
-import Loader from '@/components/Loader/loader';
+import Loader from '@/components/Loader/LoaderCommon';
 import { Formik, Field, Form } from 'formik';
 import { TextField } from 'formik-mui';
 import Image from 'next/image';

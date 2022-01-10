@@ -29,7 +29,7 @@ import { Product } from '@/pages/products';
 import { ShippingData } from '@/components/Product/ValidateFields';
 import { FieldCategory } from '@/components/Product/ValidateFields';
 import useSWR from 'swr';
-import Loader from '@/components/Loader/loader';
+import Loader from '@/components/Loader/LoaderCommon';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 
 type FieldTypes = {

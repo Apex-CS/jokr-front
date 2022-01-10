@@ -1,6 +1,7 @@
 import React from 'react';
 
-function loader() {
+
+function Loader() {
   return (
     <>
       <section className="loader">
@@ -12,4 +13,4 @@ function loader() {
   );
 }
 
-export default loader;
+export default Loader;

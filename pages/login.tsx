@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Button, TextField } from '@mui/material';
 import axios from 'axios';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
-import Router from 'next/router'
+import Router from 'next/router';
 
 type inputsLogin = {
   email: string;
@@ -80,7 +80,7 @@ const reducer = (state: State, action: Action): State => {
 function Login() {
   const { Token } = useContext(TodosContext);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const {pathname} = Router
+  const { pathname } = Router;
   const [data, setData] = useState<inputsLogin>({ email: '', password: '' });
 
   useEffect(() => {
@@ -104,12 +104,12 @@ function Login() {
     /*  setData({email:state.username,password:state.username}) */
     try {
       const res = await axios.post('/api/v1/public/Auth', { ...data });
-      console.log(res)
+      console.log(res);
 
       if (res.data) {
         localStorage.setItem('token', res.headers.authorization);
-   
-       /*  Router.push('/') */
+
+        Router.push('/');
         dispatch({
           type: 'loginSuccess',
           payload: 'Login Successfully',
@@ -202,6 +202,7 @@ function Login() {
                 margin="normal"
                 onChange={handleUsernameChange}
                 size="small"
+                autoComplete="on"
               />
 
               <TextField
@@ -215,6 +216,7 @@ function Login() {
                 helperText={state.helperText}
                 onChange={handlePasswordChange}
                 size="small"
+                autoComplete="on"
               />
 
               {/*     <div className="pass">

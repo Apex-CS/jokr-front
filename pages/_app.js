@@ -7,8 +7,9 @@ import Header from '@/components/default/Header';
 import { styled } from '@mui/material/styles';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import { Fragment, useContext, useEffect, useState } from 'react';
-import Loader from '@/components/Loader/loader';
+/* import Loader from '@/components/Loader/LoaderCommon'; */
 
+import Check from '@/components/Loader/LoaderCommon';
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -28,31 +29,44 @@ export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const { Login, IsLogged } = useContext(TodosContext);
 
-  const [ Token, setToken ] = useState('');
-  console.log('valor del token', Token);
+  const { Token, IsToken } = useContext(TodosContext);
+
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
   useEffect(() => {
     const getToken = async () => {
-      const token = localStorage.getItem('token').toString();
-      if (token) setToken(token);
+      if (token) {
+        const jwt = JSON.parse(atob(token.split('.')[1]));
+        IsToken(token);
+
+        console.log(jwt);
+        if (jwt.exp * 1000 < Date.now()) {
+          console.log('JWT has expired or will expire soon, te la pelashion');
+        } else {
+          /*  IsLogged(jwt.name)  */
+          console.log('JWT is valid for less than 5 minutes', token);
+        }
+      }
     };
 
     getToken();
   }, []);
 
-  if (pageProps.protected && !Token) {
-    return <Loader/>;
+  if (pageProps.protected && !token && typeof window !== 'undefined') {
+    /*   return <Check />; */
+    window.location.href = '/login';
   }
 
- /*  if (
+  if (
     pageProps.protected &&
-    User &&
-    pageProps.userTypes &&
-  pageProps.userTypes.indexOf(User.role) === -1 
-    !User.role 
+    /*   User && */
+    token &&
+    pageProps.userTypes
+    /*   pageProps.userTypes.indexOf(User.role) === -1  */
+    /*    !User.role  */
   ) {
     return <Layout>Sorry, you dont have access</Layout>;
-  } */
+  }
 
   const showBarLogin = router.pathname === '/login' ? true : false;
 

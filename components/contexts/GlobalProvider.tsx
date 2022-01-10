@@ -54,12 +54,11 @@ const contextDefaultValues: TodosContextState = {
 
   AllProducts: [],
 
-  Login: { name: '', login: false, role: '' },
+  Login: { name: '', IsAdmin: false, role: '' },
   IsLogged: () => ({}),
 
   Token: '',
-  /* IsToken: () => ({}) */
-
+  IsToken: () => ({}),
 };
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
@@ -157,24 +156,37 @@ const GlobalProvider: FC = ({ children }) => {
   const [AllProducts, setProducts] = useState(contextDefaultValues.AllProducts);
 
   const [Login, setLogin] = useState(contextDefaultValues.Login);
-  const IsLogged = () => setLogin(Login);
+  const IsLogged = (name: string, IsAdmin: boolean, role: string) => setLogin(Login);
 
   const [Token, setToken] = useState(contextDefaultValues.Token);
-/*   const IsToken = () => setToken(Token); */
+  const IsToken = () => setToken(Token);
 
- 
   useEffect(() => {
     const AllProductsFunction = async () => {
-      const res = await axios.get('/api/v1/products',{
-        headers: {Authorization:JSON.parse(localStorage.getItem('token') || '') }
+      const token: string = JSON.stringify(localStorage.getItem('token') || '');
+      const res = await axios.get('/api/v1/products', {
+        headers: { Authorization: token },
       });
       setProducts(res.data);
       setLoaderShow(false);
     };
-    /*  const getToken = async () => {
-      const token =  localStorage.getItem('token')?.toString()!;
+    /*     const getToken = async () => {
+      const token = JSON.stringify(localStorage.getItem('token') || '');
 
-      if (token) {setToken(token); console.log("token existe")}
+      if (token) {
+        setToken(token);
+        console.log('token existe', token);
+      }
+
+      const jwt = JSON.parse(atob(token.split('.')[1]));
+console.log(jwt)
+      if (jwt.exp * 1000 < Date.now()) {
+        console.log('JWT has expired or will expire soon, te la pelashion');
+      } else {
+      
+        setLogin(jwt) 
+        console.log('JWT is valid for less than 5 minutes', token);
+      }
     };
 
     getToken(); */
@@ -210,7 +222,7 @@ const GlobalProvider: FC = ({ children }) => {
         IsLogged,
 
         Token,
-        /* IsToken */
+        IsToken,
       }}
     >
       {children}

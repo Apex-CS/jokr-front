@@ -9,7 +9,7 @@ import { TodosContext } from '@/components/contexts/GlobalProvider';
 import { CardContent, Paper, Typography, Box, Card, CardMedia, Button } from '@mui/material';
 import React from 'react';
 
-import Loader from '@/components/Loader/loader';
+import Loader from '@/components/Loader/LoaderCommon';
 
 export type CartItemType = {
   id: number;
