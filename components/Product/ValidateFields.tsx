@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import useSWR from 'swr';
 import Image from 'next/image';
@@ -66,10 +66,13 @@ const AddlabelsConfing: FieldTypes[] = [
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 function ShippingForm() {
+  const { Token } = useContext(TodosContext);
   const { isOpen } = useContext(TodosContext);
   const { callback, isCallback } = useContext(TodosContext);
   const { isSuccess } = useContext(TodosContext);
   const { isLoader } = useContext(TodosContext);
+
+  const [data,setData] = useState([])
 
   const [category, setCategory] = useState<string>('');
   const [subCategory, setSubCategory] = useState<string>('');
@@ -85,7 +88,20 @@ function ShippingForm() {
     setSubCategory(event.target.value as string);
   };
 
-  const { data } = useSWR('/api/v1/categories', fetcher);
+  /* const { data } = useSWR('/api/v1/categories', fetcher,); */
+
+ 
+
+  useEffect(() => {
+    const AllCategoriesFunction = async () => {
+      const res = await axios.get('/api/v1/categories',{
+        headers: {Authorization: localStorage.getItem('token')?.toString()!}
+      });
+      setData(res.data)
+    };
+    AllCategoriesFunction()
+  }, []);
+
   /* IMAGES */
   const handleClose = () => {
     isOpen(false);
@@ -102,12 +118,16 @@ function ShippingForm() {
   };
 
   const CategorySearch = (id: any) => async () => {
-    const res = await axios.get(`/api/v1/subcategories/categories/${id}`);
+    const res = await axios.get(`/api/v1/subcategories/categories/${id}`,{
+      headers: {Authorization: localStorage.getItem('token')?.toString()!}
+    });
     setListSub(res.data);
     SetdisableSub(true);
   };
 
-  const handleDestroyClose = async (id: any) => await axios.delete(`/api/v1/products/image/${id}`);
+  const handleDestroyClose = async (id: any) => await axios.delete(`/api/v1/products/image/${id}`,{
+    headers: {Authorization: localStorage.getItem('token')?.toString()!}
+  });
 
   const handleDestroy = async () => {
     try {
@@ -135,7 +155,7 @@ function ShippingForm() {
         return alert('File format is incorrect');
       setLoading(true);
       const res = await axios.post('/api/v1/products/image', formData, {
-        headers: { 'content-type': 'multipart/form-data' },
+        headers: { 'content-type': 'multipart/form-data', Authorization: localStorage.getItem('token')?.toString()!  },
       });
       setLoading(false);
       setImagesId(res.data.id);
@@ -195,7 +215,7 @@ function ShippingForm() {
           values.photoUrl = imagesUrl.toString();
 
           setSubmitting(false);
-          await axios.post('/api/v1/products', { ...values });
+          await axios.post('/api/v1/products', { ...values },{ headers: {Authorization: localStorage.getItem('token')?.toString()!} });
           isOpen(false);
           isCallback(!callback);
           isSuccess(true);
@@ -317,7 +337,7 @@ function ShippingForm() {
                 </FormControl>
               </FormGroup>
 
-              {/*  <FormControl sx={{ m: 1 }} fullWidth disabled={disableSub ? false : true}>
+             {/*   <FormControl sx={{ m: 1 }} fullWidth disabled={disableSub ? false : true}>
               <InputLabel id="demo-simple-select-label"> Sub Category</InputLabel>
               <Select required
                 name="subcategory"
@@ -336,7 +356,7 @@ function ShippingForm() {
                   );
                 })}
               </Select>
-            </FormControl>  */}
+            </FormControl>  */} 
               <FormGroup>
                 <FormControl
                   fullWidth

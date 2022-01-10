@@ -4,10 +4,10 @@ import GlobalProvider from '@/components/contexts/GlobalProvider';
 
 import { useRouter } from 'next/router';
 import Header from '@/components/default/Header';
-import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
-import { Fragment, useContext } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
+import Loader from '@/components/Loader/loader';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -18,18 +18,41 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 const ItemStyle = {
-  flexGrow: 1, p: 12, marginTop: -20,  backgroundColor: '#f4f6f9'
-}
-
+  flexGrow: 1,
+  p: 12,
+  marginTop: -20,
+  backgroundColor: '#f4f6f9',
+};
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const { Login, IsLogged } = useContext(TodosContext);
-  console.log(Login);
 
-  if (pageProps.protected && !Login.login) {
-    return <h1>Loading</h1>;
+  const [ Token, setToken ] = useState('');
+  console.log('valor del token', Token);
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = localStorage.getItem('token').toString();
+      if (token) setToken(token);
+    };
+
+    getToken();
+  }, []);
+
+  if (pageProps.protected && !Token) {
+    return <Loader/>;
   }
+
+ /*  if (
+    pageProps.protected &&
+    User &&
+    pageProps.userTypes &&
+  pageProps.userTypes.indexOf(User.role) === -1 
+    !User.role 
+  ) {
+    return <Layout>Sorry, you dont have access</Layout>;
+  } */
 
   const showBarLogin = router.pathname === '/login' ? true : false;
 
@@ -42,7 +65,7 @@ export default function MyApp({ Component, pageProps }) {
           </Fragment>
         )}
 
-        <div className={!showBarLogin  ? "content-warp" : ""} >
+        <div className={!showBarLogin ? 'content-warp' : ''}>
           <DrawerHeader />
           <Component {...pageProps} />
         </div>

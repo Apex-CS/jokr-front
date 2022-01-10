@@ -111,14 +111,13 @@ function Home() {
     </>
   );
 }
-
-/* export async function getStaticProps() {
+ export async function getStaticProps() {
   return {
     props: {
       protected: true
     }
   };
-} */
+}
 
 
 export default Home;

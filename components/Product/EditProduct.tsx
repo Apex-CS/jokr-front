@@ -56,7 +56,9 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
 
   useEffect(() => {
     const getSubFuction = async () => {
-      const res = await axios.get(`/api/v1/subcategories/categories/${idSub}`);
+      const res = await axios.get(`/api/v1/subcategories/categories/${idSub}`,{
+        headers: {Authorization: localStorage.getItem('token')?.toString()!}
+      });
       setListSub(res.data);
     };
     getSubFuction();

@@ -72,6 +72,9 @@ export type TodosContextState = {
   callback: boolean;
   isCallback: (callback: boolean) => void;
 
-  Login: {name:string,login:boolean,role:string};
-  IsLogged: (name:string, login:boolean,role:string)=>void;
+  Token:string;
+/*   IsToken:(token:string) => void; */
+
+  Login: { name: string; login: boolean; role: string};
+  IsLogged: (name: string, login: boolean, role: string) => void;
 };

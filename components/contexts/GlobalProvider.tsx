@@ -54,8 +54,12 @@ const contextDefaultValues: TodosContextState = {
 
   AllProducts: [],
 
-  Login: ({name:'',login:false,role:''}),
-  IsLogged:() => ({})
+  Login: { name: '', login: false, role: '' },
+  IsLogged: () => ({}),
+
+  Token: '',
+  /* IsToken: () => ({}) */
+
 };
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
@@ -152,15 +156,28 @@ const GlobalProvider: FC = ({ children }) => {
 
   const [AllProducts, setProducts] = useState(contextDefaultValues.AllProducts);
 
-  const [Login , setLogin] = useState(contextDefaultValues.Login)
-  const IsLogged = () => setLogin(Login)
+  const [Login, setLogin] = useState(contextDefaultValues.Login);
+  const IsLogged = () => setLogin(Login);
 
+  const [Token, setToken] = useState(contextDefaultValues.Token);
+/*   const IsToken = () => setToken(Token); */
+
+ 
   useEffect(() => {
     const AllProductsFunction = async () => {
-      const res = await axios.get('/api/v1/products');
+      const res = await axios.get('/api/v1/products',{
+        headers: {Authorization:JSON.parse(localStorage.getItem('token') || '') }
+      });
       setProducts(res.data);
       setLoaderShow(false);
     };
+    /*  const getToken = async () => {
+      const token =  localStorage.getItem('token')?.toString()!;
+
+      if (token) {setToken(token); console.log("token existe")}
+    };
+
+    getToken(); */
     AllProductsFunction();
   }, [callback]);
 
@@ -190,7 +207,10 @@ const GlobalProvider: FC = ({ children }) => {
         AllProducts,
         /* GET LOGIN STATUS */
         Login,
-        IsLogged
+        IsLogged,
+
+        Token,
+        /* IsToken */
       }}
     >
       {children}
