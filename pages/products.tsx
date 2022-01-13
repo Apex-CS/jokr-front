@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ListProducts from '@/components/Product/ListProducts';
 import { styled } from '@mui/material/styles';
 
@@ -23,6 +23,8 @@ import {
 } from '@mui/material';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
+import Router from 'next/router';
 
 const tableHeader: string[] = [
   'Sku',
@@ -68,14 +70,32 @@ function Products() {
   const { open, isOpen } = useContext(TodosContext);
   const handleOpen = () => isOpen(true);
 
-  const { AllProducts } = useContext(TodosContext);
+  /* const { AllProducts } = useContext(TodosContext);  */
   const { success, isSuccess } = useContext(TodosContext);
+  const { callback, isCallback } = useContext(TodosContext);
+  const { Login, IsLogged } = useContext(TodosContext);
+  const { AllProductsAdmin} = useContext(TodosContext);
+/*   const [AllProducts, setAllProducts] = useState([]); */
 
-  useEffect(() => {
+/*   useEffect(() => {
     if (success) toast.success('Action done correctly!');
     isSuccess(false);
-  }, [success]);
 
+    if (!Token) {
+      Router.push('/login');
+    } else {
+      const getProduct = async () => {
+        const res = await axios.get('/api/v1/products', {
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+        });
+        setAllProducts(res.data);
+      };
+
+      getProduct();
+    }
+  }, [success, callback]); */
+
+  console.log('products',AllProductsAdmin);
   return (
     <>
       <Toaster position="bottom-center" reverseOrder={false} />
@@ -109,7 +129,7 @@ function Products() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {AllProducts?.map((pro: Product) => {
+                {AllProductsAdmin?.map((pro: Product) => {
                   return <ListProducts key={pro.id} product={pro} />;
                 })}
               </TableBody>
@@ -120,7 +140,7 @@ function Products() {
 
       <Modal
         open={open}
-           /* onClose={handleClose}  */
+        /* onClose={handleClose}  */
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         closeAfterTransition
@@ -157,6 +177,15 @@ function Products() {
       </Modal>
     </>
   );
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      protected: true,
+      userTypes: ['admin'],
+    },
+  };
 }
 
 export default Products;

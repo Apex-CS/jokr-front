@@ -8,8 +8,8 @@ import { styled } from '@mui/material/styles';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import { Fragment, useContext, useEffect, useState } from 'react';
 /* import Loader from '@/components/Loader/LoaderCommon'; */
+import Loader from '@/components/Loader/GlobalLoader';
 
-import Check from '@/components/Loader/LoaderCommon';
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -31,42 +31,62 @@ export default function MyApp({ Component, pageProps }) {
 
   const { Token, IsToken } = useContext(TodosContext);
 
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const auth = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const { loaderShow, isLoader } = useContext(TodosContext);
 
-  useEffect(() => {
+/*   useEffect(() => {
     const getToken = async () => {
-      if (token) {
-        const jwt = JSON.parse(atob(token.split('.')[1]));
-        IsToken(token);
+      if (auth) {
+        const jwt = JSON.parse(atob(auth.split('.')[1]));
+        console.log(jwt)
 
-        console.log(jwt);
         if (jwt.exp * 1000 < Date.now()) {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
           console.log('JWT has expired or will expire soon, te la pelashion');
         } else {
-          /*  IsLogged(jwt.name)  */
-          console.log('JWT is valid for less than 5 minutes', token);
+          console.log('JWT is valid for less than 5 minutes');
         }
       }
+
+     
     };
-
+ 
     getToken();
-  }, []);
 
-  if (pageProps.protected && !token && typeof window !== 'undefined') {
-    /*   return <Check />; */
+  }, []); */ 
+
+      /*     setTimeout(()=>{
+      getToken();
+  }, 1000 * 60 * 1) */
+
+
+
+  if (pageProps.protected && !auth && typeof window !== 'undefined') {
     window.location.href = '/login';
   }
 
   if (
     pageProps.protected &&
-    /*   User && */
-    token &&
+    //   User && */
+    auth &&
     pageProps.userTypes
-    /*   pageProps.userTypes.indexOf(User.role) === -1  */
-    /*    !User.role  */
+    //   pageProps.userTypes.indexOf(User.role) === -1  */
   ) {
-    return <Layout>Sorry, you dont have access</Layout>;
+    /* console.log(pageProps.userTypes) */
+    // return <Layout>Sorry, you dont have access</Layout>;
   }
+
+  // if (
+  // pageProps.protected &&
+  //   User && */
+  //token &&
+  //pageProps.userTypes
+  //   pageProps.userTypes.indexOf(User.role) === -1  */
+  //    !User.role
+  //) {
+  // return <Layout>Sorry, you dont have access</Layout>;
+  // }
 
   const showBarLogin = router.pathname === '/login' ? true : false;
 

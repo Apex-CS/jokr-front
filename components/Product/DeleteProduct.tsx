@@ -17,7 +17,9 @@ function DeleteProduct(props: { open: boolean; id: number; handleClose: () => vo
   const {  isSuccess } = useContext(TodosContext);
   const deleteProduct = async() => {
     // Make the function async
-    await axios.delete(`/api/v1/products/${id}`);
+    await axios.delete(`/api/v1/products/${id}`,{
+      headers: {Authorization:  'Bearer '+localStorage.getItem('token')?.toString()!}
+    });
     // TODO: Make snackbar appear on successfull/error at delete
     handleClose();
     isCallback(!callback);

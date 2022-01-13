@@ -47,8 +47,8 @@ function ListProducts(props: { product: Product }) {
           </IconButton>
         </TableCell>
       </TableRow>
-{/*       <EditProduct obj={product} open={openEdit} handleClose={handleClose} />
-      <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} /> */}
+       {/* <EditProduct obj={product} open={openEdit} handleClose={handleClose} /> */}
+      <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} /> 
     </Fragment>
   );
 }

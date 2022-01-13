@@ -52,6 +52,18 @@ export type TodosContextState = {
   /* GET All products */
 
   AllProducts: Array<{
+    id: number,
+    sku: string,
+    name: string,
+    description: string,
+    price: number,
+    stock: number,
+    subcategory: string,
+    photoUrl: string,
+    amount: number
+  }>;
+
+   AllProductsAdmin: Array<{
     description: string;
     id: number;
     name: string;
@@ -67,7 +79,7 @@ export type TodosContextState = {
       };
     };
     subcategoriesName: string;
-  }>;
+  }>; 
   /* To refresh any component */
   callback: boolean;
   isCallback: (callback: boolean) => void;

@@ -38,7 +38,16 @@ type FieldTypes = {
   value: string | number;
 };
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+const fetcher = (url:string) => {
+  const auth = JSON.stringify(localStorage.getItem('token') || '');
+  if (auth != '') return axios
+      .get(url, { 
+          headers: { 
+              'Authorization': 'Bearer '+localStorage.getItem('token')
+          }
+      })
+      .then((res) => res.data);
+}
 
 function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
   const { obj, open, handleClose } = props;
@@ -57,7 +66,7 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
   useEffect(() => {
     const getSubFuction = async () => {
       const res = await axios.get(`/api/v1/subcategories/categories/${idSub}`,{
-        headers: {Authorization: localStorage.getItem('token')?.toString()!}
+        headers: {Authorization: 'Bearer '+localStorage.getItem('token')?.toString()!}
       });
       setListSub(res.data);
     };
@@ -69,7 +78,9 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
   const [subCategory, setSubCategory] = useState<string>(obj.subcategoriesName);
 
   const CategorySearch = (id: any) => async () => {
-    const res = await axios.get(`/api/v1/subcategories/categories/${id}`);
+    const res = await axios.get(`/api/v1/subcategories/categories/${id}`,{
+      headers: {Authorization: 'Bearer '+localStorage.getItem('token')?.toString()!}
+    });
     setListSub(res.data);
     SetdisableSub(true);
 

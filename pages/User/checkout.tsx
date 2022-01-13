@@ -28,6 +28,7 @@ function Checkout() {
   const calculateTotal = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 
+
   return (
     <div>
       <Container>

@@ -15,11 +15,12 @@ export const GlobalProvider = ({ children }: any) => {
 }; */
 /*eslint no-empty: "error"*/
 
-import React, { createContext, useState, FC, useEffect } from 'react';
+import React, { createContext, useState, FC, useEffect, Fragment } from 'react';
 import { TodosContextState } from './types';
 import axios from 'axios';
-import Loader from '@/components/Loader/GlobalLoader';
-
+import swal from 'sweetalert';
+import Router from 'next/router';
+import GlobalLoader from '@/components/Loader/GlobalLoader';
 export type CartItemType = {
   id: number;
   sku: string;
@@ -53,6 +54,7 @@ const contextDefaultValues: TodosContextState = {
   isLoader: () => true,
 
   AllProducts: [],
+  AllProductsAdmin: [],
 
   Login: { name: '', IsAdmin: false, role: '' },
   IsLogged: () => ({}),
@@ -154,46 +156,143 @@ const GlobalProvider: FC = ({ children }) => {
   const isCallback = (callback: boolean) => setCallback(callback);
 
   const [AllProducts, setProducts] = useState(contextDefaultValues.AllProducts);
+  const [AllProductsAdmin, setProductsAdmin] = useState(contextDefaultValues.AllProductsAdmin);
 
   const [Login, setLogin] = useState(contextDefaultValues.Login);
   const IsLogged = (name: string, IsAdmin: boolean, role: string) => setLogin(Login);
 
   const [Token, setToken] = useState(contextDefaultValues.Token);
-  const IsToken = () => setToken(Token);
+  const IsToken = (token: string) => setToken(token);
 
-  useEffect(() => {
-    const AllProductsFunction = async () => {
-      const token: string = JSON.stringify(localStorage.getItem('token') || '');
+  /*   useEffect(() => {
+    const auth = localStorage.getItem('token');
+
+    const getProduct = async () => {
       const res = await axios.get('/api/v1/products', {
-        headers: { Authorization: token },
+        headers: { Authorization: 'Bearer ' + Token },
       });
       setProducts(res.data);
-      setLoaderShow(false);
-    };
-    /*     const getToken = async () => {
-      const token = JSON.stringify(localStorage.getItem('token') || '');
-
-      if (token) {
-        setToken(token);
-        console.log('token existe', token);
-      }
-
-      const jwt = JSON.parse(atob(token.split('.')[1]));
-console.log(jwt)
-      if (jwt.exp * 1000 < Date.now()) {
-        console.log('JWT has expired or will expire soon, te la pelashion');
-      } else {
+      setToken('Bearer '+auth)
       
-        setLogin(jwt) 
-        console.log('JWT is valid for less than 5 minutes', token);
-      }
     };
+    
+    if (auth== null) {
 
-    getToken(); */
-    AllProductsFunction();
+      Router.push('/login');
+    } else {
+  
+  
+
+      getProduct();
+
+
+    }
+  }, [callback]); */
+
+  useEffect(() => {
+    try {
+      const auth = localStorage.getItem('token');
+     
+      if (auth) {
+        const jwt = JSON.parse(atob(auth.split('.')[1]));
+
+        /* let ff = jwt.exp * 1000 */
+        const expiration = new Date(jwt.exp * 1000);
+        /* const g = new Date( expiration) */
+        const now = new Date();
+        const fiveMinutes = 300000;
+
+        /* const expiration = new Date(payload.exp);
+const now = new Date();
+const fiveMinutes = 1000 * 60 * 5;
+
+if( expiration.getTime() - now.getTime() < fiveMinutes ){ */
+
+        if (expiration.getTime() - now.getTime() < fiveMinutes) {
+          /*  localStorage.removeItem('token');
+          Router.push('/login'); */
+          console.log('JWT has expired or will expire soon, te la pelashion');
+          console.log(expiration.getTime() - now.getTime(), fiveMinutes);
+          const f = 'Bearer ' + auth;
+          swal({
+            title: 'Session will expire soon, Do you want to continue?',
+            text: 'Are you sure?',
+            icon: 'warning',
+            buttons: ['No', 'Yes'],
+          }).then(async (res) => {
+            if (res) {
+              try {
+                const refresh = await axios.post(`/api/v1/refreshJwt`,{ token: f }, { 
+                   headers: { Authorization: 'Bearer ' + auth },
+                  }
+                );
+                console.log(refresh);
+                const foo = refresh.headers.authorization.replace('Bearer ', '');
+                localStorage.setItem('token', foo);
+                Router.push('/');
+                await refresh;
+
+                swal({ icon: 'success', text: 'You can continue', timer: 2000 }).then(function () {
+                  setCallback(!callback);
+                });
+              } catch (err) {
+                swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+                  localStorage.removeItem('token');
+                  Router.push('/login');
+                });
+              
+              }
+            }  else {
+              localStorage.removeItem('token');
+              Router.push('/login');
+            } 
+          });
+        } else {
+          console.log(expiration, now);
+          console.log(expiration.getTime() - now.getTime(), fiveMinutes);
+
+          const getProduct = async () => {
+            const res = await axios.get('/api/v1/products', {
+              headers: { Authorization: 'Bearer ' + auth },
+            });
+            setProducts(res.data);
+            setProductsAdmin(res.data);
+          };
+          getProduct();
+
+          setToken('Bearer ' + auth);
+          console.log('JWT is valid for less than 5 minutes');
+        }
+      }
+    } catch (err) {
+    
+      localStorage.removeItem('token');
+      Router.push('/login');
+    }
+
+    /*    const RefreshToken = async () => {
+        try {
+          const res = await axios.post('/api/v1/refreshJwt',{token: 'Bearer ' + auth}, {
+            headers: { Authorization: 'Bearer ' + auth }
+          });
+          console.log('respuesta del refresh',res)
+        }catch(err) {
+          Router.push('/login');
+        }
+
+        
+      };
+      
+      RefreshToken()   */
   }, [callback]);
 
-  if (loaderShow) return <Loader />;
+  if (loaderShow) {
+    <Fragment>
+      <GlobalLoader />
+    </Fragment>;
+  }
+
+  /* if (loaderShow) return <GlobalLoader />;  */
 
   return (
     <TodosContext.Provider
@@ -217,6 +316,7 @@ console.log(jwt)
         isCallback,
         /* Get all products */
         AllProducts,
+        AllProductsAdmin,
         /* GET LOGIN STATUS */
         Login,
         IsLogged,

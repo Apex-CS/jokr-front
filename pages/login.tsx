@@ -8,6 +8,7 @@ import { Button, TextField } from '@mui/material';
 import axios from 'axios';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import Router from 'next/router';
+import { useRouter } from 'next/router';
 
 type inputsLogin = {
   email: string;
@@ -78,11 +79,13 @@ const reducer = (state: State, action: Action): State => {
 };
 
 function Login() {
-  const { Token } = useContext(TodosContext);
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { pathname } = Router;
-  const [data, setData] = useState<inputsLogin>({ email: '', password: '' });
 
+  const { Token,IsToken } = useContext(TodosContext);
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [data, setData] = useState<inputsLogin>({ email: '', password: '', });
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const { callback,isCallback, } = useContext(TodosContext);
   useEffect(() => {
     if (state.username.trim() && state.password.trim()) {
       dispatch({
@@ -90,7 +93,7 @@ function Login() {
         payload: false,
       });
 
-      setData({ email: state.username, password: state.username });
+      setData({ email: state.username, password: state.password });
     } else {
       dispatch({
         type: 'setIsButtonDisabled',
@@ -103,13 +106,14 @@ function Login() {
     /*   if (state.username == state.password) { */
     /*  setData({email:state.username,password:state.username}) */
     try {
-      const res = await axios.post('/api/v1/public/Auth', { ...data });
+      const res = await axios.post('/api/v1/public/login', { ...data });
       console.log(res);
-
-      if (res.data) {
+    
+      if (res.statusText) {
         localStorage.setItem('token', res.headers.authorization);
-
-        Router.push('/');
+        IsToken(res.headers.authorization)
+        isCallback(!callback);
+        Router.push('/'); 
         dispatch({
           type: 'loginSuccess',
           payload: 'Login Successfully',
@@ -120,9 +124,10 @@ function Login() {
           payload: 'Incorrect username or password',
         });
       }
+    
     } catch (err) {
       alert(err);
-    }
+    } 
 
     //await axios.post('/api/v1/Auth', { ...state.userame&&password })
     /*   window.location.href = "/login"
@@ -152,6 +157,10 @@ function Login() {
     });
   };
 
+  if (token) {
+    Router.push('/');
+  }
+  
   return (
     <div className="limiter">
       <div className="container-login100">
