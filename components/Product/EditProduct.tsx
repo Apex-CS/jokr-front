@@ -31,6 +31,8 @@ import { FieldCategory } from '@/components/Product/ValidateFields';
 import useSWR from 'swr';
 import Loader from '@/components/Loader/LoaderCommon';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
+import Router from 'next/router';
+import swal from 'sweetalert';
 
 type FieldTypes = {
   label: string;
@@ -38,7 +40,7 @@ type FieldTypes = {
   value: string | number;
 };
 
-const fetcher = (url:string) => {
+/* const fetcher = (url:string) => {
   const auth = JSON.stringify(localStorage.getItem('token') || '');
   if (auth != '') return axios
       .get(url, { 
@@ -47,30 +49,49 @@ const fetcher = (url:string) => {
           }
       })
       .then((res) => res.data);
-}
+} */
 
-function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
+function EditProduct(props: { obj: Product; open: boolean;  handleClose: () => void  }) {
   const { obj, open, handleClose } = props;
   const { isOpen } = useContext(TodosContext);
   const { callback, isCallback } = useContext(TodosContext);
   const { isSuccess } = useContext(TodosContext);
   const { isLoader } = useContext(TodosContext);
-
+  const [data, setData] = useState([]);
+  
   /* CLOSE MODAL */
 
   /* CATEGORY */
-  const { data } = useSWR('/api/v1/categories', fetcher);
+  /*   const { data } = useSWR('/api/v1/categories', fetcher); */
+
   const [idSub, setIdsub] = useState<number>(obj.subcategories.categories.id);
   const [listSub, setListSub] = useState([]);
 
   useEffect(() => {
-    const getSubFuction = async () => {
-      const res = await axios.get(`/api/v1/subcategories/categories/${idSub}`,{
-        headers: {Authorization: 'Bearer '+localStorage.getItem('token')?.toString()!}
+    try {
+      isCallback(!callback);
+
+      const getSubFuction = async () => {
+        const res = await axios.get(`/api/v1/subcategories/categories/${idSub}`, {
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+        });
+        setListSub(res.data);
+      };
+      getSubFuction();
+
+      const AllCategoriesFunction = async () => {
+        const res = await axios.get('/api/v1/categories', {
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+        });
+        setData(res.data);
+      };
+      AllCategoriesFunction();
+    } catch (err) {
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
       });
-      setListSub(res.data);
-    };
-    getSubFuction();
+    }
   }, [idSub]);
 
   const [disableSub, SetdisableSub] = useState(false);
@@ -78,8 +99,8 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
   const [subCategory, setSubCategory] = useState<string>(obj.subcategoriesName);
 
   const CategorySearch = (id: any) => async () => {
-    const res = await axios.get(`/api/v1/subcategories/categories/${id}`,{
-      headers: {Authorization: 'Bearer '+localStorage.getItem('token')?.toString()!}
+    const res = await axios.get(`/api/v1/subcategories/categories/${id}`, {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
     });
     setListSub(res.data);
     SetdisableSub(true);
@@ -110,13 +131,16 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
       console.log('desttroy', imagesUrl, 'ID:::', imagesId);
       setLoading(true);
       const imageId = imagesId.toString();
-      await axios.delete(`/api/v1/products/image/${imageId}`);
+      await axios.delete(`/api/v1/products/image/${imageId}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+      });
       setImagesId('');
       setImagesUrl('');
 
       setLoading(false);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+      localStorage.removeItem('token');
+      Router.push('/login');
     }
   };
 
@@ -132,13 +156,16 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
         return alert('File format is incorrect');
       setLoading(true);
       const res = await axios.post('/api/v1/products/image', formData, {
-        headers: { 'content-type': 'multipart/form-data' },
+        headers: { 'content-type': 'multipart/form-data', Authorization: 'Bearer ' + localStorage.getItem('token') },
       });
       setLoading(false);
       setImagesId(res.data.id);
       setImagesUrl(res.data.url);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
     }
   };
 
@@ -225,10 +252,15 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
               values.subcategories = { name: subCategory };
               values.photoPublicId = imagesId.toString();
               values.photoUrl = imagesUrl.toString();
-              console.log(values);
+              
               setSubmitting(false);
-              await axios.put(`/api/v1/products/${obj.id}`, { ...values });
-              isOpen(false);
+              
+              await axios.put(`/api/v1/products/${obj.id}`,
+               { ...values }, 
+               {  headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }}
+               );
+               handleClose();
+     
               isCallback(!callback);
               isSuccess(true);
               isLoader(true);

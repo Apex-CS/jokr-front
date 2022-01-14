@@ -9,7 +9,8 @@ import {
   DialogTitle,
 } from '@mui/material/';
 import { useContext } from 'react';
-
+import Router from 'next/router';
+import swal from 'sweetalert';
 
 function DeleteProduct(props: { open: boolean; id: number; handleClose: () => void }) {
   const { id, open, handleClose } = props;
@@ -17,13 +18,21 @@ function DeleteProduct(props: { open: boolean; id: number; handleClose: () => vo
   const {  isSuccess } = useContext(TodosContext);
   const deleteProduct = async() => {
     // Make the function async
-    await axios.delete(`/api/v1/products/${id}`,{
-      headers: {Authorization:  'Bearer '+localStorage.getItem('token')?.toString()!}
-    });
-    // TODO: Make snackbar appear on successfull/error at delete
-    handleClose();
-    isCallback(!callback);
-    isSuccess(true);
+    try {
+      await axios.delete(`/api/v1/products/${id}`,{
+        headers: {Authorization:  'Bearer '+localStorage.getItem('token')}
+      });
+      // TODO: Make snackbar appear on successfull/error at delete
+      handleClose();
+      isCallback(!callback);
+      isSuccess(true);
+    }catch(err){
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
+    }
+
   
   };
 

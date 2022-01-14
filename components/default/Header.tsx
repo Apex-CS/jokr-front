@@ -4,7 +4,6 @@ import {
   Toolbar,
   Box,
   List,
-  CssBaseline,
   Typography,
   Divider,
   IconButton,
@@ -13,6 +12,7 @@ import {
   ListItemText,
   Badge,
   MenuItem,
+  Tooltip,
 } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -104,6 +104,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 function MiniDrawer() {
   /*  ShopCart */
   const { cartItems } = useContext(TodosContext);
+  const { Login, IsLogged } = useContext(TodosContext);
   const [cartOpen, setCartOpen] = useState(false);
 
   const getTotalItems = (cartItems: any) => {
@@ -172,38 +173,56 @@ function MiniDrawer() {
           </DrawerHeader>
           <Divider />
           <List>
-            <ListItem>
-              <ListItemIcon>
-                <Link href="/products">
-                  <a>
-                    <ListAlt />
-                  </a>
-                </Link>
-              </ListItemIcon>
-              <ListItemText> Products options</ListItemText>
-            </ListItem>
+            {Login ? (
+              <Tooltip title="See products">
+                <ListItem>
+                  <ListItemIcon>
+                    <Link href="/products">
+                      <a>
+                        <ListAlt />
+                      </a>
+                    </Link>
+                  </ListItemIcon>
+                  <ListItemText> Products options</ListItemText>
+                </ListItem>
+              </Tooltip>
+            ) : (
+              ''
+            )}
 
-            <ListItem>
-              <ListItemIcon>
-                <Link href="/users">
-                  <a>
-                    <PeopleAltOutlined />
-                  </a>
-                </Link>
-              </ListItemIcon>
-              <ListItemText> Users options</ListItemText>
-            </ListItem>
+            {Login ? (
+              <Tooltip title="See users">
+                <ListItem>
+                  <ListItemIcon>
+                    <Link href="/users">
+                      <a>
+                        <PeopleAltOutlined />
+                      </a>
+                    </Link>
+                  </ListItemIcon>
+                  <ListItemText> Users options</ListItemText>
+                </ListItem>
+              </Tooltip>
+            ) : (
+              ''
+            )}
 
-            <ListItem>
-              <ListItemIcon>
-                <Link href="/">
-                  <a>
-                    <Storefront />
-                  </a>
-                </Link>
-              </ListItemIcon>
-              <ListItemText> JOKR products</ListItemText>
-            </ListItem>
+            {Login ? (
+              <Tooltip title="Home">
+                <ListItem>
+                  <ListItemIcon>
+                    <Link href="/">
+                      <a>
+                        <Storefront />
+                      </a>
+                    </Link>
+                  </ListItemIcon>
+                  <ListItemText> JOKR products</ListItemText>
+                </ListItem>
+              </Tooltip>
+            ) : (
+              ''
+            )}
           </List>
           <Divider />
         </Drawer>

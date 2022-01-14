@@ -82,7 +82,7 @@ function Login() {
 
   const { Token,IsToken } = useContext(TodosContext);
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  const { Login,IsLogged} = useContext(TodosContext);
   const [data, setData] = useState<inputsLogin>({ email: '', password: '', });
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const { callback,isCallback, } = useContext(TodosContext);
@@ -108,9 +108,11 @@ function Login() {
     try {
       const res = await axios.post('/api/v1/public/login', { ...data });
       console.log(res);
-    
+      const jwt = JSON.parse(atob(res.headers.authorization.split('.')[1]));
       if (res.statusText) {
         localStorage.setItem('token', res.headers.authorization);
+        if(jwt.authorities.toString() == 'Admin') IsLogged(jwt.authorities.toString())
+        
         IsToken(res.headers.authorization)
         isCallback(!callback);
         Router.push('/'); 
@@ -242,7 +244,7 @@ function Login() {
                   onClick={handleLogin}
                   disabled={state.isButtonDisabled}
                 >
-                  Login
+                 Sign in
                 </Button>
               </div>
             </div>

@@ -97,6 +97,7 @@ function Home() {
           />
         </Card>
         <Button
+        size='small'
           color="primary"
           variant="contained"
           onClick={() => toast.dismiss(t.id)}
@@ -135,7 +136,7 @@ function Home() {
         })}
       </Grid>
 
-      <Toaster position="bottom-center" reverseOrder={false} />
+      <Toaster position="top-right" reverseOrder={false} />
     </>
   );
 }

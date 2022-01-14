@@ -87,8 +87,8 @@ export type TodosContextState = {
   Token:string;
   IsToken:(token:string) => void; 
 
-  Login: ({name: string,IsAdmin:boolean ,role: string});
-  IsLogged: (name: string,IsAdmin:boolean ,role: string) => void;
+  Login: string;
+  IsLogged: (role: string) => void;
 };
 
 

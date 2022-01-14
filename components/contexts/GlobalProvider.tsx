@@ -56,7 +56,7 @@ const contextDefaultValues: TodosContextState = {
   AllProducts: [],
   AllProductsAdmin: [],
 
-  Login: { name: '', IsAdmin: false, role: '' },
+  Login: '' ,
   IsLogged: () => ({}),
 
   Token: '',
@@ -159,35 +159,11 @@ const GlobalProvider: FC = ({ children }) => {
   const [AllProductsAdmin, setProductsAdmin] = useState(contextDefaultValues.AllProductsAdmin);
 
   const [Login, setLogin] = useState(contextDefaultValues.Login);
-  const IsLogged = (name: string, IsAdmin: boolean, role: string) => setLogin(Login);
+  const IsLogged = (role: string) => setLogin(role);
 
   const [Token, setToken] = useState(contextDefaultValues.Token);
   const IsToken = (token: string) => setToken(token);
 
-  /*   useEffect(() => {
-    const auth = localStorage.getItem('token');
-
-    const getProduct = async () => {
-      const res = await axios.get('/api/v1/products', {
-        headers: { Authorization: 'Bearer ' + Token },
-      });
-      setProducts(res.data);
-      setToken('Bearer '+auth)
-      
-    };
-    
-    if (auth== null) {
-
-      Router.push('/login');
-    } else {
-  
-  
-
-      getProduct();
-
-
-    }
-  }, [callback]); */
 
   useEffect(() => {
     try {
@@ -195,7 +171,7 @@ const GlobalProvider: FC = ({ children }) => {
      
       if (auth) {
         const jwt = JSON.parse(atob(auth.split('.')[1]));
-
+        if(jwt.authorities.toString() === 'Admin') IsLogged(jwt.authorities.toString())
         /* let ff = jwt.exp * 1000 */
         const expiration = new Date(jwt.exp * 1000);
         /* const g = new Date( expiration) */
@@ -209,9 +185,7 @@ const fiveMinutes = 1000 * 60 * 5;
 if( expiration.getTime() - now.getTime() < fiveMinutes ){ */
 
         if (expiration.getTime() - now.getTime() < fiveMinutes) {
-          /*  localStorage.removeItem('token');
-          Router.push('/login'); */
-          console.log('JWT has expired or will expire soon, te la pelashion');
+          console.log('JWT has expired or will expire soon');
           console.log(expiration.getTime() - now.getTime(), fiveMinutes);
           const f = 'Bearer ' + auth;
           swal({

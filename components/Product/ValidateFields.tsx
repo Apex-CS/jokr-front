@@ -136,7 +136,7 @@ function ShippingForm() {
 
   const CategorySearch = (id: any) => async () => {
     const res = await axios.get(`/api/v1/subcategories/categories/${id}`, {
-      headers: { Authorization: 'Bearer ' + localStorage.getItem('token')?.toString()! },
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
     });
     isCallback(!callback);
     setListSub(res.data);
@@ -145,7 +145,7 @@ function ShippingForm() {
 
   const handleDestroyClose = async (id: any) =>
     await axios.delete(`/api/v1/products/image/${id}`, {
-      headers: { Authorization: 'Bearer ' + localStorage.getItem('token')?.toString()! },
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
     });
 
   const handleDestroy = async () => {
@@ -153,7 +153,7 @@ function ShippingForm() {
       setLoading(true);
       const imageId = imagesId.toString();
       await axios.delete(`/api/v1/products/image/${imageId}`, {
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('token')?.toString()! },
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
       });
       setImagesId('');
       setImagesUrl('');
@@ -178,14 +178,15 @@ function ShippingForm() {
       const res = await axios.post('/api/v1/products/image', formData, {
         headers: {
           'content-type': 'multipart/form-data',
-          Authorization: 'Bearer ' + localStorage.getItem('token')?.toString()!,
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       });
       setLoading(false);
       setImagesId(res.data.id);
       setImagesUrl(res.data.url);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+      localStorage.removeItem('token');
+      Router.push('/login');
     }
   };
   /* IMAGES */
@@ -245,7 +246,7 @@ function ShippingForm() {
           await axios.post(
             '/api/v1/products',
             { ...values },
-            { headers: { Authorization: 'Bearer ' + localStorage.getItem('token')?.toString()! } }
+            { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } }
           );
           isOpen(false);
           isCallback(!callback);
