@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { Box } from '@mui/material';
 import GlobalLoader from '@/components/Loader/GlobalLoader';
 import Image from 'next/image';
-import signin from '@/public/signin.jpg';
 import Link from 'next/link';
 import { Button, TextField } from '@mui/material';
 import axios from 'axios';
