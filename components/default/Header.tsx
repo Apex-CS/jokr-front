@@ -207,7 +207,7 @@ function MiniDrawer() {
               ''
             )}
 
-            {Login ? (
+           
               <Tooltip title="Home">
                 <ListItem>
                   <ListItemIcon>
@@ -220,9 +220,7 @@ function MiniDrawer() {
                   <ListItemText> JOKR products</ListItemText>
                 </ListItem>
               </Tooltip>
-            ) : (
-              ''
-            )}
+            
           </List>
           <Divider />
         </Drawer>

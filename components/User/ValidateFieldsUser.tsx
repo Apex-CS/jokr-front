@@ -14,7 +14,8 @@ import {
   MenuItem,
   DialogActions,
 } from '@mui/material';
-
+import Router from 'next/router';
+import swal from 'sweetalert';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
 import Loader from '@/components/Loader/LoaderCommon';
@@ -22,6 +23,8 @@ import { TodosContext } from '@/components/contexts/GlobalProvider';
 import Image from 'next/image';
 import Back from '@/public/back.jpg';
 import axios from 'axios';
+import { mutate } from 'swr';
+
 
 type FieldTypes = {
   name: string | number;
@@ -78,10 +81,10 @@ function ShippingFormUser() {
   const handleChangeCategory = async (event: SelectChangeEvent) => {
     setCategoryRole(event.target.value as string);
   };
-  const handleRepeatPassword = async (e: ChangeEvent<HTMLInputElement>) => {
+  /*   const handleRepeatPassword = async (e: ChangeEvent<HTMLInputElement>) => {
     const element = e.currentTarget.value;
     setRepeat(element);
-  };
+  }; */
 
   const [imagesId, setImagesId] = useState<string>('');
   const [imagesUrl, setImagesUrl] = useState<string>('');
@@ -96,19 +99,35 @@ function ShippingFormUser() {
     if (imagesId) handleDestroyClose(imagesId);
   };
 
-  const handleDestroyClose = async (id: any) => await axios.delete(`/api/v1/users/image/${id}`);
+  const handleDestroyClose = async (id: any) => {
+    try {
+      await axios.delete(`/api/v1/users/image/${id}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+      });
+    } catch (err) {
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
+    }
+  };
 
   const handleDestroy = async () => {
     try {
       setLoading(true);
       const imageId = imagesId.toString();
-      await axios.delete(`/api/v1/users/image/${imageId}`);
+      await axios.delete(`/api/v1/users/image/${imageId}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+      });
       setImagesId('');
       setImagesUrl('');
 
       setLoading(false);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
     }
   };
 
@@ -124,13 +143,19 @@ function ShippingFormUser() {
         return alert('File format is incorrect');
       setLoading(true);
       const res = await axios.post('/api/v1/users/image', formData, {
-        headers: { 'content-type': 'multipart/form-data' },
+        headers: {
+          'content-type': 'multipart/form-data',
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
       });
       setLoading(false);
       setImagesId(res.data.id);
       setImagesUrl(res.data.url);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
     }
   };
 
@@ -169,7 +194,22 @@ function ShippingFormUser() {
       }}
       onSubmit={async (values, { setSubmitting }) => {
         setSubmitting(false);
-        await axios.post('/api/v1/users', { ...values });
+        try {
+          await axios.post(
+            '/api/v1/users',
+            { ...values },
+            {
+              headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+            }
+          );
+        } catch (err) {
+          swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+            localStorage.removeItem('token');
+            Router.push('/login');
+          });
+        }
+
+        mutate('/api/v1/Users');
         isOpen(false);
         isCallback(!callback);
         isSuccess(true);
@@ -208,7 +248,7 @@ function ShippingFormUser() {
           <Form>
             <Divider />
 
-            {/*   <div className="imageTitle">Select a image: </div>
+            <div className="imageTitle">Select a image: </div>
             <Tooltip title="Add a image " placement="top">
               <div className="upload">
                 <input
@@ -241,7 +281,7 @@ function ShippingFormUser() {
                   </div>
                 )}
               </div>
-            </Tooltip> */}
+            </Tooltip>
             {AddlabelsConfing?.map((field: FieldTypes) => {
               return (
                 <FormGroup key={field.name}>

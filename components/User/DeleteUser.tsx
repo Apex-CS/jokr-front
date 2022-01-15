@@ -7,6 +7,8 @@ import {
   DialogTitle,
 } from '@mui/material/';
 import axios from 'axios';
+import swal from 'sweetalert';
+import Router from 'next/router';
 
 function refreshPage() {
   window.location.reload();
@@ -16,11 +18,20 @@ function DeleteUser(props: { open: boolean; id: number; handleClose: () => void 
   const { id, open, handleClose } = props;
 
   const deleteProduct = () => {
-    // Make the function async
-    axios.delete(`/api/v1/Users/${id}`);
-    // TODO: Make snackbar appear on successfull/error at delete
-    refreshPage();
-    handleClose();
+    try {
+      // Make the function async
+      axios.delete(`/api/v1/Users/${id}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+      });
+      // TODO: Make snackbar appear on successfull/error at delete
+      refreshPage();
+      handleClose();
+    } catch (err) {
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
+    }
   };
 
   return (

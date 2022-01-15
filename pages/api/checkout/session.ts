@@ -28,7 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     price_data: {
       currency: string;
       unit_amount: number;
-      product_data: {  name: string; description: string; images: [string] };
+      product_data: {name: string; description: string; images: [string],metadata:{id:number} };
     };
     quantity: number;
   }[] = [];
@@ -43,6 +43,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           name: product.name,
           description: product.description,
           images: [product.photoUrl],
+          metadata:{id:product.id}
         },
       },
       quantity: product.amount,

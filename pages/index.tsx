@@ -35,28 +35,9 @@ function Home() {
   const { addCart } = useContext(TodosContext);
   const [data, setData] = useState([]);
 
-  const { callback } = useContext(TodosContext);
+
   const { AllProducts } = useContext(TodosContext);
   /* const fetcher = (url: string) =>  axios.get(url,{  headers: {'Authorization': 'Bearer '+localStorage.getItem('token')}}).then((res) => res.data); */
-
- /*  useEffect(() => {
- try {
-  const getProduct = async () => {
-    const res = await axios.get('/api/v1/products', {
-      headers: { Authorization: 'Bearer '+localStorage.getItem('token') },
-    });
-    setData(res.data);
-  };
-
-  getProduct();
- }catch(err) {
-  localStorage.removeItem('token');
-  Router.push('/login');
- }
-     
-   
-
-  }, [callback]); */
 
   const handleAddToCart = (clickedItem: CartItemType) => {
     addCart(
@@ -97,7 +78,7 @@ function Home() {
           />
         </Card>
         <Button
-        size='small'
+          size="small"
           color="primary"
           variant="contained"
           onClick={() => toast.dismiss(t.id)}
@@ -136,7 +117,7 @@ function Home() {
         })}
       </Grid>
 
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} />
     </>
   );
 }

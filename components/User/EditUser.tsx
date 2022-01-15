@@ -8,12 +8,7 @@ import {
   InputAdornment,
   FormGroup,
   Tooltip,
-  InputLabel,
-  Select,
-  SelectChangeEvent,
-  MenuItem,
   DialogActions,
-  FormHelperText,
   Modal,
   Backdrop,
   Fade,
@@ -29,6 +24,8 @@ import { TextField } from 'formik-mui';
 import Image from 'next/image';
 import { ShippingData } from '@/components/User/ValidateFieldsUser';
 import Back from '@/public/back.jpg';
+import swal from 'sweetalert';
+import Router from 'next/router';
 
 type FieldTypes = {
   label: string;
@@ -57,13 +54,18 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
       console.log('desttroy', imagesUrl, 'ID:::', imagesId);
       setLoading(true);
       const imageId = imagesId.toString();
-      await axios.delete(`/api/v1/products/image/${imageId}`);
+      await axios.delete(`/api/v1/products/image/${imageId}`,{
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+      });
       setImagesId('');
       setImagesUrl('');
 
       setLoading(false);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
     }
   };
 
@@ -79,13 +81,16 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
         return alert('File format is incorrect');
       setLoading(true);
       const res = await axios.post('/api/v1/products/image', formData, {
-        headers: { 'content-type': 'multipart/form-data' },
+        headers: { 'content-type': 'multipart/form-data', Authorization: 'Bearer ' + localStorage.getItem('token') },
       });
       setLoading(false);
       setImagesId(res.data.id);
       setImagesUrl(res.data.url);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
     }
   };
 
@@ -141,30 +146,36 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
           }}
         >
           <Formik
-            initialValues={{
-    
-            }}
+            initialValues={{}}
             validate={(values) => {
               const errors: Partial<ShippingData> = {};
               //
 
-         
-
-           
-
               return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
-             
-       /*        values.photoPublicId = imagesId.toString();
+              /*        values.photoPublicId = imagesId.toString();
               values.photoUrl = imagesUrl.toString(); */
               console.log(values);
               setSubmitting(false);
-              await axios.put(`/api/v1/products/${obj.id}`, { ...values });
-              isOpen(false);
-              isCallback(!callback);
-              isSuccess(true);
-              isLoader(true);
+              try {
+                await axios.put(
+                  `/api/v1/products/${obj.id}`,
+                  { ...values },
+                  {
+                    headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+                  }
+                );
+                isOpen(false);
+                isCallback(!callback);
+                isSuccess(true);
+                isLoader(true);
+              } catch (err) {
+                swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+                  localStorage.removeItem('token');
+                  Router.push('/login');
+                });
+              }
             }}
           >
             {() => (
@@ -258,8 +269,7 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
                     );
                   })}
 
-
-                 {/*  <FormGroup>
+                  {/*  <FormGroup>
                     <FormControl fullWidth error={category ? false : true}>
                       <InputLabel>Category</InputLabel>
                       <Select

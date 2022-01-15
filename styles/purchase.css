@@ -125,3 +125,15 @@ a:hover, a:focus, a:active {
 .Checkout {
   margin-right: 20rem;
 }
+
+
+.grid1 {
+  width: 40%;
+  float: left;
+}
+
+.grid2 {
+  width: 60%;
+  float: right;
+
+}

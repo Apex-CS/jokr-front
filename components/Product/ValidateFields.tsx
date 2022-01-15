@@ -108,7 +108,8 @@ function ShippingForm() {
         const res = await axios.get('/api/v1/categories', {
           headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
         });
-        setData(res.data);
+        if(res){  setData(res.data);}
+       
       } catch (err) {
         swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
           localStorage.removeItem('token');
@@ -135,12 +136,20 @@ function ShippingForm() {
   };
 
   const CategorySearch = (id: any) => async () => {
-    const res = await axios.get(`/api/v1/subcategories/categories/${id}`, {
-      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
-    });
-    isCallback(!callback);
-    setListSub(res.data);
-    SetdisableSub(true);
+    try {
+      const res = await axios.get(`/api/v1/subcategories/categories/${id}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+      });
+      isCallback(!callback);
+      setListSub(res.data);
+      SetdisableSub(true);
+    }catch(err){
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
+    }
+   
   };
 
   const handleDestroyClose = async (id: any) =>
@@ -160,7 +169,11 @@ function ShippingForm() {
 
       setLoading(false);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+  
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
     }
   };
 
@@ -243,15 +256,23 @@ function ShippingForm() {
           values.photoUrl = imagesUrl.toString();
 
           setSubmitting(false);
-          await axios.post(
-            '/api/v1/products',
-            { ...values },
-            { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } }
-          );
-          isOpen(false);
-          isCallback(!callback);
-          isSuccess(true);
-          isLoader(true);
+          try{
+            await axios.post(
+              '/api/v1/products',
+              { ...values },
+              { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } }
+            );
+            isOpen(false);
+            isCallback(!callback);
+            isSuccess(true);
+            isLoader(true);
+          }catch(err){
+            swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+              localStorage.removeItem('token');
+              Router.push('/login');
+            });
+          }
+
         }}
       >
         {() => (

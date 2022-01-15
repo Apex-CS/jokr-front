@@ -1,11 +1,11 @@
 import '../styles/globals.css';
 import '../styles/Home.module.css';
 import GlobalProvider from '@/components/contexts/GlobalProvider';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import Header from '@/components/default/Header';
 import { styled } from '@mui/material/styles';
 import { Fragment, useContext, useEffect, useState } from 'react';
-import Loader from '@/components/Loader/Check';
+import Check from '@/components/Loader/Check';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -38,11 +38,11 @@ export default function MyApp({ Component, pageProps }) {
   }, []);
 
   if (pageProps.protected && !auth && typeof window !== 'undefined') {
-    window.location.href = '/login';
+    router.push('/login')
   }
 
   if (pageProps.protected && auth && pageProps.userTypes && UserType != 'Admin') {
-    return <Loader/>;
+    return (<Fragment><Check/> </Fragment> )
   }
 
   const showBarLogin = router.pathname === '/login' ? true : false;

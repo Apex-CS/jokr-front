@@ -77,25 +77,6 @@ function Products() {
   const { AllProductsAdmin} = useContext(TodosContext);
 /*   const [AllProducts, setAllProducts] = useState([]); */
 
-/*   useEffect(() => {
-    if (success) toast.success('Action done correctly!');
-    isSuccess(false);
-
-    if (!Token) {
-      Router.push('/login');
-    } else {
-      const getProduct = async () => {
-        const res = await axios.get('/api/v1/products', {
-          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
-        });
-        setAllProducts(res.data);
-      };
-
-      getProduct();
-    }
-  }, [success, callback]); */
-
-  console.log('products',AllProductsAdmin);
   return (
     <>
       <Toaster position="bottom-center" reverseOrder={false} />

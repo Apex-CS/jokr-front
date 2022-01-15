@@ -28,6 +28,9 @@ import {
   Tooltip,
 } from '@mui/material';
 
+import Router,{ useRouter } from 'next/router';
+import Check from '@/components/Loader/GlobalLoader';
+
 const tableHeader: string[] = ['Email', 'Name', 'Image', 'Role', 'Options'];
 
 export type User = {
@@ -42,7 +45,7 @@ export type User = {
   roleName: string;
 };
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+const fetcher = (url: string) =>  axios.get(url,{  headers: {'Authorization': 'Bearer '+localStorage.getItem('token')}}).then((res) => res.data);
 function Users() {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -54,22 +57,21 @@ function Users() {
     },
   }));
 
-
-
   /* Check if state edit is enable */
   const { open, isOpen } = useContext(TodosContext);
   const handleOpen = () => isOpen(true);
   const { success, isSuccess } = useContext(TodosContext);
-
-
+  const { callback, isCallback } = useContext(TodosContext);
+  const router = useRouter();
   useEffect(() => {
+    isCallback(!callback);
     if (success) toast.success('Action done correctly!');
     isSuccess(false);
+
   }, [success]);
 
-
   const { data, error } = useSWR('/api/v1/Users', fetcher);
-  if (error) return 'An error has occurred.' + error;
+  if (error)  return <Check/> ;
   if (!data) return 'Loading...';
   return (
     <>
@@ -135,7 +137,8 @@ function Users() {
               borderRadius: '12px',
               overflowX: 'scroll',
               '&::-webkit-scrollbar': {
-                width: 0,}
+                width: 0,
+              },
             }}
           >
             {/* Add User */}
@@ -145,6 +148,15 @@ function Users() {
       </Modal>
     </>
   );
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      protected: true,
+      userTypes: ['Admin'],
+    },
+  };
 }
 
 export default Users;

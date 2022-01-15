@@ -200,7 +200,7 @@ if( expiration.getTime() - now.getTime() < fiveMinutes ){ */
                    headers: { Authorization: 'Bearer ' + auth },
                   }
                 );
-                console.log(refresh);
+              
                 const foo = refresh.headers.authorization.replace('Bearer ', '');
                 localStorage.setItem('token', foo);
                 Router.push('/');

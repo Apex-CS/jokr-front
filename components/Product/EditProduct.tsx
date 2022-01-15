@@ -68,30 +68,44 @@ function EditProduct(props: { obj: Product; open: boolean;  handleClose: () => v
   const [listSub, setListSub] = useState([]);
 
   useEffect(() => {
-    try {
+    
       isCallback(!callback);
 
       const getSubFuction = async () => {
+        try {
         const res = await axios.get(`/api/v1/subcategories/categories/${idSub}`, {
           headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
         });
-        setListSub(res.data);
+        if(res){  setListSub(res.data);}
+
+      } catch (err) {
+        swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+          localStorage.removeItem('token');
+          Router.push('/login');
+        });
+      }
+
+       
       };
       getSubFuction();
 
       const AllCategoriesFunction = async () => {
-        const res = await axios.get('/api/v1/categories', {
-          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
-        });
-        setData(res.data);
+        try {
+          const res = await axios.get('/api/v1/categories', {
+            headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+          });
+         
+          if(res){   setData(res.data);}
+        }catch(err){
+          swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+            localStorage.removeItem('token');
+            Router.push('/login');
+          });
+        }
+       
       };
       AllCategoriesFunction();
-    } catch (err) {
-      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
-        localStorage.removeItem('token');
-        Router.push('/login');
-      });
-    }
+  
   }, [idSub]);
 
   const [disableSub, SetdisableSub] = useState(false);
@@ -99,13 +113,23 @@ function EditProduct(props: { obj: Product; open: boolean;  handleClose: () => v
   const [subCategory, setSubCategory] = useState<string>(obj.subcategoriesName);
 
   const CategorySearch = (id: any) => async () => {
-    const res = await axios.get(`/api/v1/subcategories/categories/${id}`, {
-      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
-    });
-    setListSub(res.data);
-    SetdisableSub(true);
+    try
+    {
+      const res = await axios.get(`/api/v1/subcategories/categories/${id}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+      });
+      setListSub(res.data);
+      SetdisableSub(true);
+  
+      setIdsub(id);
+    }
+    catch(err) {
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
+    }
 
-    setIdsub(id);
   };
 
   const handleChangeCategory = async (event: SelectChangeEvent) => {
@@ -254,16 +278,23 @@ function EditProduct(props: { obj: Product; open: boolean;  handleClose: () => v
               values.photoUrl = imagesUrl.toString();
               
               setSubmitting(false);
-              
-              await axios.put(`/api/v1/products/${obj.id}`,
-               { ...values }, 
-               {  headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }}
-               );
-               handleClose();
-     
-              isCallback(!callback);
-              isSuccess(true);
-              isLoader(true);
+              try {
+                await axios.put(`/api/v1/products/${obj.id}`,
+                { ...values }, 
+                {  headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }}
+                );
+                handleClose();
+      
+               isCallback(!callback);
+               isSuccess(true);
+               isLoader(true);
+              }catch(err) {
+                swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+                  localStorage.removeItem('token');
+                  Router.push('/login');
+                });
+              }
+             
             }}
           >
             {() => (
