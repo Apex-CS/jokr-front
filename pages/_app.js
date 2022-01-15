@@ -42,7 +42,7 @@ export default function MyApp({ Component, pageProps }) {
   }
 
   if (pageProps.protected && auth && pageProps.userTypes && UserType != 'Admin') {
-    return (<Fragment><Check/> </Fragment> )
+    return (<Check/>  )
   }
 
   const showBarLogin = router.pathname === '/login' ? true : false;
