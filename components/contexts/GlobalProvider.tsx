@@ -15,11 +15,12 @@ export const GlobalProvider = ({ children }: any) => {
 }; */
 /*eslint no-empty: "error"*/
 
-import React, { createContext, useState, FC, useEffect } from 'react';
+import React, { createContext, useState, FC, useEffect, Fragment } from 'react';
 import { TodosContextState } from './types';
 import axios from 'axios';
-import Loader from '@/components/Loader/GlobalLoader';
-
+import swal from 'sweetalert';
+import Router from 'next/router';
+import GlobalLoader from '@/components/Loader/GlobalLoader';
 export type CartItemType = {
   id: number;
   sku: string;
@@ -53,6 +54,13 @@ const contextDefaultValues: TodosContextState = {
   isLoader: () => true,
 
   AllProducts: [],
+  AllProductsAdmin: [],
+
+  Login: '' ,
+  IsLogged: () => ({}),
+
+  Token: '',
+  IsToken: () => ({}),
 };
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
@@ -148,17 +156,117 @@ const GlobalProvider: FC = ({ children }) => {
   const isCallback = (callback: boolean) => setCallback(callback);
 
   const [AllProducts, setProducts] = useState(contextDefaultValues.AllProducts);
+  const [AllProductsAdmin, setProductsAdmin] = useState(contextDefaultValues.AllProductsAdmin);
+
+  const [Login, setLogin] = useState(contextDefaultValues.Login);
+  const IsLogged = (role: string) => setLogin(role);
+
+  const [Token, setToken] = useState(contextDefaultValues.Token);
+  const IsToken = (token: string) => setToken(token);
+
 
   useEffect(() => {
-    const AllProductsFunction = async () => {
-      const res = await axios.get('/api/v1/products');
-      setProducts(res.data);
-      setLoaderShow(false);
-    };
-    AllProductsFunction();
+    try {
+      const auth = localStorage.getItem('token');
+     
+      if (auth) {
+        const jwt = JSON.parse(atob(auth.split('.')[1]));
+        if(jwt.authorities.toString() === 'Admin') IsLogged(jwt.authorities.toString())
+        /* let ff = jwt.exp * 1000 */
+        const expiration = new Date(jwt.exp * 1000);
+        /* const g = new Date( expiration) */
+        const now = new Date();
+        const fiveMinutes = 300000;
+
+        /* const expiration = new Date(payload.exp);
+const now = new Date();
+const fiveMinutes = 1000 * 60 * 5;
+
+if( expiration.getTime() - now.getTime() < fiveMinutes ){ */
+
+        if (expiration.getTime() - now.getTime() < fiveMinutes) {
+          console.log('JWT has expired or will expire soon');
+          console.log(expiration.getTime() - now.getTime(), fiveMinutes);
+          const f = 'Bearer ' + auth;
+          swal({
+            title: 'Session will expire soon, Do you want to continue?',
+            text: 'Are you sure?',
+            icon: 'warning',
+            buttons: ['No', 'Yes'],
+          }).then(async (res) => {
+            if (res) {
+              try {
+                const refresh = await axios.post(`/api/v1/refreshJwt`,{ token: f }, { 
+                   headers: { Authorization: 'Bearer ' + auth },
+                  }
+                );
+              
+                const foo = refresh.headers.authorization.replace('Bearer ', '');
+                localStorage.setItem('token', foo);
+                Router.push('/');
+                await refresh;
+
+                swal({ icon: 'success', text: 'You can continue', timer: 2000 }).then(function () {
+                  setCallback(!callback);
+                });
+              } catch (err) {
+                swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+                  localStorage.removeItem('token');
+                  Router.push('/login');
+                });
+              
+              }
+            }  else {
+              localStorage.removeItem('token');
+              Router.push('/login');
+            } 
+          });
+        } else {
+          console.log(expiration, now);
+          console.log(expiration.getTime() - now.getTime(), fiveMinutes);
+
+          const getProduct = async () => {
+            const res = await axios.get('/api/v1/products', {
+              headers: { Authorization: 'Bearer ' + auth },
+            });
+            setProducts(res.data);
+            setProductsAdmin(res.data);
+          };
+          getProduct();
+
+          setToken('Bearer ' + auth);
+          console.log('JWT is valid for less than 5 minutes');
+        }
+      }
+    } catch (err) {
+    
+      localStorage.removeItem('token');
+      Router.push('/login');
+    }
+
+    /*    const RefreshToken = async () => {
+        try {
+          const res = await axios.post('/api/v1/refreshJwt',{token: 'Bearer ' + auth}, {
+            headers: { Authorization: 'Bearer ' + auth }
+          });
+          console.log('respuesta del refresh',res)
+        }catch(err) {
+          Router.push('/login');
+        }
+
+        
+      };
+      
+      RefreshToken()   */
   }, [callback]);
 
-  if (loaderShow) return <Loader />;
+  if (loaderShow) {
+    <Fragment>
+      <GlobalLoader />
+    </Fragment>;
+  }
+
+  /* if (loaderShow) return <GlobalLoader />;  */
 
   return (
     <TodosContext.Provider
@@ -182,6 +290,13 @@ const GlobalProvider: FC = ({ children }) => {
         isCallback,
         /* Get all products */
         AllProducts,
+        AllProductsAdmin,
+        /* GET LOGIN STATUS */
+        Login,
+        IsLogged,
+
+        Token,
+        IsToken,
       }}
     >
       {children}

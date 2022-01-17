@@ -1,89 +1,102 @@
 export type TodosContextState = {
-    todos: number;
-    addTodo: (quantiy:number) => void;
+  todos: number;
+  addTodo: (quantiy: number) => void;
+  /* Add Items to cart */
+  cartItems: Array<{
+    id: number;
+    sku: string;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    subcategory: string;
+    photoUrl: string;
+    amount: number;
+  }>;
 
-    cartItems:Array<{
-      id:number,
-      sku:string,
-      name: string,
-      description: string, 
-      price: number,
-      stock: number,
-      subcategory: string,
-      photoUrl: string,
-      amount:number
-    }>;
-    /* Add items to cart */
+  addCart: (
+    id: number,
+    sku: string,
+    name: string,
+    description: string,
+    price: number,
+    stock: number,
+    subcategory: string,
+    photoUrl: string,
+    amount: number
+  ) => void;
 
-    addCart:(
-      id:number,
-      sku:string,
-      name: string,
-      description: string, 
-      price: number,
-      stock: number,
-      subcategory: string,
-      photoUrl: string,
-      amount:number 
-      ) => void;
+  DeletedCart: (
+    id: number,
+    sku: string,
+    name: string,
+    description: string,
+    price: number,
+    stock: number,
+    subcategory: string,
+    photoUrl: string,
+    amount: number
+  ) => void;
+  /* Check if modal is open or closer */
+  open: boolean;
+  isOpen: (open: boolean) => void;
 
-     DeletedCart:(
-        id:number,
-        sku:string,
-        name: string,
-        description: string, 
-        price: number,
-        stock: number,
-        subcategory: string,
-        photoUrl: string,
-        amount:number ,
-        ) => void;
-      /* Check if modal is open or closer */
-      open:boolean;
-      isOpen: (open:boolean) => void;
+  /* if something is done correctly */
+  success: boolean;
+  isSuccess: (success: boolean) => void;
 
+  /* Show loader compoent */
+  loaderShow: boolean;
+  isLoader: (loaderShow: boolean) => void;
 
-      success:boolean;
-      isSuccess: (success:boolean) => void;
+  /* GET All products */
 
+  AllProducts: Array<{
+    id: number,
+    sku: string,
+    name: string,
+    description: string,
+    price: number,
+    stock: number,
+    subcategory: string,
+    photoUrl: string,
+    amount: number
+  }>;
 
-      loaderShow:boolean;
-      isLoader: (loaderShow:boolean) => void;
-
-      /* GET All products */
-
-      AllProducts:Array<{
-      description: string,
-      id: number,
-      name: string,
-      photoPublicId: string,
-      photoUrl:string,
-      price: number,
-      sku: string,
-      stock: number,
-      subcategories:{
-        categories: {
-          id:number,
-          name:string
-        }
-      },
-      subcategoriesName: string
-      }>   
-      
- /*      CallApiPro: (
-        description: string,
-        id: number,
-        name: string,
-        photoPublicId: string,
-        photoUrl:string,
-        price: number,
-        sku: string,
-        stock: number,
-        subcategories:Object,
-        subcategoriesName: string
-      ) => void  */ 
-
-      callback:boolean;
-      isCallback: (callback:boolean) => void
-
+   AllProductsAdmin: Array<{
+    description: string;
+    id: number;
+    name: string;
+    photoPublicId: string;
+    photoUrl: string;
+    price: number;
+    sku: string;
+    stock: number;
+    subcategories: {
+      categories: {
+        id: number;
+        name: string;
+      };
     };
+    subcategoriesName: string;
+  }>; 
+  /* To refresh any component */
+  callback: boolean;
+  isCallback: (callback: boolean) => void;
+
+  Token:string;
+  IsToken:(token:string) => void; 
+
+  Login: string;
+  IsLogged: (role: string) => void;
+};
+
+
+
+/* authorities: ['Shopper']
+exp: 1641849779
+iat: 1641849479
+iss: "Jokr"
+jti: "12"
+name: "joel"
+sub: "123" */

@@ -1,9 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import useSWR from 'swr';
 import Image from 'next/image';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import Back from '@/public/back.jpg';
+import swal from 'sweetalert';
+
 import {
   Button,
   Grid,
@@ -23,8 +25,8 @@ import {
 
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
-import Loader from '@/components/Loader/loader';
-
+import Loader from '@/components/Loader/LoaderCommon';
+import Router from 'next/router';
 export interface ShippingData {
   sku: string;
   name: string;
@@ -43,7 +45,7 @@ type FieldTypes = {
   type: string | number;
   label: string;
   placeholder: string;
-  value:string | number;
+  value: string | number;
 };
 
 export type FieldCategory = {
@@ -56,20 +58,29 @@ export type FieldCategory = {
 };
 
 const AddlabelsConfing: FieldTypes[] = [
-  { name: 'sku', type: 'sku', label: 'New sku code', placeholder: 'Sku' , value:''},
-  { name: 'name', type: 'name', label: 'New name of product', placeholder: 'Name' ,value:'' },
-  { name: 'description', type: 'description', label: 'Description', placeholder: 'Description',value:'' },
-  { name: 'price', type: 'number', label: 'Price', placeholder: 'Price' ,value:''},
-  { name: 'stock', type: 'number', label: 'Stock', placeholder: 'Stock' ,value:''},
+  { name: 'sku', type: 'sku', label: 'New sku code', placeholder: 'Sku', value: '' },
+  { name: 'name', type: 'name', label: 'New name of product', placeholder: 'Name', value: '' },
+  {
+    name: 'description',
+    type: 'description',
+    label: 'Description',
+    placeholder: 'Description',
+    value: '',
+  },
+  { name: 'price', type: 'number', label: 'Price', placeholder: 'Price', value: '' },
+  { name: 'stock', type: 'number', label: 'Stock', placeholder: 'Stock', value: '' },
 ];
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 function ShippingForm() {
-  const { isOpen } = useContext(TodosContext);
+  const { Token } = useContext(TodosContext);
+  const { open, isOpen } = useContext(TodosContext);
   const { callback, isCallback } = useContext(TodosContext);
   const { isSuccess } = useContext(TodosContext);
   const { isLoader } = useContext(TodosContext);
+
+  const [data, setData] = useState([]);
 
   const [category, setCategory] = useState<string>('');
   const [subCategory, setSubCategory] = useState<string>('');
@@ -85,7 +96,30 @@ function ShippingForm() {
     setSubCategory(event.target.value as string);
   };
 
-  const { data } = useSWR('/api/v1/categories', fetcher);
+  /* const { data } = useSWR('/api/v1/categories', fetcher,); */
+
+  /* 'Bearer '+localStorage.getItem('token') */
+  /* headers: {Authorization:  'Bearer '+localStorage.getItem('token')?.toString()!} */
+ 
+  useEffect(() => {
+    isCallback(!callback);
+    const AllCategoriesFunction = async () => {
+      try {
+        const res = await axios.get('/api/v1/categories', {
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+        });
+        if(res){  setData(res.data);}
+       
+      } catch (err) {
+        swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+          localStorage.removeItem('token');
+          Router.push('/login');
+        });
+      }
+    };
+    AllCategoriesFunction();
+  }, []);
+
   /* IMAGES */
   const handleClose = () => {
     isOpen(false);
@@ -102,24 +136,44 @@ function ShippingForm() {
   };
 
   const CategorySearch = (id: any) => async () => {
-    const res = await axios.get(`/api/v1/subcategories/categories/${id}`);
-    setListSub(res.data);
-    SetdisableSub(true);
+    try {
+      const res = await axios.get(`/api/v1/subcategories/categories/${id}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+      });
+      isCallback(!callback);
+      setListSub(res.data);
+      SetdisableSub(true);
+    }catch(err){
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
+    }
+   
   };
 
-  const handleDestroyClose = async (id: any) => await axios.delete(`/api/v1/products/image/${id}`);
+  const handleDestroyClose = async (id: any) =>
+    await axios.delete(`/api/v1/products/image/${id}`, {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+    });
 
   const handleDestroy = async () => {
     try {
       setLoading(true);
       const imageId = imagesId.toString();
-      await axios.delete(`/api/v1/products/image/${imageId}`);
+      await axios.delete(`/api/v1/products/image/${imageId}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+      });
       setImagesId('');
       setImagesUrl('');
 
       setLoading(false);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+  
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
     }
   };
 
@@ -135,13 +189,17 @@ function ShippingForm() {
         return alert('File format is incorrect');
       setLoading(true);
       const res = await axios.post('/api/v1/products/image', formData, {
-        headers: { 'content-type': 'multipart/form-data' },
+        headers: {
+          'content-type': 'multipart/form-data',
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
       });
       setLoading(false);
       setImagesId(res.data.id);
       setImagesUrl(res.data.url);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+      localStorage.removeItem('token');
+      Router.push('/login');
     }
   };
   /* IMAGES */
@@ -180,8 +238,11 @@ function ShippingForm() {
               }
             })
           } 
-          */ 
-          if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.price) || Number(values.price) <= 10) {
+          */
+          if (
+            !/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.price) ||
+            Number(values.price) <= 10
+          ) {
             errors.price = 'Incorrect price it must be higher of 10';
           }
           if (!/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/.test(values.stock)) {
@@ -195,11 +256,23 @@ function ShippingForm() {
           values.photoUrl = imagesUrl.toString();
 
           setSubmitting(false);
-          await axios.post('/api/v1/products', { ...values });
-          isOpen(false);
-          isCallback(!callback);
-          isSuccess(true);
-          isLoader(true);
+          try{
+            await axios.post(
+              '/api/v1/products',
+              { ...values },
+              { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } }
+            );
+            isOpen(false);
+            isCallback(!callback);
+            isSuccess(true);
+            isLoader(true);
+          }catch(err){
+            swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+              localStorage.removeItem('token');
+              Router.push('/login');
+            });
+          }
+
         }}
       >
         {() => (
@@ -217,7 +290,7 @@ function ShippingForm() {
           >
             <Tooltip title="Close">
               <Button
-                style={{marginLeft:'15rem'}}
+                style={{ marginLeft: '15rem' }}
                 className="button-close"
                 color="error"
                 variant="outlined"
@@ -288,11 +361,11 @@ function ShippingForm() {
                 );
               })}
               <FormGroup>
-                  <FormControl fullWidth error={category ? false : true}>
+                <FormControl fullWidth error={category ? false : true}>
                   <InputLabel>Category</InputLabel>
                   <Select
                     name="category"
-                      sx={{ m: 1 }}
+                    sx={{ m: 1 }}
                     size="small"
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -317,7 +390,7 @@ function ShippingForm() {
                 </FormControl>
               </FormGroup>
 
-              {/*  <FormControl sx={{ m: 1 }} fullWidth disabled={disableSub ? false : true}>
+              {/*   <FormControl sx={{ m: 1 }} fullWidth disabled={disableSub ? false : true}>
               <InputLabel id="demo-simple-select-label"> Sub Category</InputLabel>
               <Select required
                 name="subcategory"

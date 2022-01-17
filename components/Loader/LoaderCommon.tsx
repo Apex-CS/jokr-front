@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import { Container } from '@mui/material';
 
-function loader() {
-  return (
+function Loader() {
+    return (
     <>
+      <Container>
       <section className="loader">
         <div className="circle"></div>
         <div className="circle"></div>
         <div className="circle"></div>
       </section>
+      </Container>
     </>
   );
 }
 
-export default loader;
+export default Loader;

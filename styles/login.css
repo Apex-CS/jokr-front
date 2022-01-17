@@ -1,0 +1,204 @@
+.limiter {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.container-login100 {
+    width: 100%;
+    min-height: 85vh;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background: #f4f6f9;
+    margin-top: -4rem;
+}
+
+.wrap-login100 {
+    width: 100%;
+    background: #f4f6f9;
+    overflow: hidden;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    flex-direction: row-reverse;
+}
+.login100-form {
+    width: 560px;
+    min-height: 100vh;
+    display: block;
+    background-color: #f4f6f9;
+ padding: 83px 55px 55px; 
+}
+
+@media (max-width: 900px) {
+    .login100-form {
+        padding: 66px 50px 50px;
+       
+    }
+}
+
+/* element.style {
+    background-image: url("../../jokr-front/public/fondo.jpg");
+} */
+.login100-more {
+    width: calc(100% - 560px);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1;
+    background-image: url("../public/fondo.jpg");
+}
+.login100-form-title {
+    width: 100%;
+    display: block;
+    font-family: 'Ubuntu';
+    font-size: 30px;
+    color: #333;
+    line-height: 1.2;
+    text-align: center;
+}
+.p-b-43 {
+    padding-bottom: 43px;
+}
+.p-t-46 {
+    padding-top: 46px;
+}
+
+.login100-form-btn {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    background: #6675df;
+    font-family: 'Ubuntu';
+    font-size: 12px;
+    color: #fff;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    -webkit-transition: all .4s;
+    -o-transition: all .4s;
+    -moz-transition: all .4s;
+    transition: all .4s;
+}
+.login100-form-btn:hover{
+    background: rgb(19, 33, 161);
+}
+button {
+    outline: none!important;
+    border: none;
+    background: 0 0;
+}
+
+.txt2 {
+    font-family: 'Ubuntu';
+    font-size: 15px;
+    line-height: 1.4;
+    color: #999;
+}
+
+
+
+.log{
+    margin-top: -175px;
+   
+}
+
+
+
+@media (max-width: 900px) {
+    .log{
+        margin-top: -77px;
+       
+    }
+}
+
+
+
+
+
+
+.container {
+    width: 400px;
+    height: 400px;
+    background-color: #fff;
+    margin: 150px auto;
+    border-radius: 11px;
+    padding: 40px 50px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    margin-top: -1rem;
+  }
+  /* top-header */
+  .top-header h3 {
+    text-align: center;
+    color: #495d76;
+  }
+  .top-header p {
+    color: #cecfd3;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 5px;
+  }
+  /* top-header */
+  /* form */
+  .user input,
+  .pass input {
+    width: 100%;
+    height: 35px;
+    border: none;
+    border: 1px solid #e6e6e6;
+    border-radius: 6px;
+    outline: none;
+    padding: 0 40px;
+  }
+  ::placeholder {
+    color: #9ca5b4;
+    font-size: 12px;
+  }
+  .user i,
+  .pass i {
+    position: relative;
+    top: 31px;
+    right: -10px;
+    color: #3981ed;
+  }
+  /* form */
+  /* button */
+  .btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+  }
+  .btn button {
+    width: 100%;
+    border: none;
+    height: 35px;
+    background-color: #277ffd;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  /* button */
+  p.last {
+    text-align: center;
+    position: relative;
+    bottom: 120px;
+    font-size: 12px;
+  }

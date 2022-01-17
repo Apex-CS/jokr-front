@@ -25,12 +25,14 @@ import Back from '@/public/back.jpg';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import { TextField } from 'formik-mui';
-import {Product } from '@/pages/products'
+import { Product } from '@/pages/products';
 import { ShippingData } from '@/components/Product/ValidateFields';
 import { FieldCategory } from '@/components/Product/ValidateFields';
 import useSWR from 'swr';
-import Loader from '@/components/Loader/loader';
+import Loader from '@/components/Loader/LoaderCommon';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
+import Router from 'next/router';
+import swal from 'sweetalert';
 
 type FieldTypes = {
   label: string;
@@ -38,28 +40,72 @@ type FieldTypes = {
   value: string | number;
 };
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+/* const fetcher = (url:string) => {
+  const auth = JSON.stringify(localStorage.getItem('token') || '');
+  if (auth != '') return axios
+      .get(url, { 
+          headers: { 
+              'Authorization': 'Bearer '+localStorage.getItem('token')
+          }
+      })
+      .then((res) => res.data);
+} */
 
-function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
+function EditProduct(props: { obj: Product; open: boolean;  handleClose: () => void  }) {
   const { obj, open, handleClose } = props;
   const { isOpen } = useContext(TodosContext);
   const { callback, isCallback } = useContext(TodosContext);
   const { isSuccess } = useContext(TodosContext);
   const { isLoader } = useContext(TodosContext);
-
+  const [data, setData] = useState([]);
+  
   /* CLOSE MODAL */
 
   /* CATEGORY */
-  const { data } = useSWR('/api/v1/categories', fetcher);
+  /*   const { data } = useSWR('/api/v1/categories', fetcher); */
+
   const [idSub, setIdsub] = useState<number>(obj.subcategories.categories.id);
   const [listSub, setListSub] = useState([]);
 
   useEffect(() => {
-    const getSubFuction = async () => {
-      const res = await axios.get(`/api/v1/subcategories/categories/${idSub}`);
-      setListSub(res.data);
-    };
-    getSubFuction();
+    
+      isCallback(!callback);
+
+      const getSubFuction = async () => {
+        try {
+        const res = await axios.get(`/api/v1/subcategories/categories/${idSub}`, {
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+        });
+        if(res){  setListSub(res.data);}
+
+      } catch (err) {
+        swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+          localStorage.removeItem('token');
+          Router.push('/login');
+        });
+      }
+
+       
+      };
+      getSubFuction();
+
+      const AllCategoriesFunction = async () => {
+        try {
+          const res = await axios.get('/api/v1/categories', {
+            headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+          });
+         
+          if(res){   setData(res.data);}
+        }catch(err){
+          swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+            localStorage.removeItem('token');
+            Router.push('/login');
+          });
+        }
+       
+      };
+      AllCategoriesFunction();
+  
   }, [idSub]);
 
   const [disableSub, SetdisableSub] = useState(false);
@@ -67,11 +113,23 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
   const [subCategory, setSubCategory] = useState<string>(obj.subcategoriesName);
 
   const CategorySearch = (id: any) => async () => {
-    const res = await axios.get(`/api/v1/subcategories/categories/${id}`);
-    setListSub(res.data);
-    SetdisableSub(true);
+    try
+    {
+      const res = await axios.get(`/api/v1/subcategories/categories/${id}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+      });
+      setListSub(res.data);
+      SetdisableSub(true);
+  
+      setIdsub(id);
+    }
+    catch(err) {
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
+    }
 
-    setIdsub(id);
   };
 
   const handleChangeCategory = async (event: SelectChangeEvent) => {
@@ -94,16 +152,19 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
 
   const handleDestroy = async () => {
     try {
-      console.log("desttroy", imagesUrl,"ID:::", imagesId )
+      console.log('desttroy', imagesUrl, 'ID:::', imagesId);
       setLoading(true);
       const imageId = imagesId.toString();
-      await axios.delete(`/api/v1/products/image/${imageId}`);
+      await axios.delete(`/api/v1/products/image/${imageId}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+      });
       setImagesId('');
       setImagesUrl('');
 
       setLoading(false);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+      localStorage.removeItem('token');
+      Router.push('/login');
     }
   };
 
@@ -119,13 +180,16 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
         return alert('File format is incorrect');
       setLoading(true);
       const res = await axios.post('/api/v1/products/image', formData, {
-        headers: { 'content-type': 'multipart/form-data' },
+        headers: { 'content-type': 'multipart/form-data', Authorization: 'Bearer ' + localStorage.getItem('token') },
       });
       setLoading(false);
       setImagesId(res.data.id);
       setImagesUrl(res.data.url);
     } catch (err) {
-      /*  alert(err.response.data.msg) */
+      swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
     }
   };
 
@@ -212,13 +276,25 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
               values.subcategories = { name: subCategory };
               values.photoPublicId = imagesId.toString();
               values.photoUrl = imagesUrl.toString();
-              console.log(values);
+              
               setSubmitting(false);
-              await axios.put(`/api/v1/products/${obj.id}`, { ...values });
-              isOpen(false);
-              isCallback(!callback);
-              isSuccess(true);
-              isLoader(true);
+              try {
+                await axios.put(`/api/v1/products/${obj.id}`,
+                { ...values }, 
+                {  headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }}
+                );
+                handleClose();
+      
+               isCallback(!callback);
+               isSuccess(true);
+               isLoader(true);
+              }catch(err) {
+                swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+                  localStorage.removeItem('token');
+                  Router.push('/login');
+                });
+              }
+             
             }}
           >
             {() => (
@@ -230,13 +306,13 @@ function EditProduct(props: { obj: Product; open: boolean; handleClose: any }) {
                   flexDirection: 'column',
                   maxWidth: 300,
                   minWidth: 300,
-                  alignItems: 'center', 
+                  alignItems: 'center',
                   justifyContent: 'space-between',
                 }}
               >
                 <Tooltip title="Close">
                   <Button
-                    style={{marginLeft:'15rem'}}
+                    style={{ marginLeft: '15rem' }}
                     className="button-close"
                     color="error"
                     variant="outlined"

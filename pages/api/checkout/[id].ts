@@ -9,6 +9,6 @@ const stripe = new Stripe(stripePromise, {
 
 export default async(req: NextApiRequest, res:NextApiResponse) => {
     const {id} = req.query;
-    const session = await stripe.checkout.sessions.retrieve(id as string,{expand: ['payment_intent']} )
+    const session = await stripe.checkout.sessions.retrieve(id as string,{expand: ['payment_intent','line_items','line_items.data.price.product']} )
     res.status(200).json({session})
 }

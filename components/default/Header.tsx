@@ -4,7 +4,6 @@ import {
   Toolbar,
   Box,
   List,
-  CssBaseline,
   Typography,
   Divider,
   IconButton,
@@ -13,6 +12,7 @@ import {
   ListItemText,
   Badge,
   MenuItem,
+  Tooltip,
 } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -29,7 +29,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import jokr from '@/public/jokr.png';
 import stripe from '@/public/stripe.png';
-const drawerWidth = 240;
+const drawerWidth = 230;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -57,6 +57,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
+
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
@@ -103,6 +104,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 function MiniDrawer() {
   /*  ShopCart */
   const { cartItems } = useContext(TodosContext);
+  const { Login, IsLogged } = useContext(TodosContext);
   const [cartOpen, setCartOpen] = useState(false);
 
   const getTotalItems = (cartItems: any) => {
@@ -128,8 +130,8 @@ function MiniDrawer() {
 
   return (
     <>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
+      <Box sx={{ display: 'flex', backgroundColor: '#f4f6f9' }}>
+        {/*  <CssBaseline /> */}
         <AppBar position="fixed" open={open} sx={{ backgroundColor: '#131921' }}>
           <Toolbar>
             <IconButton
@@ -171,43 +173,59 @@ function MiniDrawer() {
           </DrawerHeader>
           <Divider />
           <List>
-            <ListItem>
-              <ListItemIcon>
-                <Link href="/products">
-                  <a>
-                    <ListAlt />
-                  </a>
-                </Link>
-              </ListItemIcon>
-              <ListItemText> Products options</ListItemText>
-            </ListItem>
+            {Login ? (
+              <Tooltip title="See products">
+                <ListItem>
+                  <ListItemIcon>
+                    <Link href="/products">
+                      <a>
+                        <ListAlt />
+                      </a>
+                    </Link>
+                  </ListItemIcon>
+                  <ListItemText> Products options</ListItemText>
+                </ListItem>
+              </Tooltip>
+            ) : (
+              ''
+            )}
 
-            <ListItem>
-              <ListItemIcon>
-                <Link href="/users">
-                  <a>
-                    <PeopleAltOutlined />
-                  </a>
-                </Link>
-              </ListItemIcon>
-              <ListItemText> Users options</ListItemText>
-            </ListItem>
+            {Login ? (
+              <Tooltip title="See users">
+                <ListItem>
+                  <ListItemIcon>
+                    <Link href="/users">
+                      <a>
+                        <PeopleAltOutlined />
+                      </a>
+                    </Link>
+                  </ListItemIcon>
+                  <ListItemText> Users options</ListItemText>
+                </ListItem>
+              </Tooltip>
+            ) : (
+              ''
+            )}
 
-            <ListItem>
-              <ListItemIcon>
-                <Link href="/">
-                  <a>
-                    <Storefront />
-                  </a>
-                </Link>
-              </ListItemIcon>
-              <ListItemText> JOKR products</ListItemText>
-            </ListItem>
+           
+              <Tooltip title="Home">
+                <ListItem>
+                  <ListItemIcon>
+                    <Link href="/">
+                      <a>
+                        <Storefront />
+                      </a>
+                    </Link>
+                  </ListItemIcon>
+                  <ListItemText> JOKR products</ListItemText>
+                </ListItem>
+              </Tooltip>
+            
           </List>
           <Divider />
         </Drawer>
 
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box component="main" sx={{ flexGrow: 1, p: 4 }}>
           <DrawerHeader />
         </Box>
       </Box>

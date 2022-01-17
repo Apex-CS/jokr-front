@@ -28,7 +28,7 @@ function ListProducts(props: { product: Product }) {
 
   return (
     <Fragment>
-      <TableRow hover>
+      <TableRow hover >
         {/* <TableCell align="right">{product.id.toString()}</TableCell> */}
         <TableCell align="right">{product.sku}</TableCell>
         <TableCell align="right">{product.name}</TableCell>
@@ -47,8 +47,8 @@ function ListProducts(props: { product: Product }) {
           </IconButton>
         </TableCell>
       </TableRow>
-      <EditProduct obj={product} open={openEdit} handleClose={handleClose} />
-      <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} />
+       <EditProduct obj={product} open={openEdit} handleClose={handleClose} />
+      <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} /> 
     </Fragment>
   );
 }

@@ -14,9 +14,6 @@ type CartItemType = {
   name: string;
   description: string;
   price: number;
-  is_active: number;
-  created_at: string;
-  updated_at: string;
   stock: number;
   subcategory: string;
   photoUrl: string;
@@ -25,17 +22,19 @@ type CartItemType = {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { cartItems } = req.body;
+ 
 
   const items: {
     price_data: {
       currency: string;
       unit_amount: number;
-      product_data: { name: string; description: string; images: [string] };
+      product_data: {name: string; description: string; images: [string],metadata:{id:number} };
     };
     quantity: number;
   }[] = [];
 
   cartItems?.map((product: CartItemType) => {
+    console.log(product)
     items.push({
       price_data: {
         currency: 'mxn',
@@ -44,6 +43,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           name: product.name,
           description: product.description,
           images: [product.photoUrl],
+          metadata:{id:product.id}
         },
       },
       quantity: product.amount,
@@ -54,14 +54,37 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     payment_method_types: ['card'],
     customer_email:'test@email.com',
     phone_number_collection:{"enabled":true},
-    metadata:{"address":'zor juana', "tel 1":"1234567898", "house description": "green house", "postal":"23456"},
+    metadata:{
+      "id_User":'2',
+      "customer_Name":'jose',
+      "street_1":'av circuvalancion',
+      "street_2":'calle 5 de mayo',
+      "outdoor_Number":"354",
+      "tel_1":"1234567898", 
+      "tel_2":"5738679524", 
+      "house_Description": "Green house", 
+      "postal_Code":"23456",
+      "country":"Mexico",
+      "state":"CHIHUAHUA",
+      "colonia":"chapalita",
+    },
     line_items: items,
     mode: 'payment',
     success_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${req.headers.origin}/User/checkout`,
   });
+  
+
+
+
+
   res.status(200).json({ sessionId: session.id });
+
+
 };
+
+
+
 
 /*    success_url:'https://example.com/success?session_id={CHECKOUT_SESSION_ID}',
         cancel_url:'https://example.com/cancel' */

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
@@ -8,8 +8,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import { CardContent, Paper, Typography, Box, Card, CardMedia, Button } from '@mui/material';
 import React from 'react';
-
-import Loader from '@/components/Loader/loader';
+import Router from 'next/router';
+import Loader from '@/components/Loader/LoaderCommon';
 
 export type CartItemType = {
   id: number;
@@ -30,10 +30,15 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 function Home() {
+  const { Token } = useContext(TodosContext);
   const { addCart } = useContext(TodosContext);
+  const [data, setData] = useState([]);
+
+
+  const { AllProducts } = useContext(TodosContext);
+  /* const fetcher = (url: string) =>  axios.get(url,{  headers: {'Authorization': 'Bearer '+localStorage.getItem('token')}}).then((res) => res.data); */
+
   const handleAddToCart = (clickedItem: CartItemType) => {
     addCart(
       clickedItem.id,
@@ -72,7 +77,9 @@ function Home() {
             alt="Live from space album cover"
           />
         </Card>
-        <Button color="primary"
+        <Button
+          size="small"
+          color="primary"
           variant="contained"
           onClick={() => toast.dismiss(t.id)}
           className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -82,13 +89,16 @@ function Home() {
       </>
     ));
   };
-  const { data, error } = useSWR('/api/v1/products', fetcher);
-  if (error) return 'An error has occurred.' + error;
-  if (!data) return <Loader />;
+
   return (
     <>
-      <Grid container spacing={{ xs: 3, md: 1 }} columns={{ xs: 2, sm: 8, md: 11.5 }}>
-        {data?.map((item: CartItemType, index: number) => {
+      <Grid
+        container
+        spacing={{ xs: 3, md: 1 }}
+        columns={{ xs: 2, sm: 8, md: 11.5 }}
+        sx={{ paddingTop: -20, paddingLeft: 20 }}
+      >
+        {AllProducts?.map((item: CartItemType, index: number) => {
           return (
             <div key={index}>
               <br />
@@ -107,9 +117,16 @@ function Home() {
         })}
       </Grid>
 
-      <Toaster position="bottom-center" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} />
     </>
   );
+}
+export async function getStaticProps() {
+  return {
+    props: {
+      protected: true,
+    },
+  };
 }
 
 export default Home;
