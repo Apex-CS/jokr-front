@@ -39,8 +39,8 @@ export type User = {
   password: string;
   name: string;
   lastName: string;
-  getphotoUrl: string;
-  getphotoPublicId: string;
+  photoUrl: string;
+  photoPublicId: string;
   customerPaymentId: string;
   roleName: string;
 };

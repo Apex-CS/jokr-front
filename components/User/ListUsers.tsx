@@ -32,7 +32,7 @@ function ListUsers(props: { user: User }) {
       <TableRow hover >
         <TableCell align="center">{user.email}</TableCell>
         <TableCell align="center"> {user.name} {user.lastName}</TableCell>
-        <TableCell align="center"> {user.getphotoUrl}</TableCell>
+        <TableCell align="center"> {user.photoUrl}</TableCell>
         <TableCell align="center">{user.roleName}</TableCell>
         <TableCell align="center">
           <IconButton color="warning" onClick={changeStateEdit}>

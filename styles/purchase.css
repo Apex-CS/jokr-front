@@ -4,10 +4,16 @@
   text-align: center;
 }
 /* bg shortcodes */
-.bg-gradient1 span,
+.bg-gradient1 button,
 .bg-gradient1:before {
   background: #fa7e29;
-  background: linear-gradient(180deg, #fa7e29 0%, #F6682F 80%, #F6682F 100%);
+  background: linear-gradient(180deg, #fa7e29 0%, #f6682f 80%, #f6682f 100%);
+}
+
+.bg-gradient2 button,
+.bg-gradient2:before {
+  background: #39c2c9;
+  background: linear-gradient(180deg, #39c2c9 0%, #3fc8c9 80%, #3fc8c9 100%);
 }
 
 h3 {
@@ -19,15 +25,17 @@ h3 {
 a {
   text-decoration: none;
 }
-a:hover, a:focus, a:active {
+a:hover,
+a:focus,
+a:active {
   text-decoration: none;
 }
 
 /* fancy Button */
-.fancy-button {
+.fancy-button button {
   display: inline-block;
-  margin: 20px;
-  font-family: "Heebo", Helvetica, Arial, sans-serif;
+  margin: 10px;
+  font-family: 'Heebo', Helvetica, Arial, sans-serif;
   font-weight: 500;
   font-size: 16px;
   letter-spacing: 0.07em;
@@ -37,32 +45,33 @@ a:hover, a:focus, a:active {
   position: relative;
 }
 .fancy-button.bg-gradient1 {
-  text-shadow: 0px 0px 1px #BF4C28;
+  text-shadow: 0px 0px 1px #bf4c28;
+}
+.fancy-button.bg-gradient2 {
+  text-shadow: 0px 0px 1px #227270;
 }
 
-
 .fancy-button:before {
-  content: "";
+  content: '';
   display: inline-block;
   height: 40px;
   position: absolute;
   bottom: -1px;
-  left: 10px;
-  right: 10px;
+
   z-index: -1;
   border-radius: 2em;
   filter: blur(14px) brightness(0.9);
   transform-style: preserve-3d;
   transition: all 0.3s ease-out;
 }
-.fancy-button i {
+.fancy-button button i {
   margin-top: -2px;
   font-size: 1.265em;
   vertical-align: middle;
 }
-.fancy-button span {
+.fancy-button button {
   display: inline-block;
-  padding: 16px 20px;
+  padding: 8px 12px;
   border-radius: 50em;
   position: relative;
   z-index: 2;
@@ -76,7 +85,7 @@ a:hover, a:focus, a:active {
 .fancy-button:hover {
   color: #ffffff;
 }
-.fancy-button:hover span {
+.fancy-button:hover button {
   filter: brightness(0.9) contrast(1.2);
   transform: scale(0.96);
 }
@@ -84,10 +93,10 @@ a:hover, a:focus, a:active {
   bottom: 3px;
   filter: blur(6px) brightness(0.8);
 }
-.fancy-button:active span {
+.fancy-button:active button {
   filter: brightness(0.75) contrast(1.7);
 }
-.fancy-button.pop-onhover span {
+.fancy-button.pop-onhover button {
   border-radius: 4px;
 }
 .fancy-button.pop-onhover:before {
@@ -99,10 +108,10 @@ a:hover, a:focus, a:active {
   opacity: 1;
   filter: blur(16px);
 }
-.fancy-button.pop-onhover:hover span {
+.fancy-button.pop-onhover:hover button {
   transform: scale(1);
 }
-.fancy-button.pop-onhover:hover:active span {
+.fancy-button.pop-onhover:hover:active button {
   filter: brightness(1) contrast(1);
   transform: scale(1);
   transition: all 0.2s ease-out;
@@ -113,7 +122,12 @@ a:hover, a:focus, a:active {
   transition: all 0.2s ease-out;
 }
 
-
+.PM {
+  font-weight: 800;
+}
+div .PM {
+  font-size: 1.5em;
+}
 
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
 .barCart {
@@ -126,7 +140,6 @@ a:hover, a:focus, a:active {
   margin-right: 20rem;
 }
 
-
 .grid1 {
   width: 40%;
   float: left;
@@ -135,5 +148,4 @@ a:hover, a:focus, a:active {
 .grid2 {
   width: 60%;
   float: right;
-
 }

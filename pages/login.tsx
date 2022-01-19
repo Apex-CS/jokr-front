@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useReducer, useState } from 'react';
-import { Box } from '@mui/material';
-import GlobalLoader from '@/components/Loader/GlobalLoader';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Box, Modal, Fade } from '@mui/material';
 import { Button, TextField } from '@mui/material';
 import axios from 'axios';
-import { TodosContext } from '@/components/contexts/GlobalProvider';
+import  { TodosContext } from '@/components/contexts/GlobalProvider';
 import Router from 'next/router';
-import { useRouter } from 'next/router';
+import Register from '@/components/User/Register';
+import swal from 'sweetalert';
+
 
 type inputsLogin = {
   email: string;
@@ -78,13 +77,13 @@ const reducer = (state: State, action: Action): State => {
 };
 
 function Login() {
-
-  const { Token,IsToken } = useContext(TodosContext);
+  const { Token, IsToken } = useContext(TodosContext);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { Login,IsLogged} = useContext(TodosContext);
-  const [data, setData] = useState<inputsLogin>({ email: '', password: '', });
+  const { Login, IsLogged } = useContext(TodosContext);
+  const [data, setData] = useState<inputsLogin>({ email: '', password: '' });
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const { callback,isCallback, } = useContext(TodosContext);
+  const { callback, isCallback } = useContext(TodosContext);
+
   useEffect(() => {
     if (state.username.trim() && state.password.trim()) {
       dispatch({
@@ -102,19 +101,20 @@ function Login() {
   }, [state.username, state.password]);
 
   const handleLogin = async () => {
-    /*   if (state.username == state.password) { */
-    /*  setData({email:state.username,password:state.username}) */
     try {
       const res = await axios.post('/api/v1/public/login', { ...data });
-      console.log(res);
       const jwt = JSON.parse(atob(res.headers.authorization.split('.')[1]));
+
+
       if (res.statusText) {
+        swal({ icon: 'success', title: 'Ok!', text: 'Great you can continue..', timer: 2000 });
         localStorage.setItem('token', res.headers.authorization);
-        if(jwt.authorities.toString() == 'Admin') IsLogged(jwt.authorities.toString())
-        
-        IsToken(res.headers.authorization)
+        if (jwt.authorities.toString() == 'Admin') IsLogged(jwt.authorities.toString());
+
+        IsToken(res.headers.authorization);
         isCallback(!callback);
-        Router.push('/'); 
+        Router.push('/');
+        
         dispatch({
           type: 'loginSuccess',
           payload: 'Login Successfully',
@@ -125,10 +125,9 @@ function Login() {
           payload: 'Incorrect username or password',
         });
       }
-    
     } catch (err) {
-      alert(err);
-    } 
+      swal({ icon: 'error', title: 'Ups!', text: 'Email or Password are incorrect', timer: 3000 });
+    }
 
     //await axios.post('/api/v1/Auth', { ...state.userame&&password })
     /*   window.location.href = "/login"
@@ -157,50 +156,26 @@ function Login() {
       payload: event.target.value,
     });
   };
+  const {open, isOpen} =useContext(TodosContext)
+
+  
+  const handleOpen = () => isOpen(true);
+  const handleClose = () => isOpen(false);
 
   if (token) {
     Router.push('/');
   }
-  
+
   return (
     <div className="limiter">
       <div className="container-login100">
         <div className="wrap-login100">
           <form className="login100-form " /* onSubmit={handleSubmit} */>
-            {/*  <div className="log">
-        <Image src={signin} alt="log" />
-        </div> */}
-            {/*  <span className="login100-form-title p-b-43">Inicia Sesion Para Continuar</span> */}
-            {/*         <Form.Group className="mb-3" >
-            <Form.Label className="ubuntu">Email</Form.Label>
-            <Form.Control onChange={handleChangeInput} name="email" className="form-control-lg ubuntu" type="email" placeholder="Ingresa tu Email" />
-        </Form.Group>
-
-        <Form.Group className="mb-3 ">
-            <Form.Label className="ubuntu">Password</Form.Label>
-            <Form.Control onChange={handleChangeInput}  name="password" className="form-control-lg ubuntu" type="password" placeholder="Password" autoComplete="on"/>
-        </Form.Group> */}
-
-            {/*             <div className="container-login100-form-btn">
-              <button className="login100-form-btn ubuntu">Entrar</button>
-            </div>
-
-            <div className="text-center p-t-46 ">
-              <Link href="/register">
-                <a className="txt2">o Registrate</a>
-              </Link>
-            </div> */}
-
             <div className="container">
               <div className="top-header">
                 <h3>Welcome back</h3>
                 <p>Enter your credentials to access your account</p>
               </div>
-
-              {/*       <div className="user">
-          <i className="bx bxs-user-circle"></i>
-          <input type="text" placeholder="Enter your username" />
-        </div> */}
 
               <TextField
                 error={state.isError}
@@ -229,11 +204,6 @@ function Login() {
                 autoComplete="on"
               />
 
-              {/*     <div className="pass">
-          <i className="bx bxs-lock-alt"></i>
-          <input type="password" placeholder="Enter your password" />
-        </div> */}
-
               <div className="btn">
                 {/* <button  >Sign in</button> */}
                 <Button
@@ -243,18 +213,55 @@ function Login() {
                   onClick={handleLogin}
                   disabled={state.isButtonDisabled}
                 >
-                 Sign in
+                  Sign in
                 </Button>
               </div>
             </div>
             <p className="last">
-              New User? <a href="#"> Create a new account </a>
+              New User?{' '}
+              <a href="#" onClick={handleOpen} className="colors">
+                {' '}
+                Create a new account{' '}
+              </a>
             </p>
           </form>
 
           <div className="login100-more" />
         </div>
       </div>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        closeAfterTransition
+        /* BackdropComponent={Backdrop} */
+        BackdropProps={{
+          timeout: 1500,
+        }}
+        className="modalProduct"
+      >
+        <Fade in={open}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 350,
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              maxHeight: '98%',
+              marginTop: '-1rem',
+              borderRadius: '12px'
+            }}
+          >
+            <Register />
+          </Box>
+        </Fade>
+      </Modal>
     </div>
   );
 }

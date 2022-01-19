@@ -9,22 +9,22 @@ import {
 import axios from 'axios';
 import swal from 'sweetalert';
 import Router from 'next/router';
+import { mutate } from 'swr';
 
-function refreshPage() {
-  window.location.reload();
-}
 
 function DeleteUser(props: { open: boolean; id: number; handleClose: () => void }) {
   const { id, open, handleClose } = props;
 
-  const deleteProduct = () => {
+  const deleteProduct = async() => {
     try {
       // Make the function async
-      axios.delete(`/api/v1/Users/${id}`, {
+     await axios.delete(`/api/v1/Users/${id}`, {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
       });
+    mutate('/api/v1/Users');
+      
       // TODO: Make snackbar appear on successfull/error at delete
-      refreshPage();
+    
       handleClose();
     } catch (err) {
       swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {

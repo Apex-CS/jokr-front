@@ -49,4 +49,13 @@ setType(PurchaseDone)
     )
 }
 
+
+export async function getStaticProps() {
+  return {
+    props: {
+      protected: true,
+    },
+  };
+}
+
 export default CheckoutForm

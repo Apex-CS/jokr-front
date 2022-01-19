@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Button,
   Grid,
@@ -34,14 +34,14 @@ type FieldTypes = {
   value: string | number;
 };
 
-export interface ShippingData {
+export interface DataUser {
   id: number;
   email: string;
   password: string;
   name: string;
   lastName: string;
-  getphotoUrl: string;
-  getphotoPublicId: string;
+  photoUrl: string;
+  photoPublicId: string;
   customerPaymentId: string;
   roleName: string;
   repeat: string;
@@ -55,7 +55,7 @@ export interface PassRepeat {
 }
 
 const AddlabelsConfing: FieldTypes[] = [
-  { name: 'email', type: ' email', label: 'New Email', placeholder: 'Email', value: '' },
+  { name: 'email', type: 'email', label: 'New Email', placeholder: 'Email', value: '' },
   { name: 'name', type: 'text', label: 'Name', placeholder: 'Name', value: '' },
   { name: 'lastName', type: 'text', label: 'last name', placeholder: 'Last Name', value: '' },
   { name: 'password', type: 'password', label: 'Password', placeholder: 'Password', value: '' },
@@ -164,11 +164,11 @@ function ShippingFormUser() {
       initialValues={{
         email: '',
         name: '',
-        getphotoUrl: '',
+        photoUrl: '',
         lastName: '',
         password: '',
         roleName: '',
-        getphotoPublicId: '',
+        photoPublicId: '',
         repeat: '',
         role: {
           id: 0,
@@ -176,7 +176,7 @@ function ShippingFormUser() {
         },
       }}
       validate={(values) => {
-        const errors: Partial<ShippingData> = {};
+        const errors: Partial<DataUser> = {};
 
         !values.email && (errors.email = 'Required Field');
         !values.name && (errors.name = 'Required Field');
@@ -193,8 +193,11 @@ function ShippingFormUser() {
         return errors;
       }}
       onSubmit={async (values, { setSubmitting }) => {
-        setSubmitting(false);
         try {
+          setSubmitting(false);
+          values.photoPublicId = imagesId.toString();
+          values.photoUrl = imagesUrl.toString();
+          
           await axios.post(
             '/api/v1/users',
             { ...values },

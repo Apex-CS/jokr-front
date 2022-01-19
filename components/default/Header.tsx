@@ -13,7 +13,12 @@ import {
   Badge,
   MenuItem,
   Tooltip,
+  Button,
+  Menu,
+  Grid,
 } from '@mui/material';
+import Router from 'next/router';
+import swal from 'sweetalert';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -30,6 +35,7 @@ import Image from 'next/image';
 import jokr from '@/public/jokr.png';
 import stripe from '@/public/stripe.png';
 const drawerWidth = 230;
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -101,6 +107,23 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   })
 );
 
+const logout =() =>{
+
+
+  swal({
+    title: 'You will end the session, Do you want to continue?',
+    text: 'Are you sure?',
+    icon: 'warning',
+    buttons: ['No', 'Yes'],
+  }).then(async (res) => {
+    if (res) 
+    swal({ icon: 'success',title:'Good', text: 'Log out', timer: 2000 }).then(function () {
+      localStorage.removeItem('token');
+      Router.push('/login');
+    });
+  })
+}
+
 function MiniDrawer() {
   /*  ShopCart */
   const { cartItems } = useContext(TodosContext);
@@ -146,7 +169,7 @@ function MiniDrawer() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
               JOKR
             </Typography>
             <MuiDrawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
@@ -163,6 +186,22 @@ function MiniDrawer() {
                 </Badge>
               </IconButton>
             </MenuItem>
+
+            <div className="postionR">
+              <PopupState variant="popover" popupId="demo-popup-menu">
+                {(popupState) => (
+                  <React.Fragment>
+                    <Button color="inherit" {...bindTrigger(popupState)}>
+                      Options
+                    </Button>
+                    <Menu {...bindMenu(popupState)}>
+                      <MenuItem onClick={popupState.close}>My account</MenuItem>
+                      <MenuItem onClick={logout}>Logout</MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </PopupState>
+            </div>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -207,20 +246,18 @@ function MiniDrawer() {
               ''
             )}
 
-           
-              <Tooltip title="Home">
-                <ListItem>
-                  <ListItemIcon>
-                    <Link href="/">
-                      <a>
-                        <Storefront />
-                      </a>
-                    </Link>
-                  </ListItemIcon>
-                  <ListItemText> JOKR products</ListItemText>
-                </ListItem>
-              </Tooltip>
-            
+            <Tooltip title="Home">
+              <ListItem>
+                <ListItemIcon>
+                  <Link href="/">
+                    <a>
+                      <Storefront />
+                    </a>
+                  </Link>
+                </ListItemIcon>
+                <ListItemText> JOKR products</ListItemText>
+              </ListItem>
+            </Tooltip>
           </List>
           <Divider />
         </Drawer>
