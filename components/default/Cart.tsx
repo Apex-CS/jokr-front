@@ -1,6 +1,6 @@
 import React from 'react';
 import { CartItemType } from '@/pages/index';
-import { Box, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Tooltip, Typography } from '@mui/material';
 import CartItem from '@/components/default/CartItem';
 import Link from 'next/link';
 
@@ -19,7 +19,7 @@ function Cart({ cartItems }: Props) {
           {cartItems.length === 0 ? <React.Fragment>Empty cart</React.Fragment> : null}
         </Typography>
         <div className="LineCart"></div>
-        <div className="barCart" >My Cart</div>
+        <div className="barCart">My Cart</div>
         {cartItems.map((item) => (
           <CartItem key={item.id} item={item} />
         ))}
@@ -34,9 +34,9 @@ function Cart({ cartItems }: Props) {
             <div className="wrapper ">
               <div className="fancy-button bg-gradient1">
                 <Link href="/User/checkout">
-                  <span>
-                    <i className="fa fa-ticket">Purchase </i>
-                  </span>
+                  <button>
+                    <i>Purchase</i>
+                  </button>
                 </Link>
               </div>
             </div>

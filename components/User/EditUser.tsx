@@ -14,6 +14,11 @@ import {
   Fade,
   Box,
   Typography,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
+  SelectChangeEvent,
 } from '@mui/material';
 import axios from 'axios';
 import { User } from '@/pages/users';
@@ -22,40 +27,47 @@ import Loader from '@/components/Loader/LoaderCommon';
 import { Formik, Field, Form } from 'formik';
 import { TextField } from 'formik-mui';
 import Image from 'next/image';
-import { ShippingData } from '@/components/User/ValidateFieldsUser';
+import { DataUser } from '@/components/User/ValidateFieldsUser';
 import Back from '@/public/back.jpg';
 import swal from 'sweetalert';
 import Router from 'next/router';
+import { mutate } from 'swr';
+
 
 type FieldTypes = {
   label: string;
   name: string;
   value: string | number;
+  type: string;
+  placeholder: string;
 };
 
 function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
   const { obj, open, handleClose } = props;
-
-  const { isOpen } = useContext(TodosContext);
   const { callback, isCallback } = useContext(TodosContext);
   const { isSuccess } = useContext(TodosContext);
   const { isLoader } = useContext(TodosContext);
+  const [ role, setRole ] = useState<string>(obj.roleName);
 
-  const [imagesId, setImagesId] = useState<string>(obj.getphotoPublicId);
-  const [imagesUrl, setImagesUrl] = useState<string>(obj.getphotoUrl);
-  const [loading, setLoading] = useState(false);
+  const [ imagesId, setImagesId ] = useState<string>(obj.photoPublicId);
+  const [ imagesUrl, setImagesUrl ] = useState<string>(obj.photoUrl);
+  const [ loading, setLoading ] = useState(false);
+  const [ passBlock,setPassBlock ] = useState<boolean>(false);
 
   const styleUpload = {
     display: imagesUrl ? 'block' : 'none',
   };
 
+  const handleChangeRole = async (event: SelectChangeEvent) => {
+    setRole(event.target.value as string);
+  };
+
   const handleDestroy = async () => {
     try {
-      console.log('desttroy', imagesUrl, 'ID:::', imagesId);
       setLoading(true);
       const imageId = imagesId.toString();
-      await axios.delete(`/api/v1/products/image/${imageId}`,{
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+      await axios.delete(`/api/v1/products/image/${imageId}`, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
       });
       setImagesId('');
       setImagesUrl('');
@@ -81,7 +93,10 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
         return alert('File format is incorrect');
       setLoading(true);
       const res = await axios.post('/api/v1/products/image', formData, {
-        headers: { 'content-type': 'multipart/form-data', Authorization: 'Bearer ' + localStorage.getItem('token') },
+        headers: {
+          'content-type': 'multipart/form-data',
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
       });
       setLoading(false);
       setImagesId(res.data.id);
@@ -95,8 +110,29 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
   };
 
   const editFormFieldsData: FieldTypes[] = [
-    { label: 'Email', name: 'sku', value: obj.email },
-    { label: 'Name', name: 'name', value: obj.name },
+    { name: 'email', type: 'email', label: 'Email', placeholder: 'Email', value: obj.email },
+    { name: 'name', type: 'text', label: 'Name', placeholder: 'Name', value: obj.name },
+    {
+      name: 'lastName',
+      type: 'text',
+      label: 'last name',
+      placeholder: 'Last Name',
+      value: obj.lastName,
+    },
+    {
+      name: 'password',
+      type: 'password',
+      label: 'Password',
+      placeholder: 'Password',
+      value: obj.password,
+    },
+    {
+      name: 'repeat',
+      type: 'password',
+      label: 'Password',
+      placeholder: 'Repeat Password',
+      value: '',
+    },
   ];
 
   /*  const onInputChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -146,27 +182,54 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
           }}
         >
           <Formik
-            initialValues={{}}
-            validate={(values) => {
-              const errors: Partial<ShippingData> = {};
+            initialValues={{
+              email: `${obj.email}`,
+              name: `${obj.name}`,
+              photoUrl: '',
+              lastName: `${obj.lastName}`,
+              password: '',
+              roleName: `${obj.roleName}`,
+              photoPublicId: '',
+              repeat: '',
+              role: {
+                id: 0,
+                rolename: '',
+              },
+            }}
+            validate={async(values) => {
+              const errors: Partial<DataUser> = {};
               //
+
+              !values.email && (errors.email = 'Required Field');
+              !values.name && (errors.name = 'Required Field');
+              !values.password && (errors.password = 'Required Field');
+              !values.lastName && (errors.lastName = 'Required Field');
+              !values.repeat && (errors.repeat = 'Required Field');
+
+              
+              if (values.password != values.repeat) {
+                errors.password = 'Password doesnt match';
+              } else {
+                values.role.rolename = role;
+              }
 
               return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
-              /*        values.photoPublicId = imagesId.toString();
-              values.photoUrl = imagesUrl.toString(); */
-              console.log(values);
-              setSubmitting(false);
               try {
+                setSubmitting(false);
+                values.photoPublicId = imagesId.toString();
+                values.photoUrl = imagesUrl.toString();
+
                 await axios.put(
-                  `/api/v1/products/${obj.id}`,
+                  `/api/v1/users/${obj.id}`,
                   { ...values },
                   {
                     headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
                   }
                 );
-                isOpen(false);
+                mutate('/api/v1/Users');
+                handleClose();
                 isCallback(!callback);
                 isSuccess(true);
                 isLoader(true);
@@ -206,7 +269,7 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
 
                 <CardHeader
                   sx={{ m: -2, paddingBottom: '-2rem', textAlign: 'center' }}
-                  title="Update product: "
+                  title="Update User: "
                 />
 
                 <Typography sx={{ textAlign: 'center' }} variant="h5" component="div">
@@ -258,8 +321,9 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
                             margin="normal"
                             label={field.label}
                             name={field.name}
+                            type={field.type}
                             variant="outlined"
-                            id="outlined-basic"
+                            autoComplete="on"
                             InputProps={{
                               startAdornment: <InputAdornment position="start"></InputAdornment>,
                             }}
@@ -268,6 +332,27 @@ function EditUser(props: { obj: User; open: boolean; handleClose: any }) {
                       </FormGroup>
                     );
                   })}
+
+                  <FormGroup>
+                    <FormControl fullWidth error={role ? false : true}>
+                      <InputLabel>Role</InputLabel>
+                      <Select
+                        name="role"
+                        sx={{ m: 1 }}
+                        size="small"
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        label="Role"
+                        value={role ? role : ''}
+                        onChange={handleChangeRole}
+                        required
+                      >
+                        <MenuItem value="Shopper">Shopper</MenuItem>
+                        <MenuItem value="Admin">Admin</MenuItem>
+                      </Select>
+                      <FormHelperText sx={{ marginBottom: '1rem' }}>Select a role</FormHelperText>
+                    </FormControl>
+                  </FormGroup>
 
                   {/*  <FormGroup>
                     <FormControl fullWidth error={category ? false : true}>

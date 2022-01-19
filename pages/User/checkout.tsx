@@ -149,4 +149,12 @@ AUI VA EL FORMULARIO solo dale una buena vista
   );
 }
 
+export async function getStaticProps() {
+  return {
+    props: {
+      protected: true,
+    },
+  };
+}
+
 export default Checkout;

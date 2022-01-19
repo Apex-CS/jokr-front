@@ -50,6 +50,10 @@ module.exports = {
         destination: `${process.env.SPRING_API_KEY}/api/v1/public/login`,
       },
       {
+        source: '/api/v1/public/register',
+        destination: `${process.env.SPRING_API_KEY}/api/v1/public/register`,
+      },
+      {
         source: '/api/v1/refreshJwt',
         destination: `${process.env.SPRING_API_KEY}/api/v1/refreshJwt`,
       },

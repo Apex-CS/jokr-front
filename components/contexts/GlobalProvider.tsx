@@ -176,7 +176,7 @@ const GlobalProvider: FC = ({ children }) => {
         const expiration = new Date(jwt.exp * 1000);
         /* const g = new Date( expiration) */
         const now = new Date();
-        const fiveMinutes = 300000;
+        const fiveMinutes = 100000;
 
         /* const expiration = new Date(payload.exp);
 const now = new Date();

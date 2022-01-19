@@ -201,4 +201,8 @@ button {
     position: relative;
     bottom: 120px;
     font-size: 12px;
+   
   }
+  .colors {
+    color: #277ffd;
+}

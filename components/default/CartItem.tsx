@@ -1,7 +1,7 @@
 import { CartItemType } from '@/pages/index';
 import { Button, Box, Card, CardContent, Typography, CardMedia, IconButton } from '@mui/material';
 import React, { useContext } from 'react';
-
+import Link from 'next/link';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 type Props = {
   item: CartItemType;
@@ -42,7 +42,7 @@ function CartItem({ item }: Props) {
   return (
     <>
       <Card sx={{ display: 'flex', marginTop: '1rem' }}>
-        <Box >
+        <Box>
           <CardContent sx={{ flex: '1 0 auto' }}>
             <Typography component="div" variant="h6">
               {item.name}
@@ -53,23 +53,22 @@ function CartItem({ item }: Props) {
             <Typography>Total: ${(item.amount * item.price).toFixed(2)}</Typography>
           </CardContent>
           <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-            <Button
-              size="small"
-              disableElevation
-              variant="contained"
-              onClick={() => handleRemoveFromCart(item.id)}
-            >
-              -
-            </Button>
+            <div className="fancy-button bg-gradient2">
+              <Link href="#">
+                <button onClick={() => handleRemoveFromCart(item.id)}>
+                  <div className="PM">-</div>
+                </button>
+              </Link>
+            </div>
+
             <IconButton>{item.amount}</IconButton>
-            <Button
-              size="small"
-              disableElevation
-              variant="contained"
-              onClick={() => handleAddFromCart(item)}
-            >
-              +
-            </Button>
+            <div className="fancy-button bg-gradient2">
+              <Link href="#">
+                <button onClick={() => handleAddFromCart(item)}>
+                  <div className="PM">+</div>
+                </button>
+              </Link>
+            </div>
           </Box>
         </Box>
         &nbsp;&nbsp;
