@@ -1,14 +1,18 @@
 import { TodosContext } from '@/components/contexts';
 import { loadStripe } from '@stripe/stripe-js';
 import React, { useContext, useEffect, useState } from 'react';
-import { Card, Typography, CardMedia, CardContent, CardActionArea,Container, Button, Grid, Tooltip, InputLabel, Box} from '@mui/material';
+import { Card, Typography, CardMedia, CardContent, CardActionArea,Container, Button, Grid, Tooltip, InputLabel, Box, MenuItem, SelectChangeEvent, Select} from '@mui/material';
 import { CartItemType } from '@/pages/index';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
+import swal from 'sweetalert';
+import Router from 'next/router';
 type FieldTypes = {
+  name: string | number;
+  type: string | number;
   label: string;
-  name: string;
-  
+  placeholder: string;
+  value: string | number;
 };
 
 function refreshPage() {
@@ -29,6 +33,23 @@ interface ShippingData {
     street2: string;
 }
 
+export type FieldCategory = {
+  id: number;
+  client_name: string;
+    colonia: string;
+    country: string;
+    municipio: string;
+    phone: string;
+    postal_code: string;
+    state: string;
+    street1: string;
+    street2: string;
+  categories: {
+    id: number;
+    name: string;
+  };
+};
+
 
 
 import data from './address.json'
@@ -38,7 +59,61 @@ const stripePromise = loadStripe(
   'pk_test_51KCANHGz1RvjBCqBCgQwXY9h7TcmatIeXDbz67BmITIxQElhfoHHl1avDUGAgpGiRp7SPrwsap73ETmnx8gS3OGD00Xwbg2kjb'
 );
 
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
 function Checkout() {
+
+  const { Token } = useContext(TodosContext);
+  const { open, isOpen } = useContext(TodosContext);
+  const { callback, isCallback } = useContext(TodosContext);
+  const { isSuccess } = useContext(TodosContext);
+  const { isLoader } = useContext(TodosContext);
+
+  const [data, setData] = useState([]);
+
+  const [category, setCategory] = useState<string>('');
+  const [subCategory, setSubCategory] = useState<string>('');
+  const [listSub, setListSub] = useState([]);
+  const [disableSub, SetdisableSub] = useState(false);
+
+  const handleChangeCategory = async (event: SelectChangeEvent) => {
+    setCategory(event.target.value as string);
+    setSubCategory('');
+  };
+
+  const handleChangeSubCategory = async (event: SelectChangeEvent) => {
+    setSubCategory(event.target.value as string);
+  };
+
+  /* const { data } = useSWR('/api/v1/categories', fetcher,); */
+
+  /* 'Bearer '+localStorage.getItem('token') */
+  /* headers: {Authorization:  'Bearer '+localStorage.getItem('token')?.toString()!} */
+ 
+  useEffect(() => {
+    isCallback(!callback);
+    const AllCategoriesFunction = async () => {
+      try {
+        const res = await axios.get(`/api/v1/addresses/${1}`, {
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+        });
+        if(res){  setData(res.data);}
+        console.log(res.data);
+       
+      } catch (err) {
+        swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
+          localStorage.removeItem('token');
+          Router.push('/login');
+        });
+      }
+    };
+    AllCategoriesFunction();
+  }, []);
+
+
+  
+
+
   const { cartItems } = useContext(TodosContext);
   const handleClick = async (event: any) => {
     const { sessionId } = await fetch('/api/checkout/session', {
@@ -103,15 +178,15 @@ function Checkout() {
 
 <Formik
       initialValues={{
-        client_name: '',
-        colonia:'',
-        country: '',
-        municipio: '',
-        phone: '',
-        postal_code: '',
-        state: '',
-        street1: '',
-        street2: ''
+        client_name: 'Many',
+        colonia:'calma',
+        country: 'Polonia',
+        municipio: 'Wola',
+        phone: '3312224415',
+        postal_code: '45070',
+        state: 'Varsovia',
+        street1: 'oro',
+        street2: 'diamante'
 
 
 
@@ -255,51 +330,125 @@ if (values.street1.length>20) {
       <Grid container spacing={2}>
         <Grid item xs={8}>
         <div>
+        
               <InputLabel id="demo-simple-select-label"> Client Name</InputLabel>
-              <Field component={TextField} name="client_name" type="client_name"  />
+              <Field component={TextField} name="client_name" type="client_name"  inputProps={
+					{ readOnly: true, }
+				}/>
               </div>
               <br />
               <div>
               <InputLabel id="demo-simple-select-label"> Colonia</InputLabel>
-              <Field component={TextField} name="colonia" type="colonia" />
+              <Field component={TextField} name="colonia" type="colonia" inputProps={
+					{ readOnly: true, }
+				}/>
               </div>
               <br />
               <div>
               <InputLabel id="demo-simple-select-label"> Country</InputLabel>
-              <Field component={TextField} type="country" name="country"  />
+              <Field component={TextField} type="country" name="country"  inputProps={
+					{ readOnly: true, }
+				}/>
               </div>
               <br />
               <div>
               <InputLabel id="demo-simple-select-label"> Municipio</InputLabel>
-              <Field component={TextField} type="municipio" name="municipio"  />
+              <Field component={TextField} type="municipio" name="municipio" inputProps={
+					{ readOnly: true, }
+				} />
               </div>
               <br />
               <div>
               <InputLabel id="demo-simple-select-label"> Phone</InputLabel>
-              <Field component={TextField} type="number" name="phone"  />
+              <Field component={TextField} type="number" name="phone"  inputProps={
+					{ readOnly: true, }
+				}/>
               </div>
               <br />
               <div>
               <InputLabel id="demo-simple-select-label"> Postal Code</InputLabel>
-              <Field component={TextField} type="number" name="postal_code"  />
+              <Field component={TextField} type="number" name="postal_code"  inputProps={
+					{ readOnly: true, }
+				}/>
               </div>
         </Grid>
         <Grid item xs={4}>
         <div>
               <InputLabel id="demo-simple-select-label"> State</InputLabel>
-              <Field component={TextField} type="state" name="state"  />
+              <Field component={TextField} type="state" name="state"  inputProps={
+					{ readOnly: true, }
+				}/>
               </div>
               <br />
               <div>
               <InputLabel id="demo-simple-select-label"> Street and Number</InputLabel>
-              <Field component={TextField} type="street1" name="street1"  />
+              <Field component={TextField} type="street1" name="street1" inputProps={
+					{ readOnly: true, }
+				} />
               </div>
               <br />
               <div>
               <InputLabel id="demo-simple-select-label"> Street 2</InputLabel>
-              <Field component={TextField} type="street2" name="street2"  />
+              <Field component={TextField} type="street2" name="street2"inputProps={
+					{ readOnly: true, }
+				} />
               </div>
               <br />
+              <InputLabel>Select Shipping</InputLabel>
+                  <Select
+                  //component={TextField}
+                    name="category"
+                    sx={{ m: 1 }}
+                    size="small"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Category"
+                    value={category}
+                    onChange={handleChangeCategory}
+                    required
+                  >
+                    {data?.map((field: FieldCategory) => {
+                      return (
+
+                        <MenuItem
+                          key={field.id}
+                          value={field.street1}
+                         // onClick={CategorySearch(field.id)}
+                        >
+                          {field.street1}{' '}
+                        </MenuItem>
+                      );
+                      
+                    })}
+                  </Select>
+
+                  <InputLabel>Select Billing</InputLabel>
+                  <Select
+                  //component={TextField}
+                    name="category"
+                    sx={{ m: 1 }}
+                    size="small"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Category"
+                    value={category}
+                    onChange={handleChangeCategory}
+                    required
+                  >
+                    {data?.map((field: FieldCategory) => {
+                      return (
+
+                        <MenuItem
+                          key={field.id}
+                          value={field.street1}
+                         // onClick={CategorySearch(field.id)}
+                        >
+                          {field.street1}{' '}
+                        </MenuItem>
+                      );
+                      
+                    })}
+                  </Select>
         </Grid>
        
       </Grid>

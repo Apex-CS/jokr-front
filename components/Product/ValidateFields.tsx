@@ -51,6 +51,7 @@ type FieldTypes = {
 export type FieldCategory = {
   id: number;
   name: string;
+  street1: string;
   categories: {
     id: number;
     name: string;
@@ -105,10 +106,11 @@ function ShippingForm() {
     isCallback(!callback);
     const AllCategoriesFunction = async () => {
       try {
-        const res = await axios.get('/api/v1/categories', {
+        const res = await axios.get(`/api/v1/addresses/${1}`, {
           headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
         });
         if(res){  setData(res.data);}
+        console.log(res.data);
        
       } catch (err) {
         swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
@@ -140,6 +142,7 @@ function ShippingForm() {
       const res = await axios.get(`/api/v1/subcategories/categories/${id}`, {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
       });
+      
       isCallback(!callback);
       setListSub(res.data);
       SetdisableSub(true);
@@ -378,10 +381,10 @@ function ShippingForm() {
                       return (
                         <MenuItem
                           key={field.id}
-                          value={field.name}
+                          value={field.street1}
                           onClick={CategorySearch(field.id)}
                         >
-                          {field.name}{' '}
+                          {field.street1}{' '}
                         </MenuItem>
                       );
                     })}

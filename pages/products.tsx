@@ -38,6 +38,7 @@ const tableHeader: string[] = [
   'Options',
 ];
 
+
 export type Product = {
   description: string;
   id: number;
