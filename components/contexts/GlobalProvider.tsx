@@ -61,6 +61,10 @@ const contextDefaultValues: TodosContextState = {
 
   Token: '',
   IsToken: () => ({}),
+
+  IdUser:0,
+
+
 };
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
@@ -143,28 +147,32 @@ const GlobalProvider: FC = ({ children }) => {
     });
   /* Modal check if is open or close */
 
-  const [open, setOpen] = useState<boolean>(contextDefaultValues.open);
+  const [ open, setOpen ] = useState<boolean>(contextDefaultValues.open);
   const isOpen = (open: boolean) => setOpen(open);
 
-  const [success, setSuccess] = useState<boolean>(contextDefaultValues.success);
+  const [ success, setSuccess ] = useState<boolean>(contextDefaultValues.success);
   const isSuccess = (success: boolean) => setSuccess(success);
 
-  const [loaderShow, setLoaderShow] = useState<boolean>(contextDefaultValues.loaderShow);
+  const [ loaderShow, setLoaderShow ] = useState<boolean>(contextDefaultValues.loaderShow);
   const isLoader = (loaderShow: boolean) => setLoaderShow(loaderShow);
 
-  const [callback, setCallback] = useState<boolean>(contextDefaultValues.callback);
+  const [ callback, setCallback ] = useState<boolean>(contextDefaultValues.callback);
   const isCallback = (callback: boolean) => setCallback(callback);
 
-  const [AllProducts, setProducts] = useState(contextDefaultValues.AllProducts);
-  const [AllProductsAdmin, setProductsAdmin] = useState(contextDefaultValues.AllProductsAdmin);
+  const [ AllProducts, setProducts ] = useState(contextDefaultValues.AllProducts);
+  const [ AllProductsAdmin, setProductsAdmin] = useState(contextDefaultValues.AllProductsAdmin);
 
-  const [Login, setLogin] = useState(contextDefaultValues.Login);
+  const [ Login, setLogin ] = useState(contextDefaultValues.Login);
   const IsLogged = (role: string) => setLogin(role);
 
-  const [Token, setToken] = useState(contextDefaultValues.Token);
+  const [ Token, setToken ] = useState(contextDefaultValues.Token);
   const IsToken = (token: string) => setToken(token);
 
-
+  const [ IdUser, setIdUser ] = useState(contextDefaultValues.IdUser);
+ 
+  
+  
+ 
   useEffect(() => {
     try {
       const auth = localStorage.getItem('token');
@@ -172,17 +180,13 @@ const GlobalProvider: FC = ({ children }) => {
       if (auth) {
         const jwt = JSON.parse(atob(auth.split('.')[1]));
         if(jwt.authorities.toString() === 'Admin') IsLogged(jwt.authorities.toString())
+        setIdUser(jwt.jti)
+        console.log(jwt)
         /* let ff = jwt.exp * 1000 */
         const expiration = new Date(jwt.exp * 1000);
         /* const g = new Date( expiration) */
         const now = new Date();
         const fiveMinutes = 100000;
-
-        /* const expiration = new Date(payload.exp);
-const now = new Date();
-const fiveMinutes = 1000 * 60 * 5;
-
-if( expiration.getTime() - now.getTime() < fiveMinutes ){ */
 
         if (expiration.getTime() - now.getTime() < fiveMinutes) {
           console.log('JWT has expired or will expire soon');
@@ -297,6 +301,8 @@ if( expiration.getTime() - now.getTime() < fiveMinutes ){ */
 
         Token,
         IsToken,
+
+        IdUser
       }}
     >
       {children}

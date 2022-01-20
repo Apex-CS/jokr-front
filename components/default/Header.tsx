@@ -27,6 +27,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListAlt from '@mui/icons-material/ListAlt';
 import Storefront from '@mui/icons-material/Storefront';
 import PeopleAltOutlined from '@mui/icons-material/PeopleAltOutlined';
+import LibraryBooks from '@mui/icons-material/LibraryBooks';
 import Shop from '@mui/icons-material/AddShoppingCart';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
 import Cart from '@/components/default/Cart';
@@ -106,23 +107,24 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
   })
 );
+const accountPage = () => {
+  Router.push('/User/account');
+};
 
-const logout =() =>{
-
-
+const logout = () => {
   swal({
     title: 'You will end the session, Do you want to continue?',
     text: 'Are you sure?',
     icon: 'warning',
     buttons: ['No', 'Yes'],
   }).then(async (res) => {
-    if (res) 
-    swal({ icon: 'success',title:'Good', text: 'Log out', timer: 2000 }).then(function () {
-      localStorage.removeItem('token');
-      Router.push('/login');
-    });
-  })
-}
+    if (res)
+      swal({ icon: 'success', title: 'Good', text: 'Log out', timer: 2000 }).then(function () {
+        localStorage.removeItem('token');
+        Router.push('/login');
+      });
+  });
+};
 
 function MiniDrawer() {
   /*  ShopCart */
@@ -195,7 +197,7 @@ function MiniDrawer() {
                       Options
                     </Button>
                     <Menu {...bindMenu(popupState)}>
-                      <MenuItem onClick={popupState.close}>My account</MenuItem>
+                      <MenuItem onClick={accountPage}>My account</MenuItem>
                       <MenuItem onClick={logout}>Logout</MenuItem>
                     </Menu>
                   </React.Fragment>
@@ -213,7 +215,7 @@ function MiniDrawer() {
           <Divider />
           <List>
             {Login ? (
-              <Tooltip title="See products">
+              <Tooltip title="List of products" placement="right">
                 <ListItem>
                   <ListItemIcon>
                     <Link href="/products">
@@ -230,7 +232,7 @@ function MiniDrawer() {
             )}
 
             {Login ? (
-              <Tooltip title="See users">
+              <Tooltip title="List of users" placement="right">
                 <ListItem>
                   <ListItemIcon>
                     <Link href="/users">
@@ -246,7 +248,7 @@ function MiniDrawer() {
               ''
             )}
 
-            <Tooltip title="Home">
+            <Tooltip title="Home" placement="right">
               <ListItem>
                 <ListItemIcon>
                   <Link href="/">
@@ -258,6 +260,23 @@ function MiniDrawer() {
                 <ListItemText> JOKR products</ListItemText>
               </ListItem>
             </Tooltip>
+
+            {Login ? (
+              <Tooltip title="Order Histories" placement="right">
+                <ListItem>
+                  <ListItemIcon>
+                    <Link href="/history">
+                      <a>
+                        <LibraryBooks />
+                      </a>
+                    </Link>
+                  </ListItemIcon>
+                  <ListItemText> Orders</ListItemText>
+                </ListItem>
+              </Tooltip>
+            ) : (
+              ''
+            )}
           </List>
           <Divider />
         </Drawer>

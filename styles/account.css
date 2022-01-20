@@ -1,0 +1,174 @@
+.containerAccount {
+/*   top: 50%;
+  right: 50%;
+  margin-left: 6rem; */
+  margin: 150px auto;
+  width: 500px;
+  height: 1000px;
+  background-color: #fff;
+  justify-content: center;
+  border-radius: 11px;
+  padding: 40px 50px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  margin-top: -1rem;
+}
+
+@media only screen and (max-width: 1100px) {
+  .containerAccount {
+    margin-left: 5rem;
+    width: 400px;
+    height: 800px;
+    top: 10%;
+    left: 10%;
+  }
+
+  .upload {
+    height: 205px;
+  }
+
+  .loader {
+    height: 12.7rem;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .containerAccount {
+    margin-left: 4rem;
+    width: 250px;
+    height: 750px;
+    top: 10%;
+    left: 10%;
+  }
+
+  .upload {
+    height: 100px;
+  }
+}
+
+/* top-header */
+.top-header h3 {
+  text-align: center;
+  color: #495d76;
+}
+.top-header p {
+  color: #cecfd3;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 5px;
+}
+/* top-header */
+/* form */
+.user input,
+.pass input {
+  width: 100%;
+  height: 35px;
+  border: none;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  outline: none;
+  padding: 0 40px;
+}
+::placeholder {
+  color: #9ca5b4;
+  font-size: 12px;
+}
+.user i,
+.pass i {
+  position: relative;
+  top: 31px;
+  right: -10px;
+  color: #3981ed;
+}
+/* form */
+/* button */
+.btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+.btn button {
+  width: 100%;
+  border: none;
+  height: 35px;
+  background-color: #277ffd;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+/* button */
+p.last {
+  text-align: center;
+  position: relative;
+  bottom: 120px;
+  font-size: 12px;
+}
+.colors {
+  color: #277ffd;
+}
+
+/* Demo styling */
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 10rem;
+}
+
+.left {
+  left: 0;
+    background-color: rgb(255, 245, 241);
+  width: 53%;
+}
+
+.right {
+  right: 0;
+   background-color: rgb(242, 254, 255);
+  width: 47%;
+}
+
+.wrap2 {
+  width: 180px;
+  height: 250px;
+  margin: 0 auto;
+  position: center;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+@media only screen and (max-width: 400px) {
+  .split {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 10rem;
+  }
+
+  .left {
+    margin-top: -5rem;
+    height: 1100px;
+  }
+
+  .wrap2 {
+    width: 120px;
+    height: 210px;
+  }
+
+  .containerAccount {
+    width: 85%;
+    height: 90%;
+  }
+}

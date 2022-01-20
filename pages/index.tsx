@@ -96,7 +96,7 @@ function Home() {
         container
         spacing={{ xs: 3, md: 1 }}
         columns={{ xs: 2, sm: 8, md: 11.5 }}
-        sx={{ paddingTop: -20, paddingLeft: 20 }}
+        sx={{ paddingTop: -20, paddingLeft: 15 }}
       >
         {AllProducts?.map((item: CartItemType, index: number) => {
           return (
