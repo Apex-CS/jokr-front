@@ -89,6 +89,9 @@ export type TodosContextState = {
 
   Login: string;
   IsLogged: (role: string) => void;
+
+  IdUser:number;
+
 };
 
 
