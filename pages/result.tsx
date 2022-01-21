@@ -33,7 +33,7 @@ function CheckoutForm() {
     };
     setType(PurchaseDone);
     setData(PurchaseDone)
-    /* await axios.post('/api/v1/orders',{...type},{ headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }}) */
+    /* await axios.post('/api/v1/orders',{...PurchaseDone},{ headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }}) */ 
 
   };
 
