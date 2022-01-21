@@ -135,7 +135,6 @@ function MiniDrawer() {
     });
   };
 
-  
 
   const getTotalItems = (cartItems: any) => {
     const total = cartItems.reduce(
