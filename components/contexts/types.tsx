@@ -90,8 +90,10 @@ export type TodosContextState = {
   Login: string;
   IsLogged: (role: string) => void;
 
+
   ImageUser: { url: string; urlId: string };
   IsImageUser: (url: string, urlId: string) => void;
+
 
   IdUser: number;
 

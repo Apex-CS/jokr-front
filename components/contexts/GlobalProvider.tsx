@@ -62,8 +62,10 @@ const contextDefaultValues: TodosContextState = {
   Token: '',
   IsToken: () => ({}),
 
+
   ImageUser: { url: '', urlId: '' },
   IsImageUser: () => ({}),
+
 
   IdUser: 0,
 
@@ -175,6 +177,7 @@ const GlobalProvider: FC = ({ children }) => {
   const [Token, setToken] = useState(contextDefaultValues.Token);
   const IsToken = (token: string) => setToken(token);
 
+
   const [ImageUser, setImageUser] = useState(contextDefaultValues.ImageUser);
   const IsImageUser = (url: string, urlId: string) => setImageUser({ url, urlId });
 
@@ -186,17 +189,20 @@ const GlobalProvider: FC = ({ children }) => {
   const [Shopper, setShopper] = useState(contextDefaultValues.Shopper);
   const isShopper = (isShopper: string) => setShopper(isShopper);
 
+
   useEffect(() => {
     try {
       const auth = localStorage.getItem('token');
 
       if (auth) {
         const jwt = JSON.parse(atob(auth.split('.')[1]));
+
         setIdUser(jwt.jti);
         setImageUser({ url: jwt.photoUrl, urlId: jwt.photoUrlId });
         console.log(jwt.authorities.toString());
         if (jwt.authorities.toString() === 'Admin') IsLogged(jwt.authorities.toString());
         if (jwt.authorities.toString() === 'Shopper') isShopper(jwt.authorities.toString());
+
 
         /* let ff = jwt.exp * 1000 */
         const expiration = new Date(jwt.exp * 1000);
@@ -322,6 +328,7 @@ const GlobalProvider: FC = ({ children }) => {
         ImageUser,
         IsImageUser,
 
+
         IdUser,
 
         idAddress,
@@ -329,6 +336,7 @@ const GlobalProvider: FC = ({ children }) => {
 
         Shopper,
         isShopper,
+
       }}
     >
       {children}

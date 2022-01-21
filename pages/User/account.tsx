@@ -26,6 +26,7 @@ import {
   Fade,
   Box,
   Backdrop,
+
 } from '@mui/material';
 import toast, { Toaster } from 'react-hot-toast';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
@@ -47,8 +48,10 @@ import { useRouter } from 'next/router';
 
 
 
+
 /* TABLE */
 const tableHeader: string[] = ['Address', 'State', 'Options'];
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -116,6 +119,7 @@ function Account() {
   const { open, isOpen } = useContext(TodosContext);
   const { IdUser } = useContext(TodosContext);
   const [loading, setLoading] = useState(false);
+
   const { ImageUser, IsImageUser } = useContext(TodosContext);
   const { callback, isCallback } = useContext(TodosContext);
   const { isSuccess } = useContext(TodosContext);
@@ -125,6 +129,7 @@ function Account() {
   const [imagesUrl, setImagesUrl] = useState<string>(ImageUser.url); */
 
   const { data: address } = useSWR(`/api/v1/addresses/${IdUser}`, fetcher);
+
 
   const { data, error } = useSWR(`/api/v1/users/${IdUser}`, fetcher);
   if (error) return <Check />;
@@ -138,8 +143,12 @@ function Account() {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
       });
 
+
       IsImageUser('', '');
 
+
+      IsImageUser('','')
+      
       setLoading(false);
     } catch (err) {
       swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
@@ -167,7 +176,9 @@ function Account() {
         },
       });
       setLoading(false);
+
       IsImageUser(res.data.url, res.data.id);
+
     } catch (err) {
       swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
         localStorage.removeItem('token');
@@ -268,6 +279,7 @@ function Account() {
                   });
                 }
 
+
                 swal({
                   icon: 'warning',
                   title: '!!!Have you done modifications to your perfil',
@@ -285,6 +297,7 @@ function Account() {
                   isSuccess(true);
                   isLoader(true);
                 });
+
               }}
             >
               {() => (
@@ -382,15 +395,15 @@ function Account() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
+
                   {address?.map((address: DataAddress) => {
                     return <ListAdress key={address.id} address={address} />;
                   })}
+
                 </TableBody>
               </Table>
             </TableContainer>
           </FormGroup>
-
-
 
         </div>
       </Grid>
