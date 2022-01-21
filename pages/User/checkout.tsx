@@ -94,6 +94,7 @@ function Checkout() {
         setAddressCity(address[index].municipio);
         setAddressState(address[index].state);
         setAddressCountry(address[index].country);
+        localStorage.setItem('ia', adress);
       }
     }
   };
@@ -126,7 +127,7 @@ function Checkout() {
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify({ cartItems: cartItems }),
+      body: JSON.stringify({ cartItems: cartItems, idUser:IdUser }),
     }).then((res) => res.json());
 
     const stripe = await stripePromise;
