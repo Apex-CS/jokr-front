@@ -62,6 +62,9 @@ const contextDefaultValues: TodosContextState = {
   Token: '',
   IsToken: () => ({}),
 
+  ImageUser:{url:'',urlId:''},
+  IsImageUser: () => ({}),
+
   IdUser:0,
 
 
@@ -168,6 +171,9 @@ const GlobalProvider: FC = ({ children }) => {
   const [ Token, setToken ] = useState(contextDefaultValues.Token);
   const IsToken = (token: string) => setToken(token);
 
+  const [ ImageUser, setImageUser ] = useState(contextDefaultValues.ImageUser);
+  const IsImageUser = (url: string, urlId:string) => setImageUser({url,urlId});
+
   const [ IdUser, setIdUser ] = useState(contextDefaultValues.IdUser);
  
   
@@ -179,8 +185,10 @@ const GlobalProvider: FC = ({ children }) => {
      
       if (auth) {
         const jwt = JSON.parse(atob(auth.split('.')[1]));
-        if(jwt.authorities.toString() === 'Admin') IsLogged(jwt.authorities.toString())
         setIdUser(jwt.jti)
+        setImageUser({url:jwt.photoUrl,urlId:jwt.photoUrlId})
+        if(jwt.authorities.toString() === 'Admin') IsLogged(jwt.authorities.toString())
+
         console.log(jwt)
         /* let ff = jwt.exp * 1000 */
         const expiration = new Date(jwt.exp * 1000);
@@ -301,6 +309,9 @@ const GlobalProvider: FC = ({ children }) => {
 
         Token,
         IsToken,
+
+        ImageUser,
+        IsImageUser,
 
         IdUser
       }}

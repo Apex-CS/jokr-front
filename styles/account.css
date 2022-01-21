@@ -120,13 +120,13 @@ p.last {
 
 .left {
   left: 0;
-    background-color: rgb(255, 245, 241);
+    background-color: rgb(255, 251, 249);
   width: 53%;
 }
 
 .right {
   right: 0;
-   background-color: rgb(242, 254, 255);
+   background-color: rgb(255, 255, 255);
   width: 47%;
 }
 

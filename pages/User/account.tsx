@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Button,
   Grid,
@@ -21,7 +21,7 @@ import {
   TableHead,
   TableRow,
   TableBody,
-  Paper
+  Paper,
 } from '@mui/material';
 import toast, { Toaster } from 'react-hot-toast';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
@@ -38,17 +38,18 @@ import useSWR from 'swr';
 import Check from '@/components/Loader/GlobalLoader';
 import { styled } from '@mui/material/styles';
 
+
 /* TABLE */
-const tableHeader: string[] = ['Street 1','Street 2' ,'Municipio', 'State','Options'];
+const tableHeader: string[] = ['Street 1', 'Street 2', 'Municipio', 'State', 'Options'];
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
 /* TABLE  */
 export interface DataUser {
@@ -79,37 +80,39 @@ type FieldTypes = {
   value: string | number;
 };
 
-
-
-const fetcher = (url: string) =>  axios.get(url,{  headers: {'Authorization': 'Bearer '+localStorage.getItem('token')}}).then((res) => res.data);
+const fetcher = (url: string) =>
+  axios
+    .get(url, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
+    .then((res) => res.data);
 
 function Account() {
   const { open, isOpen } = useContext(TodosContext);
   const { IdUser } = useContext(TodosContext);
-
-
-  const [imagesId, setImagesId] = useState<string>('');
-  const [imagesUrl, setImagesUrl] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-
+  const [ loading, setLoading] = useState(false);
+  const { ImageUser, IsImageUser } = useContext(TodosContext);
   const { callback, isCallback } = useContext(TodosContext);
   const { isSuccess } = useContext(TodosContext);
   const { isLoader } = useContext(TodosContext);
 
-  const styleUpload = {
-    display: imagesUrl ? 'block' : 'none',
-  };
+/*   const [imagesId, setImagesId] = useState<string>(ImageUser.urlId);
+  const [imagesUrl, setImagesUrl] = useState<string>(ImageUser.url); */
+
+  console.log('Usuario logeado', IdUser);
+
+  const { data, error } = useSWR(`/api/v1/users/${IdUser}`, fetcher);
+  if (error) return <Check />;
+  if (!data) return 'Loading...';
 
   const handleDestroy = async () => {
     try {
       setLoading(true);
-      const imageId = imagesId.toString();
+      const imageId = ImageUser.urlId;
       await axios.delete(`/api/v1/users/image/${imageId}`, {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
       });
-      setImagesId('');
-      setImagesUrl('');
 
+      IsImageUser('','')
+      
       setLoading(false);
     } catch (err) {
       swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
@@ -137,8 +140,8 @@ function Account() {
         },
       });
       setLoading(false);
-      setImagesId(res.data.id);
-      setImagesUrl(res.data.url);
+      IsImageUser(res.data.url,res.data.id)
+
     } catch (err) {
       swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
         localStorage.removeItem('token');
@@ -147,17 +150,22 @@ function Account() {
     }
   };
 
-  console.log('Usuario logeado', IdUser);
- 
-
-  const { data, error } = useSWR(`/api/v1/users/${IdUser}`, fetcher);
-  if (error)  return <Check/> ;
-  if (!data) return 'Loading...';
-
-const AddlabelsConfing: FieldTypes[] = [
-    { name: 'email', type: 'email', label: 'New Email', placeholder: 'Email', value: data[0].email },
+  const AddlabelsConfing: FieldTypes[] = [
+    {
+      name: 'email',
+      type: 'email',
+      label: 'New Email',
+      placeholder: 'Email',
+      value: data[0].email,
+    },
     { name: 'name', type: 'text', label: 'Name', placeholder: 'Name', value: data[0].name },
-    { name: 'lastName', type: 'text', label: 'last name', placeholder: 'Last Name', value: data[0].lastName },
+    {
+      name: 'lastName',
+      type: 'text',
+      label: 'last name',
+      placeholder: 'Last Name',
+      value: data[0].lastName,
+    },
     { name: 'password', type: 'password', label: 'Password', placeholder: 'Password', value: '' },
     {
       name: 'repeat',
@@ -168,6 +176,10 @@ const AddlabelsConfing: FieldTypes[] = [
     },
   ];
 
+  const styleUpload = {
+    display: ImageUser.url ? 'block' : 'none',
+  };
+  console.log('ifno', data);
   return (
     <>
       <Grid>
@@ -180,11 +192,11 @@ const AddlabelsConfing: FieldTypes[] = [
 
             <Formik
               initialValues={{
-                email: `${ data[0].email}`,
+                email: `${data[0].email}`,
                 name: `${data[0].name}`,
-                photoUrl: `${data[0].photoUrl}`,
+                photoUrl: '',
                 lastName: `${data[0].lastName}`,
-                password:``,
+                password: ``,
                 roleName: `${data[0].roleName}`,
                 photoPublicId: ``,
                 repeat: '',
@@ -204,6 +216,8 @@ const AddlabelsConfing: FieldTypes[] = [
 
                 if (values.password != values.repeat) {
                   errors.password = 'Password doesnt match';
+                } else {
+                  values.role.rolename = data[0].roleName;
                 }
 
                 return errors;
@@ -211,11 +225,11 @@ const AddlabelsConfing: FieldTypes[] = [
               onSubmit={async (values, { setSubmitting }) => {
                 try {
                   setSubmitting(false);
-                  values.photoPublicId = imagesId.toString();
-                  values.photoUrl = imagesUrl.toString();
+                  values.photoPublicId = ImageUser.urlId;
+                  values.photoUrl = ImageUser.url;
 
-                  await axios.post(
-                    '/api/v1/users',
+                  await axios.put(
+                    `/api/v1/users/${IdUser}`,
                     { ...values },
                     {
                       headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
@@ -227,10 +241,11 @@ const AddlabelsConfing: FieldTypes[] = [
                     Router.push('/login');
                   });
                 }
-
+           
                 mutate('/api/v1/Users');
+                mutate(`/api/v1/users/${IdUser}`);
                 isOpen(false);
-                isCallback(!callback);
+                IsImageUser(ImageUser.url,ImageUser.urlId)
                 isSuccess(true);
                 isLoader(true);
               }}
@@ -261,7 +276,7 @@ const AddlabelsConfing: FieldTypes[] = [
                         ) : (
                           <div id="file_img" style={styleUpload}>
                             <Image
-                              src={imagesUrl ? imagesUrl : Back}
+                              src={ImageUser.url ? ImageUser.url : Back}
                               width={500}
                               height={380}
                               alt="Pro_Image"
@@ -294,16 +309,16 @@ const AddlabelsConfing: FieldTypes[] = [
                         </FormGroup>
                       );
                     })}
+
+                    <div className="btn">
+                      <Button type="submit" variant="contained" size="large" color="secondary">
+                        Update
+                      </Button>
+                    </div>
                   </Form>
                 </>
               )}
             </Formik>
-
-            <div className="btn">
-              <Button variant="contained" size="large" color="secondary">
-                Update
-              </Button>
-            </div>
           </div>
         </div>
 
@@ -314,30 +329,28 @@ const AddlabelsConfing: FieldTypes[] = [
             </div>
           </Tooltip>
 
-
           <FormGroup>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {tableHeader?.map((header: string) => {
-                    return (
-                      <StyledTableCell align="center" key={header}>
-                        {header}
-                      </StyledTableCell>
-                    );
-                  })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {/* {data?.map((user: User) => {
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {tableHeader?.map((header: string) => {
+                      return (
+                        <StyledTableCell align="center" key={header}>
+                          {header}
+                        </StyledTableCell>
+                      );
+                    })}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/* {data?.map((user: User) => {
                   return <ListUsers key={user.id} user={user} />;
                 })} */}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </FormGroup>
-
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </FormGroup>
         </div>
       </Grid>
     </>
