@@ -50,7 +50,7 @@ import { useRouter } from 'next/router';
 
 
 /* TABLE */
-const tableHeader: string[] = ['Address', 'State', 'Options'];
+const tableHeader: string[] = ['Streer 1', 'Street 2', 'Colonia','Municipio','State','Country','Postal Code','Phone','Recipient Name','Default billing','Default Shipping','Options'];
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {

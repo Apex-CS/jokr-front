@@ -26,7 +26,16 @@ function ListAdress(props: { address: DataAddress }) {
         <Fragment>
         <TableRow hover >
           <TableCell align="center">{address.street1}</TableCell>
+          <TableCell align="center"> { address.street2}</TableCell>
+          <TableCell align="center"> { address.colonia}</TableCell>
+          <TableCell align="center"> { address.municipio}</TableCell>
           <TableCell align="center"> { address.state}</TableCell>
+          <TableCell align="center"> { address.country}</TableCell>
+          <TableCell align="center"> { address.postal_code}</TableCell>
+          <TableCell align="center"> { address.recipient_name}</TableCell>
+          <TableCell align="center"> { address.phone}</TableCell>
+          <TableCell align="center"> { address.is_default_billing_address.toString()}</TableCell>
+          <TableCell align="center"> { address.is_default_shipping_address.toString()}</TableCell>
           <TableCell align="center">
             <IconButton color="error" onClick={changeStateDelete}>
               <DeleteForeverIcon />

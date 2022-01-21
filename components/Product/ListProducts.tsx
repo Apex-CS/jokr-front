@@ -4,7 +4,8 @@ import BorderColorIcon from '@mui/icons-material/BorderColorOutlined';
 import { IconButton, TableCell, TableRow } from '@mui/material';
 import EditProduct from '@/components/Product/EditProduct';
 import DeleteProduct from '@/components/Product/DeleteProduct';
-import {Product} from '@/pages/products'
+import { Product } from '@/pages/products';
+import Image from 'next/image';
 
 function ListProducts(props: { product: Product }) {
   const { product } = props;
@@ -25,10 +26,9 @@ function ListProducts(props: { product: Product }) {
     setIdProduct(product.id);
   };
 
-
   return (
     <Fragment>
-      <TableRow hover >
+      <TableRow hover>
         {/* <TableCell align="right">{product.id.toString()}</TableCell> */}
         <TableCell align="right">{product.sku}</TableCell>
         <TableCell align="right">{product.name}</TableCell>
@@ -37,7 +37,9 @@ function ListProducts(props: { product: Product }) {
         <TableCell align="right">{product.stock}</TableCell>
         <TableCell align="right">{product.subcategories.categories.name}</TableCell>
         <TableCell align="right">{product.subcategoriesName}</TableCell>
-        <TableCell align="right">{product.photoUrl}</TableCell> 
+        <TableCell align="right">
+          <Image src={product.photoUrl} width={80} height={80} alt="Pro_Image" />
+        </TableCell>
         <TableCell align="right">
           <IconButton color="warning" onClick={changeStateEdit}>
             <BorderColorIcon />
@@ -47,8 +49,8 @@ function ListProducts(props: { product: Product }) {
           </IconButton>
         </TableCell>
       </TableRow>
-       <EditProduct obj={product} open={openEdit} handleClose={handleClose} />
-      <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} /> 
+      <EditProduct obj={product} open={openEdit} handleClose={handleClose} />
+      <DeleteProduct id={iduser} open={openDel} handleClose={handleDelClose} />
     </Fragment>
   );
 }
