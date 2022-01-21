@@ -62,7 +62,7 @@ const stripePromise = loadStripe(
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 function Checkout() {
-
+  const a=1;
   const { Token } = useContext(TodosContext);
   const { open, isOpen } = useContext(TodosContext);
   const { callback, isCallback } = useContext(TodosContext);
@@ -331,69 +331,170 @@ if (values.street1.length>20) {
         <Grid item xs={8}>
         <div>
         
-              <InputLabel id="demo-simple-select-label"> Client Name</InputLabel>
-              <Field component={TextField} name="client_name" type="client_name"  inputProps={
+              
+              <Field label={"Client Name"} component={TextField} name="client_name" type="client_name"  inputProps={
 					{ readOnly: true, }
 				}/>
               </div>
               <br />
               <div>
-              <InputLabel id="demo-simple-select-label"> Colonia</InputLabel>
-              <Field component={TextField} name="colonia" type="colonia" inputProps={
-					{ readOnly: true, }
-				}/>
+              {data?.map((field: FieldCategory) => {
+                
+                if(field.id==a){
+                return(
+                  
+                  <Field 
+                  label={"Colonia"}
+                  key={field.id}
+                  value={field.colonia}
+                  component={TextField} type="colonia" name="colonia"inputProps={
+                    { readOnly: true, }
+                  } />
+                )
+                  }
+                
+                    })}
               </div>
               <br />
               <div>
-              <InputLabel id="demo-simple-select-label"> Country</InputLabel>
-              <Field component={TextField} type="country" name="country"  inputProps={
-					{ readOnly: true, }
-				}/>
+              {data?.map((field: FieldCategory) => {
+                
+                if(field.id==a){
+                return(
+                  
+                  <Field 
+                  label={"Country"}
+                  key={field.id}
+                  value={field.country}
+                  component={TextField} type="country" name="country"inputProps={
+                    { readOnly: true, }
+                  } />
+                )
+                  }
+                
+                    })}
               </div>
               <br />
               <div>
-              <InputLabel id="demo-simple-select-label"> Municipio</InputLabel>
-              <Field component={TextField} type="municipio" name="municipio" inputProps={
-					{ readOnly: true, }
-				} />
+              {data?.map((field: FieldCategory) => {
+                
+                if(field.id==a){
+                return(
+                  
+                  <Field 
+                  label={"Municipio"}
+                  key={field.id}
+                  value={field.municipio}
+                  component={TextField} type="municipio" name="municipio"inputProps={
+                    { readOnly: true, }
+                  } />
+                )
+                  }
+                
+                    })}
               </div>
               <br />
               <div>
-              <InputLabel id="demo-simple-select-label"> Phone</InputLabel>
-              <Field component={TextField} type="number" name="phone"  inputProps={
-					{ readOnly: true, }
-				}/>
+              {data?.map((field: FieldCategory) => {
+                
+                if(field.id==a){
+                return(
+                  
+                  <Field 
+                  label={"Phone"}
+                  key={field.id}
+                  value={field.phone}
+                  component={TextField} type="phone" name="phone"inputProps={
+                    { readOnly: true, }
+                  } />
+                )
+                  }
+                
+                    })}
               </div>
               <br />
               <div>
-              <InputLabel id="demo-simple-select-label"> Postal Code</InputLabel>
-              <Field component={TextField} type="number" name="postal_code"  inputProps={
-					{ readOnly: true, }
-				}/>
+              {data?.map((field: FieldCategory) => {
+                
+                if(field.id==a){
+                return(
+                  
+                  <Field 
+                  label={"Postal Code"}
+                  key={field.id}
+                  value={field.postal_code}
+                  component={TextField} type="postal_code" name="postal_code"inputProps={
+                    { readOnly: true, }
+                  } />
+                )
+                  }
+                
+                    })}
               </div>
         </Grid>
         <Grid item xs={4}>
         <div>
-              <InputLabel id="demo-simple-select-label"> State</InputLabel>
-              <Field component={TextField} type="state" name="state"  inputProps={
-					{ readOnly: true, }
-				}/>
+        {data?.map((field: FieldCategory) => {
+                
+                if(field.id==a){
+                return(
+                  
+                  <Field 
+                  label={"State"}
+                  key={field.id}
+                  value={field.state}
+                  component={TextField} type="state" name="state"inputProps={
+                    { readOnly: true, }
+                  } />
+                )
+                  }
+                
+                    })}
               </div>
               <br />
               <div>
-              <InputLabel id="demo-simple-select-label"> Street and Number</InputLabel>
-              <Field component={TextField} type="street1" name="street1" inputProps={
-					{ readOnly: true, }
-				} />
+              {data?.map((field: FieldCategory) => {
+                
+                if(field.id==a){
+                return(
+                  
+                  <Field 
+                  label={"Street and Number"}
+                  key={field.id}
+                  value={field.street1}
+                  component={TextField} type="street1" name="street1"inputProps={
+                    { readOnly: true, }
+                  } />
+                )
+                  }
+                
+                    })}
               </div>
               <br />
               <div>
-              <InputLabel id="demo-simple-select-label"> Street 2</InputLabel>
-              <Field component={TextField} type="street2" name="street2"inputProps={
-					{ readOnly: true, }
-				} />
+              {data?.map((field: FieldCategory) => {
+                
+                if(field.id==a){
+                return(
+                  
+                  <Field 
+                  label={"Street 2"}
+                  key={field.id}
+                  value={field.street2}
+                  component={TextField} type="street2" name="street2"inputProps={
+                    { readOnly: true, }
+                  } />
+                )
+                  }
+                
+                    })}
               </div>
               <br />
+
+
+              
+
+
               <InputLabel>Select Shipping</InputLabel>
                   <Select
                   //component={TextField}
@@ -422,33 +523,7 @@ if (values.street1.length>20) {
                     })}
                   </Select>
 
-                  <InputLabel>Select Billing</InputLabel>
-                  <Select
-                  //component={TextField}
-                    name="category"
-                    sx={{ m: 1 }}
-                    size="small"
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Category"
-                    value={category}
-                    onChange={handleChangeCategory}
-                    required
-                  >
-                    {data?.map((field: FieldCategory) => {
-                      return (
-
-                        <MenuItem
-                          key={field.id}
-                          value={field.street1}
-                         // onClick={CategorySearch(field.id)}
-                        >
-                          {field.street1}{' '}
-                        </MenuItem>
-                      );
-                      
-                    })}
-                  </Select>
+                  
         </Grid>
        
       </Grid>
