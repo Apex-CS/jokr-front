@@ -23,7 +23,7 @@ import { TodosContext } from '@/components/contexts';
 
 const tableHeader: string[] = ['User', 'Name', 'Options'];
 
-function history() {
+function History() {
   const { Login } = useContext(TodosContext);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -66,4 +66,4 @@ function history() {
     )
 }
 
-export default history
+export default History
