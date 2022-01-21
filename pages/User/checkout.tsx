@@ -73,14 +73,29 @@ function Checkout() {
   const [adressStreetA, setAddressStreetA] = React.useState('Street name 1');
   const [adressStreetB, setAddressStreetB] = React.useState('Street name 2');
   const [adressPostal, setAddressPostal] = React.useState('Postal/Zip Code');
-  const [adressCity, setAddressCity] = React.useState('City');
+  const [adressCity, setAddressCity] = React.useState('Municipio');
   const [adressState, setAddressState] = React.useState('Province/State');
   const [adressCountry, setAddressCountry] = React.useState('Country');
   const handleChange = (event: SelectChangeEvent) => {
     setAddress(event.target.value as string);
+    const idAdress = event.target.value;
 
+    const address = data.map((field: FieldCategory) => {
+      return field;
+    });
 
-    setAddressName(event.target.value as string);
+    for (let index = 0; index < address.length; index++) {
+      if (address[index].id == Number(idAdress)) {
+        setAddressName(address[index].recipient_name);
+        setAddressPrhone(address[index].phone);
+        setAddressStreetA(address[index].street1);
+        setAddressStreetB(address[index].street2);
+        setAddressPostal(address[index].postal_code);
+        setAddressCity(address[index].municipio);
+        setAddressState(address[index].state);
+        setAddressCountry(address[index].country);
+      }
+    }
   };
 
   useEffect(() => {
@@ -185,7 +200,7 @@ function Checkout() {
               >
                 {data?.map((field: FieldCategory) => {
                   return (
-                    <MenuItem key={field.id} value={field.id} >
+                    <MenuItem key={field.id} value={field.id}>
                       {field.street1 + ' Col. ' + field.colonia}{' '}
                     </MenuItem>
                   );
@@ -197,7 +212,7 @@ function Checkout() {
           <form noValidate autoComplete="off">
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField label= {adressName} variant="outlined" disabled={true} fullWidth  />
+                <TextField label={adressName} variant="outlined" disabled={true} fullWidth />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField label={adressPhone} variant="outlined" disabled={true} fullWidth />
@@ -215,7 +230,7 @@ function Checkout() {
                 <TextField label={adressCity} variant="outlined" disabled={true} fullWidth />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label={adressState} variant="outlined" disabled={true}fullWidth />
+                <TextField label={adressState} variant="outlined" disabled={true} fullWidth />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField label={adressCountry} variant="outlined" disabled={true} fullWidth />
@@ -237,3 +252,6 @@ export async function getStaticProps() {
 }
 
 export default Checkout;
+function castInt(idAdress: string) {
+  throw new Error('Function not implemented.');
+}
