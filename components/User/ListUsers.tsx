@@ -7,6 +7,7 @@ import EditUser from '@/components/User/EditUser';
 import DeleteUser from '@/components/User/DeleteUser';
 import { User } from '@/pages/users';
 import { textAlign } from '@mui/system';
+import Image from 'next/image';
 
 function ListUsers(props: { user: User }) {
   const { user } = props;
@@ -29,10 +30,16 @@ function ListUsers(props: { user: User }) {
 
   return (
     <Fragment>
-      <TableRow hover >
+      <TableRow hover>
         <TableCell align="center">{user.email}</TableCell>
-        <TableCell align="center"> {user.name} {user.lastName}</TableCell>
-        <TableCell align="center"> {user.photoUrl}</TableCell>
+        <TableCell align="center">
+          {' '}
+          {user.name} {user.lastName}
+        </TableCell>
+        <TableCell align="center">
+          {' '}
+          <Image src={user.photoUrl}  width={80} height={80}  />
+        </TableCell>
         <TableCell align="center">{user.roleName}</TableCell>
         <TableCell align="center">
           <IconButton color="warning" onClick={changeStateEdit}>

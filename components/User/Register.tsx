@@ -79,6 +79,8 @@ function Register() {
         lastName: '',
         password: '',
         repeat: '',
+        photoUrl:'https://res.cloudinary.com/dpakhjsmh/image/upload/v1642231950/Jokr/usersPhoto/bdee6glflmmivlrqmcuk.png',
+        photoPublicId: 'bdee6glflmmivlrqmcuk',
         role: {
           id: 0,
           rolename: 'Shopper',
