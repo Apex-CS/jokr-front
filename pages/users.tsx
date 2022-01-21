@@ -79,6 +79,7 @@ function Users() {
 
       <Tooltip title="Add a new User" placement="top">
         <div className="wrap">
+        <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Users</h1>
           <button className="ADD btn5" onClick={handleOpen}>
             +
           </button>

@@ -87,6 +87,7 @@ function Products() {
 
       <Tooltip title="Add a new Product" placement="top">
         <div className="wrap">
+          <h1>&nbsp;&nbsp;Products</h1>
           <button className="ADD btn5" onClick={handleOpen}>
             +
           </button>

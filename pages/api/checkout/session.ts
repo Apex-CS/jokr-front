@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
+import { TodosContext } from '@/components/contexts/GlobalProvider'; 
+import React, { useContext, useEffect, useState } from 'react';
 
 const foo: string = process.env.STRIPE_SECRET_KEY!;
 const stripePromise =
@@ -20,9 +22,21 @@ type CartItemType = {
   amount: number;
 };
 
+type CartItemTypeA = {
+  id: number;
+};
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { cartItems } = req.body;
- 
+  const { cartItems,IdUser } = req.body;
+  // const { IdUser } = useContext(TodosContext);
+
+  console.log( "Esta madre si jala" + IdUser?.map((field: CartItemTypeA) => {return field;}));
+
+  const idUser = IdUser?.map((field: CartItemTypeA) => {
+    return field.id;
+  });
+  
+  
 
   const items: {
     price_data: {
@@ -50,12 +64,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
   });
 
+  
+  
+  
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     customer_email:'test@email.com',
     phone_number_collection:{"enabled":true},
     metadata:{
-      "id_User":'2',
+      "id_User": idUser,
+      "id_User_test": '2' ,
       "id_Address":'4',
     },
     line_items: items,
