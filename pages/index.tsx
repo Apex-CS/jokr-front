@@ -31,10 +31,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Home() {
-  const { Token } = useContext(TodosContext);
   const { addCart } = useContext(TodosContext);
-  const [data, setData] = useState([]);
-
 
   const { AllProducts } = useContext(TodosContext);
   /* const fetcher = (url: string) =>  axios.get(url,{  headers: {'Authorization': 'Bearer '+localStorage.getItem('token')}}).then((res) => res.data); */

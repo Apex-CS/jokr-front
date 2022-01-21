@@ -57,6 +57,14 @@ module.exports = {
         source: '/api/v1/refreshJwt',
         destination: `${process.env.SPRING_API_KEY}/api/v1/refreshJwt`,
       },
+      {
+        source: '/api/v1/addresses',
+        destination: `${process.env.SPRING_API_KEY}/api/v1/addresses`,
+      },
+      {
+        source: '/api/v1/addresses/:id_user',
+        destination: `${process.env.SPRING_API_KEY}/api/v1/addresses/:id_user`,
+      }
     ];
   },
   webpackDevMiddleware: (config) => {

@@ -22,6 +22,10 @@ import {
   TableRow,
   TableBody,
   Paper,
+  Modal,
+  Fade,
+  Box,
+  Backdrop,
 } from '@mui/material';
 import toast, { Toaster } from 'react-hot-toast';
 import { TodosContext } from '@/components/contexts/GlobalProvider';
@@ -37,10 +41,14 @@ import Router from 'next/router';
 import useSWR from 'swr';
 import Check from '@/components/Loader/GlobalLoader';
 import { styled } from '@mui/material/styles';
+import AddAddress from '@/components/Address/AddAddress';
+import ListAdress from '@/components/Address/ListAdress';
+import { useRouter } from 'next/router';
+
 
 
 /* TABLE */
-const tableHeader: string[] = ['Street 1', 'Street 2', 'Municipio', 'State', 'Options'];
+const tableHeader: string[] = ['Address', 'State', 'Options'];
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -52,6 +60,24 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 /* TABLE  */
+export interface DataAddress {
+  id: number;
+  street1: string;
+  street2: string;
+  colonia: string;
+  municipio: string;
+  state: string;
+  country: string;
+  postal_code: string;
+  phone: string;
+  recipient_name: string;
+  is_default_billing_address: boolean;
+  is_default_shipping_address: boolean;
+  users: {
+    id: number;
+  };
+}
+
 export interface DataUser {
   id: number;
   email: string;
@@ -86,18 +112,19 @@ const fetcher = (url: string) =>
     .then((res) => res.data);
 
 function Account() {
+  const router = useRouter();
   const { open, isOpen } = useContext(TodosContext);
   const { IdUser } = useContext(TodosContext);
-  const [ loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { ImageUser, IsImageUser } = useContext(TodosContext);
   const { callback, isCallback } = useContext(TodosContext);
   const { isSuccess } = useContext(TodosContext);
   const { isLoader } = useContext(TodosContext);
-
-/*   const [imagesId, setImagesId] = useState<string>(ImageUser.urlId);
+  const handleOpen = () => isOpen(true);
+  /*   const [imagesId, setImagesId] = useState<string>(ImageUser.urlId);
   const [imagesUrl, setImagesUrl] = useState<string>(ImageUser.url); */
 
-  console.log('Usuario logeado', IdUser);
+  const { data: address } = useSWR(`/api/v1/addresses/${IdUser}`, fetcher);
 
   const { data, error } = useSWR(`/api/v1/users/${IdUser}`, fetcher);
   if (error) return <Check />;
@@ -111,8 +138,8 @@ function Account() {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
       });
 
-      IsImageUser('','')
-      
+      IsImageUser('', '');
+
       setLoading(false);
     } catch (err) {
       swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
@@ -140,8 +167,7 @@ function Account() {
         },
       });
       setLoading(false);
-      IsImageUser(res.data.url,res.data.id)
-
+      IsImageUser(res.data.url, res.data.id);
     } catch (err) {
       swal({ icon: 'error', text: 'Session Expired', timer: 2000 }).then(function () {
         localStorage.removeItem('token');
@@ -179,7 +205,7 @@ function Account() {
   const styleUpload = {
     display: ImageUser.url ? 'block' : 'none',
   };
-  console.log('ifno', data);
+
   return (
     <>
       <Grid>
@@ -241,13 +267,24 @@ function Account() {
                     Router.push('/login');
                   });
                 }
-           
-                mutate('/api/v1/Users');
-                mutate(`/api/v1/users/${IdUser}`);
-                isOpen(false);
-                IsImageUser(ImageUser.url,ImageUser.urlId)
-                isSuccess(true);
-                isLoader(true);
+
+                swal({
+                  icon: 'warning',
+                  title: '!!!Have you done modifications to your perfil',
+                  text: 'Log in again',
+                  timer: 4000,
+                }).then(function () {
+                  localStorage.removeItem('token');
+                  Router.push('/login');
+                  router.reload();
+
+                  mutate('/api/v1/Users');
+                  mutate(`/api/v1/users/${IdUser}`);
+                  isOpen(false);
+
+                  isSuccess(true);
+                  isLoader(true);
+                });
               }}
             >
               {() => (
@@ -259,7 +296,6 @@ function Account() {
                     <Tooltip title="Add a image " placement="top">
                       <div className="upload">
                         <input
-                          required
                           type="file"
                           name="file"
                           id="file_up"
@@ -325,7 +361,9 @@ function Account() {
         <div className="split right">
           <Tooltip title="Add a new Address" placement="top">
             <div className="wrap2">
-              <button className="ADD btn5">+</button>
+              <button className="ADD btn5" onClick={handleOpen}>
+                +
+              </button>
             </div>
           </Tooltip>
 
@@ -344,15 +382,55 @@ function Account() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* {data?.map((user: User) => {
-                  return <ListUsers key={user.id} user={user} />;
-                })} */}
+                  {address?.map((address: DataAddress) => {
+                    return <ListAdress key={address.id} address={address} />;
+                  })}
                 </TableBody>
               </Table>
             </TableContainer>
           </FormGroup>
+
+
+
         </div>
       </Grid>
+
+      <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 1500,
+        }}
+        className="modalProduct"
+      >
+        <Fade in={open}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 350,
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              maxHeight: '98%',
+              marginTop: '.1rem',
+              borderRadius: '12px',
+              overflowX: 'scroll',
+              '&::-webkit-scrollbar': {
+                width: 0,
+              },
+            }}
+          >
+            {/* Add Addrees */}
+            <AddAddress />
+          </Box>
+        </Fade>
+      </Modal>
     </>
   );
 }
