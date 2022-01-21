@@ -66,6 +66,7 @@ const contextDefaultValues: TodosContextState = {
   ImageUser: { url: '', urlId: '' },
   IsImageUser: () => ({}),
 
+  Email:'',
 
   IdUser: 0,
 
@@ -177,6 +178,7 @@ const GlobalProvider: FC = ({ children }) => {
   const [Token, setToken] = useState(contextDefaultValues.Token);
   const IsToken = (token: string) => setToken(token);
 
+  const [ Email, setEmail] = useState(contextDefaultValues.Email);
 
   const [ImageUser, setImageUser] = useState(contextDefaultValues.ImageUser);
   const IsImageUser = (url: string, urlId: string) => setImageUser({ url, urlId });
@@ -196,7 +198,7 @@ const GlobalProvider: FC = ({ children }) => {
 
       if (auth) {
         const jwt = JSON.parse(atob(auth.split('.')[1]));
-
+        setEmail(jwt.sub)
         setIdUser(jwt.jti);
         setImageUser({ url: jwt.photoUrl, urlId: jwt.photoUrlId });
         console.log(jwt.authorities.toString());
@@ -328,6 +330,7 @@ const GlobalProvider: FC = ({ children }) => {
         ImageUser,
         IsImageUser,
 
+        Email,
 
         IdUser,
 

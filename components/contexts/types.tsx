@@ -94,6 +94,7 @@ export type TodosContextState = {
   ImageUser: { url: string; urlId: string };
   IsImageUser: (url: string, urlId: string) => void;
 
+  Email:string;
 
   IdUser: number;
 
@@ -102,6 +103,7 @@ export type TodosContextState = {
 
   Shopper: string;
   isShopper: (isShopper: string) => void;
+  
 
 };
 

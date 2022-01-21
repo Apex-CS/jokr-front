@@ -64,6 +64,10 @@ module.exports = {
       {
         source: '/api/v1/addresses/:id_user',
         destination: `${process.env.SPRING_API_KEY}/api/v1/addresses/:id_user`,
+      },
+      {
+        source: '/api/v1/orders',
+        destination: `${process.env.SPRING_API_KEY}/api/v1/orders`,
       }
     ];
   },

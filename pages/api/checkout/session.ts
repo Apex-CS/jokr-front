@@ -1,9 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
-import { TodosContext } from '@/components/contexts/GlobalProvider'; 
-import React, { useContext, useEffect, useState } from 'react';
 
-const foo: string = process.env.STRIPE_SECRET_KEY!;
 const stripePromise =
   'sk_test_51KCANHGz1RvjBCqBNLdH5eL0UtNp5f16huK8HKR0iN5jJevIIlEP2jwczwWEMklddUIi1TwBLAgUFxpgUgZQEic300NR3BXD7r';
 const stripe = new Stripe(stripePromise, {
@@ -22,33 +19,25 @@ type CartItemType = {
   amount: number;
 };
 
-type CartItemTypeA = {
-  id: number;
-};
-
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { cartItems,IdUser } = req.body;
-  // const { IdUser } = useContext(TodosContext);
-
-  console.log( "Esta madre si jala" + IdUser?.map((field: CartItemTypeA) => {return field;}));
-
-  const idUser = IdUser?.map((field: CartItemTypeA) => {
-    return field.id;
-  });
-  
-  
+  const { cartItems, IdUser, IdAddress, Email } = req.body;
 
   const items: {
     price_data: {
       currency: string;
       unit_amount: number;
-      product_data: {name: string; description: string; images: [string],metadata:{id:number} };
+      product_data: {
+        name: string;
+        description: string;
+        images: [string];
+        metadata: { id: number };
+      };
     };
     quantity: number;
   }[] = [];
 
   cartItems?.map((product: CartItemType) => {
-    console.log(product)
+    console.log(product);
     items.push({
       price_data: {
         currency: 'mxn',
@@ -57,47 +46,33 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           name: product.name,
           description: product.description,
           images: [product.photoUrl],
-          metadata:{id:product.id}
+          metadata: { id: product.id },
         },
       },
       quantity: product.amount,
     });
   });
 
-  
-  
-  
-
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
-    customer_email:'test@email.com',
-    phone_number_collection:{"enabled":true},
-    metadata:{
-      "id_User": idUser,
-      "id_User_test": '2' ,
-      "id_Address":'4',
+    customer_email: Email,
+    phone_number_collection: { enabled: true },
+    metadata: {
+      id_User: IdUser,
+      id_Address: IdAddress,
     },
     line_items: items,
     mode: 'payment',
     success_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${req.headers.origin}/User/checkout`,
   });
-  
-
-
-
 
   res.status(200).json({ sessionId: session.id });
-
-
 };
-
-
-
 
 /*    success_url:'https://example.com/success?session_id={CHECKOUT_SESSION_ID}',
         cancel_url:'https://example.com/cancel' */
-   /*      {
+/*      {
             price_data: {
               currency: 'mxn',
               unit_amount: 2000,
