@@ -43,7 +43,7 @@ function DeleteProduct(props: { open: boolean; id: number; handleClose: () => vo
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">You are about to delete a product</DialogTitle>
+      {/* <DialogTitle id="alert-dialog-title">You are about to delete a product</DialogTitle> */}
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           Are you sure you want to delete the product?
