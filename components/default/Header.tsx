@@ -17,7 +17,7 @@ import {
   Menu,
   Grid,
 } from '@mui/material';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import swal from 'sweetalert';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -111,26 +111,30 @@ const accountPage = () => {
   Router.push('/User/account');
 };
 
-const logout = () => {
-  swal({
-    title: 'You will end the session, Do you want to continue?',
-    text: 'Are you sure?',
-    icon: 'warning',
-    buttons: ['No', 'Yes'],
-  }).then(async (res) => {
-    if (res)
-      swal({ icon: 'success', title: 'Good', text: 'Log out', timer: 2000 }).then(function () {
-        localStorage.removeItem('token');
-        Router.push('/login');
-      });
-  });
-};
 
 function MiniDrawer() {
   /*  ShopCart */
   const { cartItems } = useContext(TodosContext);
   const { Login, IsLogged } = useContext(TodosContext);
   const [cartOpen, setCartOpen] = useState(false);
+  const router = useRouter()
+
+  const logout = () => {
+    swal({
+      title: 'You will end the session, Do you want to continue?',
+      text: 'Are you sure?',
+      icon: 'warning',
+      buttons: ['No', 'Yes'],
+    }).then(async (res) => {
+      if (res)
+        swal({ icon: 'success', title: 'Good', text: 'Log out', timer: 2000 }).then(function () {
+          localStorage.removeItem('token');
+          Router.push('/login');
+          router.reload();
+        });
+    });
+  };
+
 
   const getTotalItems = (cartItems: any) => {
     const total = cartItems.reduce(
