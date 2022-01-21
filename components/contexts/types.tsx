@@ -52,18 +52,18 @@ export type TodosContextState = {
   /* GET All products */
 
   AllProducts: Array<{
-    id: number,
-    sku: string,
-    name: string,
-    description: string,
-    price: number,
-    stock: number,
-    subcategory: string,
-    photoUrl: string,
-    amount: number
+    id: number;
+    sku: string;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    subcategory: string;
+    photoUrl: string;
+    amount: number;
   }>;
 
-   AllProductsAdmin: Array<{
+  AllProductsAdmin: Array<{
     description: string;
     id: number;
     name: string;
@@ -79,30 +79,29 @@ export type TodosContextState = {
       };
     };
     subcategoriesName: string;
-  }>; 
+  }>;
   /* To refresh any component */
   callback: boolean;
   isCallback: (callback: boolean) => void;
 
-  Token:string;
-  IsToken:(token:string) => void; 
+  Token: string;
+  IsToken: (token: string) => void;
 
   Login: string;
   IsLogged: (role: string) => void;
 
-  ImageUser:{url:string,urlId:string};
-  IsImageUser: (url: string, urlId:string) => void;
-  
-  IdUser:number;
+
+  ImageUser: { url: string; urlId: string };
+  IsImageUser: (url: string, urlId: string) => void;
+
+
+  IdUser: number;
+
+  idAddress: number;
+  IdAddress: (IdAddress:number) => void;
+
+  Shopper: string;
+  isShopper: (isShopper: string) => void;
 
 };
 
-
-
-/* authorities: ['Shopper']
-exp: 1641849779
-iat: 1641849479
-iss: "Jokr"
-jti: "12"
-name: "joel"
-sub: "123" */

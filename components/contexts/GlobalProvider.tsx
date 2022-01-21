@@ -56,18 +56,24 @@ const contextDefaultValues: TodosContextState = {
   AllProducts: [],
   AllProductsAdmin: [],
 
-  Login: '' ,
+  Login: '',
   IsLogged: () => ({}),
 
   Token: '',
   IsToken: () => ({}),
 
-  ImageUser:{url:'',urlId:''},
+
+  ImageUser: { url: '', urlId: '' },
   IsImageUser: () => ({}),
 
-  IdUser:0,
 
+  IdUser: 0,
 
+  idAddress: 0,
+  IdAddress: () => 0,
+
+  Shopper: '',
+  isShopper: () => ({}),
 };
 
 export const TodosContext = createContext<TodosContextState>(contextDefaultValues);
@@ -150,46 +156,54 @@ const GlobalProvider: FC = ({ children }) => {
     });
   /* Modal check if is open or close */
 
-  const [ open, setOpen ] = useState<boolean>(contextDefaultValues.open);
+  const [open, setOpen] = useState<boolean>(contextDefaultValues.open);
   const isOpen = (open: boolean) => setOpen(open);
 
-  const [ success, setSuccess ] = useState<boolean>(contextDefaultValues.success);
+  const [success, setSuccess] = useState<boolean>(contextDefaultValues.success);
   const isSuccess = (success: boolean) => setSuccess(success);
 
-  const [ loaderShow, setLoaderShow ] = useState<boolean>(contextDefaultValues.loaderShow);
+  const [loaderShow, setLoaderShow] = useState<boolean>(contextDefaultValues.loaderShow);
   const isLoader = (loaderShow: boolean) => setLoaderShow(loaderShow);
 
-  const [ callback, setCallback ] = useState<boolean>(contextDefaultValues.callback);
+  const [callback, setCallback] = useState<boolean>(contextDefaultValues.callback);
   const isCallback = (callback: boolean) => setCallback(callback);
 
-  const [ AllProducts, setProducts ] = useState(contextDefaultValues.AllProducts);
-  const [ AllProductsAdmin, setProductsAdmin] = useState(contextDefaultValues.AllProductsAdmin);
+  const [AllProducts, setProducts] = useState(contextDefaultValues.AllProducts);
+  const [AllProductsAdmin, setProductsAdmin] = useState(contextDefaultValues.AllProductsAdmin);
 
-  const [ Login, setLogin ] = useState(contextDefaultValues.Login);
+  const [Login, setLogin] = useState(contextDefaultValues.Login);
   const IsLogged = (role: string) => setLogin(role);
 
-  const [ Token, setToken ] = useState(contextDefaultValues.Token);
+  const [Token, setToken] = useState(contextDefaultValues.Token);
   const IsToken = (token: string) => setToken(token);
 
-  const [ ImageUser, setImageUser ] = useState(contextDefaultValues.ImageUser);
-  const IsImageUser = (url: string, urlId:string) => setImageUser({url,urlId});
 
-  const [ IdUser, setIdUser ] = useState(contextDefaultValues.IdUser);
- 
-  
-  
- 
+  const [ImageUser, setImageUser] = useState(contextDefaultValues.ImageUser);
+  const IsImageUser = (url: string, urlId: string) => setImageUser({ url, urlId });
+
+  const [IdUser, setIdUser] = useState(contextDefaultValues.IdUser);
+
+  const [idAddress, setIdAddress] = useState(contextDefaultValues.idAddress);
+  const IdAddress = (idAddress: number) => setIdAddress(idAddress);
+
+  const [Shopper, setShopper] = useState(contextDefaultValues.Shopper);
+  const isShopper = (isShopper: string) => setShopper(isShopper);
+
+
   useEffect(() => {
     try {
       const auth = localStorage.getItem('token');
-     
+
       if (auth) {
         const jwt = JSON.parse(atob(auth.split('.')[1]));
-        setIdUser(jwt.jti)
-        setImageUser({url:jwt.photoUrl,urlId:jwt.photoUrlId})
-        if(jwt.authorities.toString() === 'Admin') IsLogged(jwt.authorities.toString())
 
-        console.log(jwt)
+        setIdUser(jwt.jti);
+        setImageUser({ url: jwt.photoUrl, urlId: jwt.photoUrlId });
+        console.log(jwt.authorities.toString());
+        if (jwt.authorities.toString() === 'Admin') IsLogged(jwt.authorities.toString());
+        if (jwt.authorities.toString() === 'Shopper') isShopper(jwt.authorities.toString());
+
+
         /* let ff = jwt.exp * 1000 */
         const expiration = new Date(jwt.exp * 1000);
         /* const g = new Date( expiration) */
@@ -208,11 +222,14 @@ const GlobalProvider: FC = ({ children }) => {
           }).then(async (res) => {
             if (res) {
               try {
-                const refresh = await axios.post(`/api/v1/refreshJwt`,{ token: f }, { 
-                   headers: { Authorization: 'Bearer ' + auth },
+                const refresh = await axios.post(
+                  `/api/v1/refreshJwt`,
+                  { token: f },
+                  {
+                    headers: { Authorization: 'Bearer ' + auth },
                   }
                 );
-              
+
                 const foo = refresh.headers.authorization.replace('Bearer ', '');
                 localStorage.setItem('token', foo);
                 Router.push('/');
@@ -226,12 +243,11 @@ const GlobalProvider: FC = ({ children }) => {
                   localStorage.removeItem('token');
                   Router.push('/login');
                 });
-              
               }
-            }  else {
+            } else {
               localStorage.removeItem('token');
               Router.push('/login');
-            } 
+            }
           });
         } else {
           console.log(expiration, now);
@@ -251,7 +267,6 @@ const GlobalProvider: FC = ({ children }) => {
         }
       }
     } catch (err) {
-    
       localStorage.removeItem('token');
       Router.push('/login');
     }
@@ -313,7 +328,15 @@ const GlobalProvider: FC = ({ children }) => {
         ImageUser,
         IsImageUser,
 
-        IdUser
+
+        IdUser,
+
+        idAddress,
+        IdAddress,
+
+        Shopper,
+        isShopper,
+
       }}
     >
       {children}
