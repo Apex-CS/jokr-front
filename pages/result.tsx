@@ -2,12 +2,24 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
-import { Container } from '@mui/material';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Container,
+  Typography,
+  Button,
+} from '@mui/material';
 import axios from 'axios';
+import Link from 'next/link';
+
+
+
 function CheckoutForm() {
   const router = useRouter();
-  /* const { session_id } = router.query  */
   const [type, setType] = useState({});
+  const [dataFront, setData] = useState<any>({});
 
   const postData = async (url: any) => {
     const result = await axios.get(url);
@@ -20,9 +32,9 @@ function CheckoutForm() {
       customer_details: result.data.session.customer_details,
     };
     setType(PurchaseDone);
+    setData(PurchaseDone)
+    /* await axios.post('/api/v1/orders',{...type},{ headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }}) */
 
-    console.log(result.data.session);
-    console.log(PurchaseDone);
   };
 
   const { data, error } = useSWR(
@@ -30,20 +42,28 @@ function CheckoutForm() {
     (url) => postData(url) /*  fetch(url).then(res=> res.json()    ) */
   );
   if (error) return 'An error has occurred.' + error;
-
-  /*       const [type, setType] = useState(null);
-
-        const { data } = useSWR(type ? "/api/post/vote" : null, (link) =>
-          postData(link, type)
-        );
-     */
+  //http://localhost:3000/result?session_id=cs_test_b1rPcDe5PXYpJ8cHQvJQ6w92VUXwbGeEUvwTtTuEM8XaiYZlziKDwoj8ZS
+     //   http://localhost:3000/result?session_id=cs_test_b1tdmj3nG3r9F6OhRdaimj2brT1dcoQ8ABMaMvIghplLwEkVrQVik40yhW
   return (
     <div>
-      <Container>
-        <h1>Payment Result</h1>
-        <pre>{data ? JSON.stringify(data, null, 2) : 'Loadding...'}</pre>
-        <h1>Payment Result mejorado</h1>
-        <pre>{type ? JSON.stringify(type, null, 2) : 'Loadding...'}</pre>
+      <Container sx={{ alignContent: 'center', alignItems: 'center' }}>
+      <pre>{type ? JSON.stringify(type, null, 2) : 'Loadding...'}</pre> 
+
+        <Card sx={{ maxWidth: 1000, marginLeft: '5rem' }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              <h1>!! Perfect</h1>
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+            Thanks for your purchase
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Link href="/history">
+              <Button>OK</Button>
+            </Link>
+          </CardActions>
+        </Card>
       </Container>
     </div>
   );

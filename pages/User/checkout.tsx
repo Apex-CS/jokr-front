@@ -67,6 +67,7 @@ function Checkout() {
   const { callback, isCallback } = useContext(TodosContext);
   const [data, setData] = useState([]);
   const { IdUser } = useContext(TodosContext);
+  const { Email } = useContext(TodosContext);
   const [adress, setAddress] = React.useState('');
   const [adressName, setAddressName] = React.useState('Recipient Name');
   const [adressPhone, setAddressPrhone] = React.useState('Phone Number');
@@ -76,6 +77,9 @@ function Checkout() {
   const [adressCity, setAddressCity] = React.useState('Municipio');
   const [adressState, setAddressState] = React.useState('Province/State');
   const [adressCountry, setAddressCountry] = React.useState('Country');
+
+  console.log('usuario logeado', IdUser);
+
   const handleChange = (event: SelectChangeEvent) => {
     setAddress(event.target.value as string);
     const idAdress = event.target.value;
@@ -127,7 +131,7 @@ function Checkout() {
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify({ cartItems: cartItems, idUser:IdUser }),
+      body: JSON.stringify({ cartItems: cartItems, IdUser: IdUser, IdAddress:adress, Email:Email }),
     }).then((res) => res.json());
 
     const stripe = await stripePromise;
